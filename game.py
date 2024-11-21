@@ -4,8 +4,20 @@ import pygame
 from player import Player
 from bullet import Bullet
 from enemy import Enemy
+from shed import shed
 
-def execute_game():
+def game_loop():
+    player = Player()
+    current_state = "main"
+    
+    while True:
+        if current_state == "main":
+            current_state = execute_game(player)
+        elif current_state == "shed":
+            current_state = shed(player)
+    """ Used for different levels etc """
+
+def execute_game(player: Player):
     # Clock for controlling frame rate
     clock = pygame.time.Clock()
 
@@ -55,13 +67,17 @@ def execute_game():
                 bullet.kill()
                 if enemy.health <= 0:
                     enemy.kill()
-                
+        
         enemy_spawn_timer -= 1
 
         # Update positions
         player_group.update()
         bullets.update()
         enemies.update(player)
+
+        # Checking if the user goes into the shed area
+        if player.rect.right >= width:
+            return "shed"
 
         # Drawing the objects
         player_group.draw(screen)
