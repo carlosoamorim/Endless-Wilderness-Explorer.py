@@ -1,6 +1,7 @@
 import pygame
 
-from config import dark_red, deep_black, resolution, white
+from config import resolution, white, deep_black, dark_red
+
 
 # Function to draw a stick figure with a construction hat
 def draw_stick_figure_with_hat(screen, x, y):
@@ -43,6 +44,7 @@ def draw_normal_stick_figure(screen, x, y):
     pygame.draw.line(screen, (255, 255, 255), (x, y + 60), (x + 20, y + 100), 2)  # Right leg
 
 
+# Under construction screen
 def under_construction():
 
     # creating the screen at 720x720 pixels

@@ -1,7 +1,7 @@
-import pygame
+from game import game_loop
 from utils import *  # no need to import pygame because the import is in utils
 from config import *  # importing colors and the like
-from game import game_loop
+from utils import under_construction
 
 
 def interface():
@@ -49,7 +49,7 @@ def interface():
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if 90 <= mouse[0] <= 630 and 240 <= mouse[1] <= 300:
                     wilderness_explorer()
-                    
+
             # options button
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if 90 <= mouse[0] <= 230 and 600 <= mouse[1] <= 660:
@@ -94,6 +94,7 @@ def interface():
 
         # update the display so that the loop changes will appear
         pygame.display.update()
+
 
 def credits_():
 
