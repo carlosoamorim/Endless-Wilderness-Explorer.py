@@ -1,39 +1,46 @@
-from utils import *
 from config import *
 import pygame
-import math
 import random
-from player import Player
+import math
 
 class Enemy(pygame.sprite.Sprite):
+
     def __init__(self):
         super().__init__()
-
-        self.image = pygame.Surface((enemy_size, enemy_size))
-        self.image.fill(red)
+        # creating a surface for the enemy
+        self.image = pygame.Surface(enemy_size)
+        # filling the surface with chosen enemy colour
+        self.image.fill(greenish)
+        # getting rectangle for positioning
         self.rect = self.image.get_rect()
 
-        #Positioning
-        self.rect.x = random.randint(0, width - enemy_size)
-        self.rect.y = random.randint(0, height - enemy_size)
+        # starting the enemy at a random valid location on the screen
+        self.rect.x = random.randint(0, width - enemy_size[0])
+        self.rect.y = random.randint(0, height - enemy_size[-1])
 
-        #Random speed
-        self.speed = random.randint(2, 3)
-
+        # setting a random initial speed for the enemy booo maybe different enemy types would be cool
+        self.speed = random.randint(1, 3)
+        # setting the healthbar
         self.health = 10
-    
+
     def update(self, player):
-        """
-        Update the enemy position according to the player
 
         """
+        receiving the player as input so that we can assure the enemies move in the players' direction
 
-        #Direction
-        direction = math.atan2(player.rect.y - self.rect.y, player.rect.x - self.rect.x)
+        """
 
-        #Move towards the player
-        self.rect.x += int(self.speed * math.cos(direction))
-        self.rect.y += int(self.speed * math.sin(direction))
+        # determining the direction (in radians) of the movement based on the player location
+        dx = player.rect.x - self.rect.x
+        dy = player.rect.y - self.rect.y
+
+        # getting the direction in radians
+        direction = math.atan2(dy, dx)
+
+        # moving the enemy towards the player --> like bullet
+        self.rect.x += self.speed * math.cos(direction)
+        self.rect.y += self.speed * math.sin(direction)
 
         self.rect.x = int(self.rect.x)
         self.rect.y = int(self.rect.y)
+
