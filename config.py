@@ -13,6 +13,7 @@ yellow = (255, 255, 0)
 red = (150, 0, 24)
 cute_purple = (128, 0, 128)
 greenish = (182, 215, 168)
+black = (0, 0 ,0)
 # SCREEN RESOLUTION
 resolution = (720, 720) # height/width
 width, height = resolution[0], resolution[1]

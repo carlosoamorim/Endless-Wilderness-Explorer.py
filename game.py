@@ -1,128 +1,147 @@
-from enemy import Enemy
-from config import *
-import math
 import pygame
+import time
+from config import *
 from player import Player
+from enemy import Enemy
 from shed import shed
 
-def game_loop():
-    # Setup
-    player = Player()
-    current_state = "main"  # Start in the main area
 
+from game_over import game_over_screen
+
+
+def game_loop():
+    # Initialize the player
+    player = Player()
+
+    # Start in the main area
+    current_state = "main"
+
+    # Endless game loop
     while True:
         if current_state == "main":
             current_state = execute_game(player)
         elif current_state == "shed":
             current_state = shed(player)
 
-
-
-def execute_game(player: Player = None):
-
+def execute_game(player):
     # SETUP:
+    pygame.init()
 
-    # setting up the background:
-    background = pygame.image.load("images/mowed_grass.jpg")
+    # Initialize the mixer for sound
+    pygame.mixer.init()
+
+    # Load the music file
+    pygame.mixer.music.load("music/Undefeatable Epic Version.mp3")
+    # Set volume (optional)
+    pygame.mixer.music.set_volume(0.5)  # Volume ranges from 0.0 to 1.0
+
+    # Play the music
+    pygame.mixer.music.play(-1)
+    # Background
+    background = pygame.image.load("images/arena_background.webp")
     background = pygame.transform.scale(background, (width, height))
 
-    # using the clock to control the time frame.
-    clock = pygame.time.Clock()
-
-    # screen setup:
+    # Screen setup
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Endless Wilderness Explorer")
 
-
-    # setting up the player
-    # creating an empty group for the player
-    player_group = pygame.sprite.Group()
-
-    # adding the player to the group
-    player_group.add(player)
-
-    # creating an empty bullet group that will be given as input to the player.shoot() method
+    # Groups
+    player_group = pygame.sprite.GroupSingle(player)
     bullets = pygame.sprite.Group()
-
-    # creating the enemy group
     enemies = pygame.sprite.Group()
 
-    # before starting our main loop, setup the enemy cooldown variable
+    # Game variables
+    clock = pygame.time.Clock()
     enemy_cooldown = 0
-
-    # MAIN GAME LOOP
-
+    damage_cooldown = 1  # Cooldown in seconds
+    last_damage_time = 0
     running = True
 
+    # Fonts
+    font = pygame.font.Font(None, 36)
+
+    # MAIN GAME LOOP
     while running:
-
-        # controlling the frame rate
         clock.tick(fps)
+        screen.blit(background, (0, 0))  # Draw background
 
-        # setting up the background
-        screen.blit(background, (0, 0))
-
-        # handling events:
+        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                return
 
-        # automatically shoot bullets from the player
+        # Shooting bullets
         player.shoot(bullets)
 
-        # spawning enemies every two seconds
+        # Spawn enemies
         if enemy_cooldown <= 0:
-            # creating an enemy...would be so cool if there were more than one type... oh well...
             enemy = Enemy()
-
-            # adding the enemy to the group
             enemies.add(enemy)
-
-            # in bullets, we use fps to spawn every second. Here we double that, to spawn every two seconds
-            enemy_cooldown = fps * 2
-
-        # updating the enemy cooldown
+            enemy_cooldown = fps * 2  # 2 seconds cooldown
         enemy_cooldown -= 1
 
-        # updating positions and visuals:
-        # calling the .update() method of all the instances in the player group
+        # Update all sprites
         player_group.update()
-
-        # updating the bullets and enemy groups
-        enemies.update(player)
         bullets.update()
+        enemies.update(player)
 
+        # Check if the player moved to the next area
+        if player.rect.right >= width:
+            return "shed"
 
-
-        # drawing the player and enemies sprites on the screen
+        # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
-
-        # drawing the bullet sprites:
         for bullet in bullets:
             bullet.draw(screen)
 
-        # checking for collisions between player bullets and enemies
+        # Check for collisions between bullets and enemies
         for bullet in bullets:
-            # getting the enemies that were hit by a bullet
             collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
-
             for enemy in collided_enemies:
-
-                # every hit enemy needs to lose life
-                # every bullet hit will reduce the life by 5 hp
                 enemy.health -= 5
-
-                # removing the bullet from the screen (as it's lodged in the enemy's heart)
                 bullet.kill()
-
-                # checking if the enemy is ripperino
                 if enemy.health <= 0:
                     enemy.kill()
 
-        if player.rect.right >= width:
-            return "shed"  # Transition to the shed area
+        # Check for collisions between player and enemies
+        for enemy in enemies:
+            if pygame.sprite.spritecollide(enemy, player_group, False):
+                current_time = time.time()
+                if current_time - last_damage_time > damage_cooldown:
+                    player.health -= 25
+                    player.image.fill(red)
+                    last_damage_time = current_time
+                    if player.health <= 0:
+                        print("Game Over")
+
+                        # Stop or fade out the current music
+                        pygame.mixer.music.fadeout(2000)  # Fade out over 2 seconds
+                        pygame.time.wait(2000)  # Wait for the fadeout to complete (non-blocking)
+
+                        # Load and play the game over music
+                        pygame.mixer.music.load("music/Sonic 1 Music_ Game Over.mp3")
+                        pygame.mixer.music.set_volume(0.5)  # Adjust volume if needed
+                        pygame.mixer.music.play()  # Play the new music
+
+                        # Call the game over screen
+                        game_over_screen()
+                        return
+
+        # Reset player color after taking damage
+        if time.time() - last_damage_time > damage_cooldown:
+            player.image.fill(blue)
+
+        # Draw health bar
+        pygame.draw.rect(screen, red, (10, 10, 200, 20))  # Red background
+        pygame.draw.rect(screen, green, (10, 10, player.health*2, 20))  # Green health bar
+        health_text = font.render(f'Health: {player.health}', True, white)
+        screen.blit(health_text, (220, 10))
+
         pygame.display.flip()
 
-    # the main while game loop has terminated and the game ends
     pygame.quit()
+
+
+
