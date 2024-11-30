@@ -72,7 +72,7 @@ def execute_game(player):
                 return
 
         # Shooting bullets
-        player.shoot(bullets)
+        player.attack(bullets)
 
         # Spawn enemies
         if enemy_cooldown <= 0:
@@ -100,7 +100,7 @@ def execute_game(player):
         for bullet in bullets:
             collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
             for enemy in collided_enemies:
-                enemy.health -= 5
+                enemy.health -= player.weapon.damage
                 bullet.kill()
                 if enemy.health <= 0:
                     enemy.kill()

@@ -3,6 +3,7 @@ from config import *
 import pygame
 import math
 from bullet import Bullet
+from meatball import Meatball
 
 
 # making Player a child of the Sprite class
@@ -24,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.health = 100
         self.bullet_cooldown = 0
+        self.weapon = Meatball()
 
     def update(self):
 
@@ -40,26 +42,12 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
 
-    def shoot(self, bullets):
-        """
-        bullets --> pygame group where I will add bullets
-        """
-        # cooldown ==> how many frames I need to wait until I can shoot again
+    def attack(self,  bullets):
+        
         if self.bullet_cooldown <=0:
-            # === defining the directions in which the bullets will fly ===
-            # these 4 directions are, in order, right, left, up, down
-            for angle in [0, math.pi, math.pi / 2, 3 * math.pi / 2]:
-
-                # === creating a bullet for each angle ===
-
-                # I will use self.rect.centerx to make the x position of the bullet the same as the
-                # x position of the player, thus making the bullet come out of them.
-                # finally, the direction of the bullet is the angle
-                bullet = Bullet(self.rect.centerx, self.rect.centery, angle)
-                # adding the bullet to the bullets pygame group.
-                bullets.add(bullet)
-
-            # resetting the cooldown
-            self.bullet_cooldown = fps
-
+                if self.weapon.name == "Meatball":
+                    self.weapon.attack(self, bullets)
+                    # resetting the cooldown
+                    self.bullet_cooldown = fps        # cooldown ==> how many frames I need to wait until I can shoot again
+                    
         self.bullet_cooldown -= 1
