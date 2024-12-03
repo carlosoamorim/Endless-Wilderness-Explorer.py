@@ -99,6 +99,7 @@ def execute_game(player):
                 if event.key == pygame.K_ESCAPE:  # Pause game
                     pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=desspawn_timer)
 
+
         # Shooting bullets
         player.shoot(bullets)
 
@@ -152,6 +153,10 @@ def execute_game(player):
         if desspawn_timer.running and not desspawn_timer.update():
             enemy_cooldown = original_enemy_cooldown  # Restore spawn rate
             player.power_active = False
+
+        # Check if the player moved to the next area
+        if player.rect.right >= width:
+            return "shed"
         # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
