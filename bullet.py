@@ -2,33 +2,31 @@ from config import *
 import pygame
 import math
 
-
 class Bullet(pygame.sprite.Sprite):
-
-    def __init__(self, x, y, direction):
-
+    def __init__(self, x, y, speed, direction, image_path, damage):
         super().__init__()
-
-        # setting base attributes
+        self.rect = pygame.Rect(x, y, 5, 5)
+        self.speed = speed
         self.direction = direction
-        self.radius = bullet_size
-        self.color = deep_black
-        self.speed = 7
-
-        # updating the x and y positions to fit the circle
-        self.rect = pygame.Rect(x - self.radius, y - self.radius, self.radius * 2, self.radius * 2)
-
+        self.image = pygame.image.load(image_path)
+        self.damage = damage
+        
     def update(self):
-
-        # updating the bullet's position based on the speed and the direction
-        # (x, y) --> (cos, sin)
-        self.rect.x += int(self.speed * math.cos(self.direction))
-        self.rect.y += int(self.speed * math.sin(self.direction))
-
-        # killing the bullet if it goes off-screen.
+        # Move the bullet in the direction it is facing
+        self.rect.x += self.speed * math.cos(math.radians(self.direction))
+        self.rect.y += self.speed * math.sin(math.radians(self.direction))
+        
+        # Check if the bullet is off the screen
         if self.rect.x < 0 or self.rect.x > width or self.rect.y < 0 or self.rect.y > height:
             self.kill()
 
     def draw(self, screen):
         # drawing the bullet on the screen
-        pygame.draw.circle(screen, self.color, self.rect.center, self.radius)
+        screen.blit(self.image, self.rect.topleft)
+    
+    def collide(self, enemies):
+        for enemy in enemies:
+            if self.rect.colliderect(enemy.rect):
+                enemy.health -= 3
+                return True
+        return False

@@ -4,6 +4,7 @@ import pygame
 import math
 from bullet import Bullet
 from meatball import Meatball
+from falukorv import Falukorv
 
 
 # making Player a child of the Sprite class
@@ -24,7 +25,6 @@ class Player(pygame.sprite.Sprite):
         # GAMEPLAY VARIABLES
         self.speed = 5
         self.health = 100
-        self.bullet_cooldown = 0
         self.weapon = Meatball()
 
     def update(self):
@@ -42,12 +42,10 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
 
-    def attack(self,  bullets):
-        
-        if self.bullet_cooldown <=0:
-                if self.weapon.name == "Meatball":
-                    self.weapon.attack(self, bullets)
-                    # resetting the cooldown
-                    self.bullet_cooldown = fps        # cooldown ==> how many frames I need to wait until I can shoot again
-                    
-        self.bullet_cooldown -= 1
+    def attack(self, bullets):
+        direction = 0  # Example direction, you might want to calculate this based on player orientation
+        bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, direction)
+        if bullet:
+            bullets.add(bullet)
+            print(f"Bullet added at ({bullet.rect.x}, {bullet.rect.y})")
+

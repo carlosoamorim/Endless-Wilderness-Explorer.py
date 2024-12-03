@@ -96,15 +96,6 @@ def execute_game(player):
         for bullet in bullets:
             bullet.draw(screen)
 
-        # Check for collisions between bullets and enemies
-        for bullet in bullets:
-            collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
-            for enemy in collided_enemies:
-                enemy.health -= player.weapon.damage
-                bullet.kill()
-                if enemy.health <= 0:
-                    enemy.kill()
-
         # Check for collisions between player and enemies
         for enemy in enemies:
             if pygame.sprite.spritecollide(enemy, player_group, False):
