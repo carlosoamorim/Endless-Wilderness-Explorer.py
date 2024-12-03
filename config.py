@@ -1,6 +1,6 @@
 # Config file used to set global variables and other settings
 # COLORS AND PICTURES HERE FOR NOW
-
+import random
 # COLORS
 dark_red = (138, 0, 0)  # Dark red for buttons
 deep_black = (19, 20, 20)  # Almost black for background
@@ -14,6 +14,7 @@ red = (150, 0, 24)
 cute_purple = (128, 0, 128)
 greenish = (182, 215, 168)
 black = (0, 0 ,0)
+gold = (255, 215, 0)
 # SCREEN RESOLUTION
 resolution = (720, 720) # height/width
 width, height = resolution[0], resolution[1]
@@ -23,4 +24,5 @@ fps = 60
 player_size = (50, 100)
 enemy_size = (40, 40)
 bullet_size = 10
+power_up_size = (random.randint(10,50))
 
