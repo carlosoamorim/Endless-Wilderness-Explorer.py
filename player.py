@@ -1,21 +1,18 @@
-from utils import *
-from config import *
 import pygame
 import math
+import time
+from config import *
+from utils import *
 from bullet import Bullet
+from power_up import Power_up
 
 
-# making Player a child of the Sprite class
 class Player(pygame.sprite.Sprite):
-
     def __init__(self):
-        # calling the mother class' init
         super().__init__()
 
         # VISUAL VARIABLES
-        # we call surface to represent the player image
         self.image = pygame.Surface(player_size)
-        # drawing the image of the player
         self.image.fill(cute_purple)
         self.rect = self.image.get_rect()
         self.rect.center = (width // 2, height // 2)
@@ -24,13 +21,17 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.health = 100
         self.bullet_cooldown = 0
+        self.power_active = False
+        self.invincible = False
+
 
     def update(self):
-
-        # getting the keys input:
+        """Handle player movement with boundary checks."""
         keys = pygame.key.get_pressed()
+        self.move(keys)
 
-        # checking which keys were pressed and moving the player accordingly
+    def move(self, keys):
+        """Move the player within screen boundaries."""
         if keys[pygame.K_w] and self.rect.top > 0:
             self.rect.y -= self.speed
         if keys[pygame.K_s] and self.rect.bottom < height:
@@ -41,25 +42,30 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.speed
 
     def shoot(self, bullets):
-        """
-        bullets --> pygame group where I will add bullets
-        """
-        # cooldown ==> how many frames I need to wait until I can shoot again
-        if self.bullet_cooldown <=0:
-            # === defining the directions in which the bullets will fly ===
-            # these 4 directions are, in order, right, left, up, down
+        """Shoot bullets in all directions."""
+        if self.bullet_cooldown <= 0:
             for angle in [0, math.pi, math.pi / 2, 3 * math.pi / 2]:
-
-                # === creating a bullet for each angle ===
-
-                # I will use self.rect.centerx to make the x position of the bullet the same as the
-                # x position of the player, thus making the bullet come out of them.
-                # finally, the direction of the bullet is the angle
                 bullet = Bullet(self.rect.centerx, self.rect.centery, angle)
-                # adding the bullet to the bullets pygame group.
                 bullets.add(bullet)
+            self.bullet_cooldown = fps  # Reset cooldown
+        elif self.bullet_cooldown > 0:
+            self.bullet_cooldown -= 1
 
-            # resetting the cooldown
-            self.bullet_cooldown = fps
 
-        self.bullet_cooldown -= 1
+class Invincibility(Power_up):
+    def __init__(self, power_box_weight, power_box_height, chance, image):
+        super().__init__("Invincibility", power_box_weight, power_box_height, chance, image)
+
+    def power_affect_player(self, player):
+        """ºinvicible activate, with this variable I deactivated the damage system."""
+        player.invincible = True
+
+        player.image.fill(gold)  # Change color to indicate invincibility
+
+    def detransform(self, player):
+        """Go back to normal."""
+        player.image.fill(cute_purple)  # Reset to original color
+        player.invincible = False
+        player.power_active = False
+    def power_affect_game(self, target):
+        pass
