@@ -4,7 +4,7 @@ from config import *
 from utils import *
 from abc import abstractmethod, ABC
 
-class Power_up(ABC, pygame.sprite.Sprite):
+class PowerUp(ABC, pygame.sprite.Sprite):
 
     def __init__(self, power_name, power_box_weight, power_box_height, chance, image):
         super().__init__()
@@ -35,28 +35,45 @@ class Power_up(ABC, pygame.sprite.Sprite):
         pass
 
 
-class Execute_Order_66(Power_up):
+class Desspawn_machine(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):
         super().__init__("Execute Order 66",power_box_weight, power_box_height, chance, image)
 
     def power_affect_player(self, player):
         pass
 
+
+
     def power_affect_game(self, target):
         for enemy in target:
-            enemy.kill()
+            if len(target) > 2:
+                enemy.kill()
 
 
-class Desspawn_machine(Power_up):
+class Slow_respawn(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):
-        super().__init__("Desspawn machine", power_box_weight, power_box_height, chance, image)
+        super().__init__("Slow_respawn", power_box_weight, power_box_height, chance, image)
 
     def power_affect_player(self, player):
         pass
 
+
     def power_affect_game(self, current_enemy_cooldown):
+
 
         #Increases the respawn cooldown for enemies.
         current_enemy_cooldown = fps * 5
 
         return current_enemy_cooldown
+
+
+class Heal(PowerUp):
+    def __init__(self, power_box_weight, power_box_height, chance, image):
+        super().__init__("Heal", power_box_weight, power_box_height, chance, image)
+
+    def power_affect_player(self, player):
+        self.player = player
+        self.player.health += 25
+
+    def power_affect_game(self, target):
+        pass
