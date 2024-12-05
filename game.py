@@ -6,7 +6,7 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from power_up import *
+from PowerUp import *
 import math
 from game_over import game_over_screen
 from Power_up_timer import Timer
@@ -65,7 +65,7 @@ def execute_game(player):
     clock = pygame.time.Clock()
     original_enemy_cooldown = fps * 2
     enemy_cooldown = original_enemy_cooldown
-    damage_cooldown = 1
+    damage_cooldown = 2
     last_damage_time = 0
     power_respawn = 0
 
@@ -84,12 +84,12 @@ def execute_game(player):
         clock.tick(fps)
         screen.blit(background, (0, 0))  # Draw background
         # Power-ups
-        gambling_untouch = random.randint(0, 20)
-        gambling_despawn = random.randint(0, 15)
-        gambling_order66 = random.randint(0, 30)
+        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
+        gambling_despawn = random.randint(0, 1) # 15
+        gambling_slowdown = random.randint(0, 1) # 30
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
-        order66 = Execute_Order_66(48, 48, gambling_order66, image="images/order66.png")
-        desspawn = Desspawn_machine(48, 48, gambling_despawn, image="images/despawn.png")
+        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
+        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -105,18 +105,18 @@ def execute_game(player):
 
         # Spawn enemies
         if enemy_cooldown <= 0:
-            enemy = Enemy()
+            enemy = Enemy(player)
             enemies.add(enemy)
-            enemy_cooldown = fps * 2 if not desspawn_timer.running else desspawn.power_affect_game(enemy_cooldown)  # Adjust spawn rate
+            enemy_cooldown = fps * 2 if not desspawn_timer.running else slowdown.power_affect_game(enemy_cooldown, enemies)  # Adjust spawn rate
         enemy_cooldown -= 1
 
 
 
         # Spawn power-ups
         if power_respawn <= 0:
-            powers.add(untouch) if untouch.chance == 20 else None
-            powers.add(order66) if order66.chance == 15 else None
-            powers.add(desspawn) if desspawn.chance == 30 else None
+            powers.add(untouch) if untouch.chance == 1 or untouch.chance == 10 else None
+            powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
+            powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
 
             power_respawn = fps * 5
         power_respawn -= 1
@@ -138,13 +138,14 @@ def execute_game(player):
                         powers.remove(power)
                         power.power_affect_player(player)
                         player.power_active = "Invincibility"
-                    elif isinstance(power, Execute_Order_66):
+                    elif isinstance(power, Desspawn_machine):
                         powers.remove(power)
                         power.power_affect_game(enemies)
-                    elif isinstance(power, Desspawn_machine):
+
+                    elif isinstance(power, Slow_respawn):
                         desspawn_timer.start(15)
                         powers.remove(power)
-                        player.power_active = "Desspawn"
+                        player.power_active = "Slow respawn"
 
         # Check timers
         if active_timer.running and not active_timer.update():
@@ -155,7 +156,7 @@ def execute_game(player):
             player.power_active = False
 
         # Check if the player moved to the next area
-        if player.rect.right >= width:
+        if player.rect.right >= width and not player.power_active:
             return "shed"
         # Draw sprites
         player_group.draw(screen)
@@ -193,7 +194,7 @@ def execute_game(player):
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
-                    player.health -= 25
+                    player.health -= 10
                     player.image.fill(red)
                     last_damage_time = current_time
                     if player.health <= 0:

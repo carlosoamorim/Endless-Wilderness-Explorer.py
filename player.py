@@ -4,7 +4,7 @@ import time
 from config import *
 from utils import *
 from bullet import Bullet
-from power_up import Power_up
+from PowerUp import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
             self.bullet_cooldown -= 1
 
 
-class Invincibility(Power_up):
+class Invincibility(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):
         super().__init__("Invincibility", power_box_weight, power_box_height, chance, image)
 
@@ -67,5 +67,5 @@ class Invincibility(Power_up):
         player.image.fill(cute_purple)  # Reset to original color
         player.invincible = False
         player.power_active = False
-    def power_affect_game(self, target):
+    def power_affect_game(self, target, target2):
         pass
