@@ -14,6 +14,7 @@ def interface():
     corbelfont = pygame.font.SysFont("Corbel", 50)
     comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
 
+
     # Text renderings
     wilderness_text = corbelfont.render("Wilderness Explorer", True, white)
     title_text = comicsansfont.render("Computation III - Project", True, glowing_light_red)
@@ -154,4 +155,3 @@ def rules():
             create_button(screen, "Back", dark_red, 450, 600, 140, 60, corbelfont)
 
             pygame.display.update()
-
