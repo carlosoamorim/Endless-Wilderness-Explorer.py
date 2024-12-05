@@ -13,14 +13,16 @@ def interface():
     # Fonts
     corbelfont = pygame.font.SysFont("Corbel", 50)
     comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
+    customfont = pygame.font.Font("fonts/futurama/fr-bold.ttf", 50)
 
     # Text renderings
-    wilderness_text = corbelfont.render("Wilderness Explorer", True, white)
-    title_text = comicsansfont.render("Computation III - Project", True, glowing_light_red)
+    wilderness_text = customfont.render("Wilderness Explorer", True, ikea_blue)
+    title_text = customfont.render("Meatball Mania", True, white)
+    
 
     # Button coordinates and sizes
     buttons = [
-        {"label": "Wilderness Explorer", "action": wilderness_explorer, "rect": (90, 240, 540, 60), "color": dark_red},
+        {"label": "Wilderness Explorer", "action": wilderness_explorer, "rect": (90, 240, 540, 60), "color": ikea_yellow},
         {"label": "Rules", "action":  rules, "rect": (90, 480, 140, 60), "color": grey},
         {"label": "Options", "action": under_construction, "rect": (90, 600, 140, 60), "color": grey},
         {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": grey},
@@ -49,7 +51,7 @@ def interface():
 
         # Draw title
         screen.blit(title_text, (55, 0))
-
+        screen.blit(wilderness_text, (90, 150))
         pygame.display.update()
 
 
