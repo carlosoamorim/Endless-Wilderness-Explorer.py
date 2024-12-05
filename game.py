@@ -208,7 +208,7 @@ def execute_game(player):
 
         # Reset player color after damage cooldown
         if time.time() - last_damage_time > damage_cooldown and not player.invincible:
-            player.image.fill(cute_purple)
+            player.image = pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png").convert_alpha()
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
