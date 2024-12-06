@@ -11,7 +11,7 @@ import math
 from game_over import game_over_screen
 from Power_up_timer import Timer
 from pause import Pause
-
+from rounds import Rounds
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -69,7 +69,13 @@ def execute_game(player):
     last_damage_time = 0
     power_respawn = 0
 
-
+    #round system:
+    # Initialize round variables
+    current_round = 1
+    enemies_per_round = 5  # Number of enemies to spawn each round
+    enemies_spawned = 0  # Number of enemies spawned in the current round
+    round_active = True  # Indicates if the current round is active
+    rounds = Rounds()
 
     # Timers
     active_timer = Timer()  # Invincibility timer
@@ -84,6 +90,9 @@ def execute_game(player):
     while running:
         clock.tick(fps)
         screen.blit(background, (0, 0))  # Draw background
+        #rounds systems:
+
+
         # Power-ups
         gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 1) # 15
@@ -106,14 +115,31 @@ def execute_game(player):
         # Shooting bullets
         player.shoot(bullets)
 
-        # Spawn enemies
-        if enemy_cooldown <= 0:
-            enemy = Enemy(player)
-            enemies.add(enemy)
-            enemy_cooldown = fps * 2 if not desspawn_timer.running else slowdown.power_affect_game(enemy_cooldown, enemies)  # Adjust spawn rate
-        enemy_cooldown -= 1
 
+        # Spawn enemies if the round is active
+        if round_active:
+            if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
+                enemy = Enemy(player)
+                enemies.add(enemy)
+                enemy_cooldown = fps * 2  # Reset cooldown
+                enemies_spawned += 1
+            enemy_cooldown -= 1
 
+            # Check if all enemies are defeated to end the round
+            if enemies_spawned == enemies_per_round and len(enemies) == 0:
+                round_active = False  # End the current round
+
+        # Transition to the next round if round is not active
+        if not round_active:
+            rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
+            pygame.display.flip()
+            pygame.time.wait(2000)  # Allow the player to see the message
+            rounds.pre_round_countdown(screen, font)
+            current_round += 1
+            enemies_per_round += 2
+            rounds.increase_difficulty(current_round, enemies)
+            enemies_spawned = 0  # Reset enemy spawn counter
+            round_active = True  # Activate the next round
 
         # Spawn power-ups
         if power_respawn <= 0:
@@ -172,7 +198,7 @@ def execute_game(player):
             player.power_active = False
             healup.detransform(player)
                 # Check if the player moved to the next area
-        if player.rect.right >= width and not player.power_active:
+        if player.rect.right >= width and not player.power_active and not round_active:
             return "shed"
         # Draw sprites
         player_group.draw(screen)
@@ -225,11 +251,11 @@ def execute_game(player):
                     last_damage_time = current_time
                     if player.health <= 0:
                         print("Game Over")
-                        pygame.mixer.music.fadeout(2000)
-                        pygame.time.wait(2000)
+                        pygame.mixer.music.stop()
                         pygame.mixer.music.load("music/Sonic 1 Music_ Game Over.mp3")
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
+                        pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
                         return
 
@@ -243,11 +269,15 @@ def execute_game(player):
         health_text = font.render(f'Health: {player.health}', True, white)
         screen.blit(health_text, (220, 10))
 
+        # Draw round number
+        round_text = font.render(f"Round: {current_round}", True, white)
+        screen.blit(round_text, (10, 40))
 
         #Confirms the power up activation
         if player.power_active:
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
+        print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
 
         pygame.display.flip()
 
