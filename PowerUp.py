@@ -10,7 +10,7 @@ class PowerUp(ABC, pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(image)  # Load the image
         self.image = pygame.transform.scale(self.image, (power_box_weight, power_box_height))  # Scale it
-        self.chance =  chance
+        self.chance = chance
 
         self.power_name = power_name
         self.power_box_weight = power_box_weight
@@ -94,8 +94,13 @@ class Heal(PowerUp):
         super().__init__("Heal", power_box_weight, power_box_height, chance, image)
 
     def power_affect_player(self, player):
-        self.player = player
-        self.player.health += 25
 
-    def power_affect_game(self, target):
+        player.health += 25
+        player.image.fill(blue)
+        player.heal = True
+
+    def detransform(self, player):
+        player.heal = False
+
+    def power_affect_game(self, target, target2):
         pass

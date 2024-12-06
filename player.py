@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_cooldown = 0
         self.power_active = False
         self.invincible = False
-
+        self.heal = False
 
     def update(self):
         """Handle player movement with boundary checks."""

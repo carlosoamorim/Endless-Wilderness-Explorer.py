@@ -74,7 +74,8 @@ def execute_game(player):
     # Timers
     active_timer = Timer()  # Invincibility timer
     desspawn_timer = Timer()  # De-spawner timer
-
+    kboom_timer = Timer()
+    heal_timer = Timer()
     running = True
     pause_game = Pause()
     font = pygame.font.Font(None, 36)
@@ -87,9 +88,11 @@ def execute_game(player):
         gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 1) # 15
         gambling_slowdown = random.randint(0, 1) # 30
+        gambling_heal = random.randint(0, 1) # 5
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
+        healup = Heal(48, 48, gambling_heal, image="images/heal.png")
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -117,7 +120,7 @@ def execute_game(player):
             powers.add(untouch) if untouch.chance == 1 or untouch.chance == 10 else None
             powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
             powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
-
+            powers.add(healup) if healup.chance == 1 or healup.chance == 5 else None
             power_respawn = fps * 5
         power_respawn -= 1
 
@@ -140,12 +143,19 @@ def execute_game(player):
                         player.power_active = "Invincibility"
                     elif isinstance(power, Desspawn_machine):
                         powers.remove(power)
+                        kboom_timer.start(3)
                         power.power_affect_game(enemies)
-
+                        player.power_active = "Kboom"
                     elif isinstance(power, Slow_respawn):
                         desspawn_timer.start(15)
                         powers.remove(power)
                         player.power_active = "Slow respawn"
+
+                    elif isinstance(power, Heal):
+                        heal_timer.start(5)
+                        powers.remove(power)
+                        power.power_affect_player(player)
+                        player.power_active = "Healing"
 
         # Check timers
         if active_timer.running and not active_timer.update():
@@ -155,7 +165,13 @@ def execute_game(player):
             enemy_cooldown = original_enemy_cooldown  # Restore spawn rate
             player.power_active = False
 
-        # Check if the player moved to the next area
+        if kboom_timer.running and not kboom_timer.update():
+            player.power_active = False
+
+        if heal_timer.running and not heal_timer.update():
+            player.power_active = False
+            healup.detransform(player)
+                # Check if the player moved to the next area
         if player.rect.right >= width and not player.power_active:
             return "shed"
         # Draw sprites
@@ -178,7 +194,17 @@ def execute_game(player):
             pygame.draw.rect(screen, black, (10, 70, 200, 20))
             pygame.draw.rect(screen, green, (10, 70, bar_width, 20))
 
+        if kboom_timer.running:
+            remaining_time = kboom_timer.get_remaining_time()
+            bar_width = int((remaining_time/kboom_timer.maximum) * 200)
+            pygame.draw.rect(screen, black, (10, 40, 200, 20))
+            pygame.draw.rect(screen, ikea_blue, (10, 40, bar_width, 20))
 
+        if heal_timer.running:
+            remaining_time = heal_timer.get_remaining_time()
+            bar_width = int((remaining_time / heal_timer.maximum) * 200)
+            pygame.draw.rect(screen, black, (10, 70, 200, 20))
+            pygame.draw.rect(screen, cute_purple, (10, 70, bar_width, 20))
 
         # Handle bullet and enemy collisions
         for bullet in bullets:
@@ -209,7 +235,7 @@ def execute_game(player):
 
         # Reset player color after damage cooldown
         if time.time() - last_damage_time > damage_cooldown and not player.invincible:
-            player.image.fill(cute_purple)
+            player.image.fill(cute_purple) if not player.heal else player.image.fill(blue)
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
