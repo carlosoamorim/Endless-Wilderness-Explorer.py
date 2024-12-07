@@ -33,7 +33,11 @@ def game_loop():
     # Endless game loop
     while True:
         if current_state == "main":
-            current_state = execute_game(player)
+            # Pass `current_state` to execute_game to allow state transitions
+            next_state = execute_game(player)
+            if next_state is None:
+                break  # Exit the game if `None` is returned
+            current_state = next_state
         elif current_state == "shed":
             current_state = shed(player)
 
@@ -77,6 +81,7 @@ def execute_game(player):
     round_active = True  # Indicates if the current round is active
     rounds = Rounds()
 
+
     # Timers
     active_timer = Timer()  # Invincibility timer
     slowdown_timer = Timer()  # De-spawner timer
@@ -86,6 +91,10 @@ def execute_game(player):
     pause_game = Pause()
     font = pygame.font.Font(None, 36)
 
+    # Pre-round countdown and shed exploration
+    next_action = rounds.pre_round_countdown(screen, font, player)
+    if next_action == "shed":
+         "shed"  # Return to the shed
     # MAIN GAME LOOP
     while running:
         clock.tick(fps)
@@ -117,13 +126,12 @@ def execute_game(player):
         # Shooting bullets
         player.shoot(bullets)
 
-
         # Spawn enemies if the round is active
         if round_active:
             if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
                 enemy = Enemy(player)
                 enemies.add(enemy)
-                enemy_cooldown = fps * 2 if not slowdown_timer.get_remaining_time() else slowdown.power_affect_game(enemy_cooldown, enemies)# Reset cooldown
+                enemy_cooldown = fps * 2
                 enemies_spawned += 1
             enemy_cooldown -= 1
 
@@ -135,8 +143,10 @@ def execute_game(player):
         if not round_active:
             rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
             pygame.display.flip()
-            pygame.time.wait(2000)  # Allow the player to see the message
-            rounds.pre_round_countdown(screen, font)
+            pygame.time.wait(2000)
+            next_action = rounds.pre_round_countdown(screen, font, player)
+            if next_action == "shed":
+                return "shed"  # Return to the shed
             current_round += 1
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
@@ -200,8 +210,8 @@ def execute_game(player):
             player.power_active = False
             healup.detransform(player)
                 # Check if the player moved to the next area
-        if player.rect.right >= width and not player.power_active:
-            return "shed"
+        #if player.rect.right >= width and not player.power_active or round_active:
+        #    return "shed"
         # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
