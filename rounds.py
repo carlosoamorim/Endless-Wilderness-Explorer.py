@@ -16,7 +16,7 @@ class Rounds:
         # Move player to the shed location
         shed_exploration = True
         shed_text = font.render(
-            "Explore the Shed! Press Enter to Start Next Round or P to go to the Shed",
+            "Explore the Shed! Press Enter to Start a new Round or P to go to the Shed",
             True, white
         )
         shed_text_rect = shed_text.get_rect(center=(width // 2, height // 2 - 50))
@@ -36,6 +36,7 @@ class Rounds:
                         shed_exploration = False
                     elif event.key == pygame.K_p:  # Go to shed
                         shed(player)
+
 
         # Countdown before the next round starts
         for i in range(3, 0, -1):
