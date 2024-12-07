@@ -79,7 +79,7 @@ def execute_game(player):
 
     # Timers
     active_timer = Timer()  # Invincibility timer
-    desspawn_timer = Timer()  # De-spawner timer
+    slowdown_timer = Timer()  # De-spawner timer
     kboom_timer = Timer()
     heal_timer = Timer()
     running = True
@@ -109,7 +109,9 @@ def execute_game(player):
                 return
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # Pause game
-                    pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=desspawn_timer)
+                    pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=slowdown_timer,
+                                          active_timer3=kboom_timer,
+                                          active_timer4=heal_timer)
 
 
         # Shooting bullets
@@ -121,7 +123,7 @@ def execute_game(player):
             if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
                 enemy = Enemy(player)
                 enemies.add(enemy)
-                enemy_cooldown = fps * 2  # Reset cooldown
+                enemy_cooldown = fps * 2 if not slowdown_timer.get_remaining_time() else slowdown.power_affect_game(enemy_cooldown, enemies)# Reset cooldown
                 enemies_spawned += 1
             enemy_cooldown -= 1
 
@@ -173,7 +175,7 @@ def execute_game(player):
                         power.power_affect_game(enemies)
                         player.power_active = "Kboom"
                     elif isinstance(power, Slow_respawn):
-                        desspawn_timer.start(15)
+                        slowdown_timer.start(15)
                         powers.remove(power)
                         player.power_active = "Slow respawn"
 
@@ -187,7 +189,7 @@ def execute_game(player):
         if active_timer.running and not active_timer.update():
             untouch.detransform(player)  # Revert invincibility
             player.power_active = False
-        if desspawn_timer.running and not desspawn_timer.update():
+        if slowdown_timer.running and not slowdown_timer.update():
             enemy_cooldown = original_enemy_cooldown  # Restore spawn rate
             player.power_active = False
 
@@ -198,7 +200,7 @@ def execute_game(player):
             player.power_active = False
             healup.detransform(player)
                 # Check if the player moved to the next area
-        if player.rect.right >= width and not player.power_active and not round_active:
+        if player.rect.right >= width and not player.power_active:
             return "shed"
         # Draw sprites
         player_group.draw(screen)
@@ -214,9 +216,9 @@ def execute_game(player):
             pygame.draw.rect(screen, black, (10, 40, 200, 20))
             pygame.draw.rect(screen, gold, (10, 40, bar_width, 20))
 
-        if desspawn_timer.running:
-            remaining_time = desspawn_timer.get_remaining_time()
-            bar_width = int((remaining_time / desspawn_timer.maximum) * 200)
+        if slowdown_timer.running:
+            remaining_time = slowdown_timer.get_remaining_time()
+            bar_width = int((remaining_time / slowdown_timer.maximum) * 200)
             pygame.draw.rect(screen, black, (10, 70, 200, 20))
             pygame.draw.rect(screen, green, (10, 70, bar_width, 20))
 

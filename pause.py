@@ -4,7 +4,7 @@ import pygame
 
 class Pause:
     @staticmethod
-    def pause_game(screen, font, bg_color=black, text_color=white, active_timer=None, active_timer2 = None):
+    def pause_game(screen, font, bg_color=black, text_color=white, active_timer=None, active_timer2 = None, active_timer3 = None, active_timer4= None):
         """
         Displays a pause menu and waits for the player to resume or quit.
         Args:
@@ -28,6 +28,11 @@ class Pause:
 
         if active_timer2 and not active_timer2.paused:
             active_timer2.pause()
+
+        if active_timer3 and not active_timer3.paused:
+            active_timer3.pause()
+        if active_timer4 and not active_timer4.paused:
+            active_timer4.pause()
         while paused:
             screen.fill(bg_color)
             screen.blit(pause_text, (width // 2 - pause_text.get_width() // 2, height // 2 - 100))
@@ -47,6 +52,12 @@ class Pause:
 
                         if active_timer2 and active_timer2.paused:
                             active_timer2.resume()
+
+                        if active_timer3 and active_timer3.paused:
+                            active_timer3.resume()
+
+                        if active_timer4 and active_timer4.paused:
+                            active_timer4.resume()
                     elif event.key == pygame.K_q:  # Quit game
                         pygame.quit()
                         return "quit"
