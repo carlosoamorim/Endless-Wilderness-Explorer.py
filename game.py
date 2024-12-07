@@ -92,9 +92,8 @@ def execute_game(player):
     font = pygame.font.Font(None, 36)
 
     # Pre-round countdown and shed exploration
-    next_action = rounds.pre_round_countdown(screen, font, player)
-    if next_action == "shed":
-         "shed"  # Return to the shed
+    rounds.pre_round_countdown(screen, font, player)
+
     # MAIN GAME LOOP
     while running:
         clock.tick(fps)
@@ -131,7 +130,7 @@ def execute_game(player):
             if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
                 enemy = Enemy(player)
                 enemies.add(enemy)
-                enemy_cooldown = fps * 2
+                enemy_cooldown = fps * 2 if not slowdown_timer.update() else slowdown.power_affect_game(enemy_cooldown, enemies)
                 enemies_spawned += 1
             enemy_cooldown -= 1
 
@@ -144,9 +143,8 @@ def execute_game(player):
             rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
             pygame.display.flip()
             pygame.time.wait(2000)
-            next_action = rounds.pre_round_countdown(screen, font, player)
-            if next_action == "shed":
-                return "shed"  # Return to the shed
+            rounds.pre_round_countdown(screen, font, player)
+             # Return to the shed
             current_round += 1
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
