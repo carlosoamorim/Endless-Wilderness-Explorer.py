@@ -123,7 +123,8 @@ def execute_game(player):
 
 
         # Shooting bullets
-        player.shoot(bullets)
+        if player.nearest_enemy(enemies) is not None:
+            player.attack(bullets, enemies)
 
         # Spawn enemies if the round is active
         if round_active:
@@ -165,6 +166,25 @@ def execute_game(player):
         player_group.update()
         bullets.update()
         enemies.update(player)
+
+
+        # Check if the player moved to the next area
+        if player.rect.right >= width:
+            return "shed"
+
+        # Set nearest enemy as target
+        for bullet in bullets:
+            if bullet.direction == 0:
+                bullet.direction = player.nearest_enemy_angle(enemies)
+
+        # Check for bullet-enemy collisions
+        for bullet in bullets:
+            if bullet.collide(enemies):
+                for enemy in enemies:
+                    if enemy.health <= 0:
+                        enemies.remove(enemy)
+
+
         powers.update()
 
         # Handle power-up collision
@@ -210,12 +230,14 @@ def execute_game(player):
                 # Check if the player moved to the next area
         #if player.rect.right >= width and not player.power_active or round_active:
         #    return "shed"
+
         # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
         powers.draw(screen)
         for bullet in bullets:
             bullet.draw(screen)
+
 
         # Draw timers
         if active_timer.running:

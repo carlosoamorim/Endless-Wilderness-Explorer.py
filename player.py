@@ -4,6 +4,7 @@ import time
 from config import *
 from utils import *
 from bullet import Bullet
+from meatball import Meatball
 from PowerUp import *
 
 
@@ -20,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         # GAMEPLAY VARIABLES
         self.speed = 5
         self.health = 100
+        self.weapon = Meatball()
         self.bullet_cooldown = 0
         self.power_active = False
         self.invincible = False
@@ -41,15 +43,27 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
 
-    def shoot(self, bullets):
-        """Shoot bullets in all directions."""
-        if self.bullet_cooldown <= 0:
-            for angle in [0, math.pi, math.pi / 2, 3 * math.pi / 2]:
-                bullet = Bullet(self.rect.centerx, self.rect.centery, angle)
-                bullets.add(bullet)
-            self.bullet_cooldown = fps  # Reset cooldown
-        elif self.bullet_cooldown > 0:
-            self.bullet_cooldown -= 1
+    def attack(self, bullets, enemies):
+        bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
+        if bullet:
+            bullets.add(bullet)
+
+    def nearest_enemy(self, enemies):
+        nearest_enemy = None
+        nearest_distance = float("inf")
+        for enemy in enemies:
+            distance = math.hypot(enemy.rect.x - self.rect.x, enemy.rect.y - self.rect.y)
+            if distance < nearest_distance:
+                nearest_enemy = enemy
+                nearest_distance = distance
+        return nearest_enemy
+    
+    def nearest_enemy_angle(self, enemies):
+        nearest_enemy_angle = 0
+        nearest_enemy = self.nearest_enemy(enemies)
+        if nearest_enemy is not None:
+            nearest_enemy_angle = math.degrees(math.atan2(nearest_enemy.rect.y - self.rect.y, nearest_enemy.rect.x - self.rect.x))
+        return nearest_enemy_angle
 
 
 class Invincibility(PowerUp):
