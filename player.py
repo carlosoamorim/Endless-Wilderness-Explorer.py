@@ -1,23 +1,19 @@
-from utils import *
-from config import *
 import pygame
 import math
+import time
+from config import *
+from utils import *
 from bullet import Bullet
 from meatball import Meatball
-from falukorv import Falukorv
+from PowerUp import *
 
 
-# making Player a child of the Sprite class
 class Player(pygame.sprite.Sprite):
-
     def __init__(self):
-        # calling the mother class' init
         super().__init__()
 
         # VISUAL VARIABLES
-        # we call surface to represent the player image
         self.image = pygame.Surface(player_size)
-        # drawing the image of the player
         self.image.fill(cute_purple)
         self.rect = self.image.get_rect()
         self.rect.center = (width // 2, height // 2)
@@ -26,13 +22,18 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.health = 100
         self.weapon = Meatball()
+        self.bullet_cooldown = 0
+        self.power_active = False
+        self.invincible = False
+        self.heal = False
 
     def update(self):
-
-        # getting the keys input:
+        """Handle player movement with boundary checks."""
         keys = pygame.key.get_pressed()
+        self.move(keys)
 
-        # checking which keys were pressed and moving the player accordingly
+    def move(self, keys):
+        """Move the player within screen boundaries."""
         if keys[pygame.K_w] and self.rect.top > 0:
             self.rect.y -= self.speed
         if keys[pygame.K_s] and self.rect.bottom < height:
@@ -64,3 +65,21 @@ class Player(pygame.sprite.Sprite):
             nearest_enemy_angle = math.degrees(math.atan2(nearest_enemy.rect.y - self.rect.y, nearest_enemy.rect.x - self.rect.x))
         return nearest_enemy_angle
 
+
+class Invincibility(PowerUp):
+    def __init__(self, power_box_weight, power_box_height, chance, image):
+        super().__init__("Invincibility", power_box_weight, power_box_height, chance, image)
+
+    def power_affect_player(self, player):
+        """ºinvicible activate, with this variable I deactivated the damage system."""
+        player.invincible = True
+
+        player.image.fill(gold)  # Change color to indicate invincibility
+
+    def detransform(self, player):
+        """Go back to normal."""
+        player.image.fill(cute_purple)  # Reset to original color
+        player.invincible = False
+        player.power_active = False
+    def power_affect_game(self, target, target2):
+        pass
