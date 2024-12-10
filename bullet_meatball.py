@@ -8,7 +8,7 @@ class BulletMeatball(Bullet):
     def collide(self, enemies):
         for enemy in enemies:
             if self.rect.colliderect(enemy.rect):
-                enemy.health -= 3
+                enemy.health -= 5
                 self.kill()
                 return True
         return False

@@ -42,10 +42,25 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
 
-    def attack(self, bullets):
-        direction = 0  # Example direction, you might want to calculate this based on player orientation
-        bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, direction)
+    def attack(self, bullets, enemies):
+        bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
         if bullet:
             bullets.add(bullet)
-            print(f"Bullet added at ({bullet.rect.x}, {bullet.rect.y})")
+
+    def nearest_enemy(self, enemies):
+        nearest_enemy = None
+        nearest_distance = float("inf")
+        for enemy in enemies:
+            distance = math.hypot(enemy.rect.x - self.rect.x, enemy.rect.y - self.rect.y)
+            if distance < nearest_distance:
+                nearest_enemy = enemy
+                nearest_distance = distance
+        return nearest_enemy
+    
+    def nearest_enemy_angle(self, enemies):
+        nearest_enemy_angle = 0
+        nearest_enemy = self.nearest_enemy(enemies)
+        if nearest_enemy is not None:
+            nearest_enemy_angle = math.degrees(math.atan2(nearest_enemy.rect.y - self.rect.y, nearest_enemy.rect.x - self.rect.x))
+        return nearest_enemy_angle
 

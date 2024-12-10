@@ -72,7 +72,8 @@ def execute_game(player):
                 return
 
         # Shooting bullets
-        player.attack(bullets)
+        if player.nearest_enemy(enemies) is not None:
+            player.attack(bullets, enemies)
 
         # Spawn enemies
         if enemy_cooldown <= 0:
@@ -89,6 +90,18 @@ def execute_game(player):
         # Check if the player moved to the next area
         if player.rect.right >= width:
             return "shed"
+
+        # Set nearest enemy as target
+        for bullet in bullets:
+            if bullet.direction == 0:
+                bullet.direction = player.nearest_enemy_angle(enemies)
+
+        # Check for bullet-enemy collisions
+        for bullet in bullets:
+            if bullet.collide(enemies):
+                for enemy in enemies:
+                    if enemy.health <= 0:
+                        enemies.remove(enemy)
 
         # Draw sprites
         player_group.draw(screen)
