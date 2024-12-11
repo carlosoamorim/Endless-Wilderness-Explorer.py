@@ -47,7 +47,7 @@ def execute_game(player):
     pygame.mixer.init()
 
     # Load and play music
-    pygame.mixer.music.load("music/Undefeatable Epic Version.mp3")
+    pygame.mixer.music.load("music/Circles.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
@@ -168,9 +168,9 @@ def execute_game(player):
         enemies.update(player)
 
 
-        # Check if the player moved to the next area
-        if player.rect.right >= width:
-            return "shed"
+        # Check if the player moved to the next area, this code is too dangerous code to be activated
+        #if player.rect.right >= width:
+         #   return "shed"
 
         # Set nearest enemy as target
         for bullet in bullets:
