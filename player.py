@@ -13,10 +13,15 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # VISUAL VARIABLES
+        
         self.image = pygame.Surface(player_size)
-        self.image.fill(cute_purple)
         self.rect = self.image.get_rect()
-        self.rect.center = (width // 2, height // 2)
+        self.rect.center = (width / 2, height / 2)
+        
+        self.image = pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (50, 100))
+
+        
 
         # GAMEPLAY VARIABLES
         self.speed = 5
