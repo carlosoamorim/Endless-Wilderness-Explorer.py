@@ -6,12 +6,12 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from power_up import *
+from PowerUp import *
 import math
 from game_over import game_over_screen
 from Power_up_timer import Timer
 from pause import Pause
-
+from rounds import Rounds
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -33,7 +33,11 @@ def game_loop():
     # Endless game loop
     while True:
         if current_state == "main":
-            current_state = execute_game(player)
+            # Pass `current_state` to execute_game to allow state transitions
+            next_state = execute_game(player)
+            if next_state is None:
+                break  # Exit the game if `None` is returned
+            current_state = next_state
         elif current_state == "shed":
             current_state = shed(player)
 
@@ -43,7 +47,7 @@ def execute_game(player):
     pygame.mixer.init()
 
     # Load and play music
-    pygame.mixer.music.load("music/Undefeatable Epic Version.mp3")
+    pygame.mixer.music.load("music/Circles.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
@@ -65,31 +69,47 @@ def execute_game(player):
     clock = pygame.time.Clock()
     original_enemy_cooldown = fps * 2
     enemy_cooldown = original_enemy_cooldown
-    damage_cooldown = 1
+    damage_cooldown = 2
     last_damage_time = 0
     power_respawn = 0
 
+    #round system:
+    # Initialize round variables
+    current_round = 1
+    enemies_per_round = 5  # Number of enemies to spawn each round
+    enemies_spawned = 0  # Number of enemies spawned in the current round
+    round_active = True  # Indicates if the current round is active
+    rounds = Rounds()
 
 
     # Timers
     active_timer = Timer()  # Invincibility timer
-    desspawn_timer = Timer()  # De-spawner timer
-
+    slowdown_timer = Timer()  # De-spawner timer
+    kboom_timer = Timer()
+    heal_timer = Timer()
     running = True
     pause_game = Pause()
     font = pygame.font.Font(None, 36)
+
+    # Pre-round countdown and shed exploration
+    rounds.pre_round_countdown(screen, font, player)
 
     # MAIN GAME LOOP
     while running:
         clock.tick(fps)
         screen.blit(background, (0, 0))  # Draw background
+        #rounds systems:
+
+
         # Power-ups
-        gambling_untouch = random.randint(0, 20)
-        gambling_despawn = random.randint(0, 15)
-        gambling_order66 = random.randint(0, 30)
+        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
+        gambling_despawn = random.randint(0, 1) # 15
+        gambling_slowdown = random.randint(0, 1) # 30
+        gambling_heal = random.randint(0, 1) # 5
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
-        order66 = Execute_Order_66(48, 48, gambling_order66, image="images/order66.png")
-        desspawn = Desspawn_machine(48, 48, gambling_despawn, image="images/despawn.png")
+        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
+        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
+        healup = Heal(48, 48, gambling_heal, image="images/heal.png")
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -97,27 +117,47 @@ def execute_game(player):
                 return
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # Pause game
-                    pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=desspawn_timer)
+                    pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=slowdown_timer,
+                                          active_timer3=kboom_timer,
+                                          active_timer4=heal_timer)
 
 
         # Shooting bullets
-        player.shoot(bullets)
+        if player.nearest_enemy(enemies) is not None:
+            player.attack(bullets, enemies)
 
-        # Spawn enemies
-        if enemy_cooldown <= 0:
-            enemy = Enemy()
-            enemies.add(enemy)
-            enemy_cooldown = fps * 2 if not desspawn_timer.running else desspawn.power_affect_game(enemy_cooldown)  # Adjust spawn rate
-        enemy_cooldown -= 1
+        # Spawn enemies if the round is active
+        if round_active:
+            if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
+                enemy = Enemy(player)
+                enemies.add(enemy)
+                enemy_cooldown = fps * 2 if not slowdown_timer.update() else slowdown.power_affect_game(enemy_cooldown, enemies)
+                enemies_spawned += 1
+            enemy_cooldown -= 1
 
+            # Check if all enemies are defeated to end the round
+            if enemies_spawned == enemies_per_round and len(enemies) == 0:
+                round_active = False  # End the current round
 
+        # Transition to the next round if round is not active
+        if not round_active:
+            rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
+            pygame.display.flip()
+            pygame.time.wait(2000)
+            rounds.pre_round_countdown(screen, font, player)
+             # Return to the shed
+            current_round += 1
+            enemies_per_round += 2
+            rounds.increase_difficulty(current_round, enemies)
+            enemies_spawned = 0  # Reset enemy spawn counter
+            round_active = True  # Activate the next round
 
         # Spawn power-ups
         if power_respawn <= 0:
-            powers.add(untouch) if untouch.chance == 20 else None
-            powers.add(order66) if order66.chance == 15 else None
-            powers.add(desspawn) if desspawn.chance == 30 else None
-
+            powers.add(untouch) if untouch.chance == 1 or untouch.chance == 10 else None
+            powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
+            powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
+            powers.add(healup) if healup.chance == 1 or healup.chance == 5 else None
             power_respawn = fps * 5
         power_respawn -= 1
 
@@ -126,6 +166,25 @@ def execute_game(player):
         player_group.update()
         bullets.update()
         enemies.update(player)
+
+
+        # Check if the player moved to the next area, this code is too dangerous code to be activated
+        #if player.rect.right >= width:
+         #   return "shed"
+
+        # Set nearest enemy as target
+        for bullet in bullets:
+            if bullet.direction == 0:
+                bullet.direction = player.nearest_enemy_angle(enemies)
+
+        # Check for bullet-enemy collisions
+        for bullet in bullets:
+            if bullet.collide(enemies):
+                for enemy in enemies:
+                    if enemy.health <= 0:
+                        enemies.remove(enemy)
+
+
         powers.update()
 
         # Handle power-up collision
@@ -138,31 +197,47 @@ def execute_game(player):
                         powers.remove(power)
                         power.power_affect_player(player)
                         player.power_active = "Invincibility"
-                    elif isinstance(power, Execute_Order_66):
-                        powers.remove(power)
-                        power.power_affect_game(enemies)
                     elif isinstance(power, Desspawn_machine):
-                        desspawn_timer.start(15)
                         powers.remove(power)
-                        player.power_active = "Desspawn"
+                        kboom_timer.start(3)
+                        power.power_affect_game(enemies)
+                        player.power_active = "Kboom"
+                    elif isinstance(power, Slow_respawn):
+                        slowdown_timer.start(15)
+                        powers.remove(power)
+                        player.power_active = "Slow respawn"
+
+                    elif isinstance(power, Heal):
+                        heal_timer.start(5)
+                        powers.remove(power)
+                        power.power_affect_player(player)
+                        player.power_active = "Healing"
 
         # Check timers
         if active_timer.running and not active_timer.update():
             untouch.detransform(player)  # Revert invincibility
             player.power_active = False
-        if desspawn_timer.running and not desspawn_timer.update():
+        if slowdown_timer.running and not slowdown_timer.update():
             enemy_cooldown = original_enemy_cooldown  # Restore spawn rate
             player.power_active = False
 
-        # Check if the player moved to the next area
-        if player.rect.right >= width:
-            return "shed"
+        if kboom_timer.running and not kboom_timer.update():
+            player.power_active = False
+
+        if heal_timer.running and not heal_timer.update():
+            player.power_active = False
+            healup.detransform(player)
+                # Check if the player moved to the next area
+        #if player.rect.right >= width and not player.power_active or round_active:
+        #    return "shed"
+
         # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
         powers.draw(screen)
         for bullet in bullets:
             bullet.draw(screen)
+
 
         # Draw timers
         if active_timer.running:
@@ -171,13 +246,23 @@ def execute_game(player):
             pygame.draw.rect(screen, black, (10, 40, 200, 20))
             pygame.draw.rect(screen, gold, (10, 40, bar_width, 20))
 
-        if desspawn_timer.running:
-            remaining_time = desspawn_timer.get_remaining_time()
-            bar_width = int((remaining_time / desspawn_timer.maximum) * 200)
+        if slowdown_timer.running:
+            remaining_time = slowdown_timer.get_remaining_time()
+            bar_width = int((remaining_time / slowdown_timer.maximum) * 200)
             pygame.draw.rect(screen, black, (10, 70, 200, 20))
             pygame.draw.rect(screen, green, (10, 70, bar_width, 20))
 
+        if kboom_timer.running:
+            remaining_time = kboom_timer.get_remaining_time()
+            bar_width = int((remaining_time/kboom_timer.maximum) * 200)
+            pygame.draw.rect(screen, black, (10, 40, 200, 20))
+            pygame.draw.rect(screen, ikea_blue, (10, 40, bar_width, 20))
 
+        if heal_timer.running:
+            remaining_time = heal_timer.get_remaining_time()
+            bar_width = int((remaining_time / heal_timer.maximum) * 200)
+            pygame.draw.rect(screen, black, (10, 70, 200, 20))
+            pygame.draw.rect(screen, cute_purple, (10, 70, bar_width, 20))
 
         # Handle bullet and enemy collisions
         for bullet in bullets:
@@ -193,22 +278,22 @@ def execute_game(player):
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
-                    player.health -= 25
+                    player.health -= 10
                     player.image.fill(red)
                     last_damage_time = current_time
                     if player.health <= 0:
                         print("Game Over")
-                        pygame.mixer.music.fadeout(2000)
-                        pygame.time.wait(2000)
+                        pygame.mixer.music.stop()
                         pygame.mixer.music.load("music/Sonic 1 Music_ Game Over.mp3")
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
+                        pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
                         return
 
         # Reset player color after damage cooldown
         if time.time() - last_damage_time > damage_cooldown and not player.invincible:
-            player.image.fill(cute_purple)
+            player.image.fill(cute_purple) if not player.heal else player.image.fill(blue)
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
@@ -216,11 +301,15 @@ def execute_game(player):
         health_text = font.render(f'Health: {player.health}', True, white)
         screen.blit(health_text, (220, 10))
 
+        # Draw round number
+        round_text = font.render(f"Round: {current_round}", True, white)
+        screen.blit(round_text, (10, 40))
 
         #Confirms the power up activation
         if player.power_active:
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
+        print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
 
         pygame.display.flip()
 

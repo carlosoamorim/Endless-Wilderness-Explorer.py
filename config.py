@@ -15,6 +15,11 @@ cute_purple = (128, 0, 128)
 greenish = (182, 215, 168)
 black = (0, 0 ,0)
 gold = (255, 215, 0)
+
+# IKEA-Specific colors
+ikea_blue = (0, 87, 173)
+ikea_yellow = (251, 218, 12)
+
 # SCREEN RESOLUTION
 resolution = (720, 720) # height/width
 width, height = resolution[0], resolution[1]
