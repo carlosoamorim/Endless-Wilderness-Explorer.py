@@ -4,8 +4,9 @@ import time
 from config import *
 from utils import *
 from bullet import Bullet
-from meatball import Meatball
-from PowerUp import *
+from weapons.meatball import Meatball
+from powerups.PowerUp import *
+from weapons.falukorv import Falukorv
 
 
 class Player(pygame.sprite.Sprite):
@@ -65,21 +66,3 @@ class Player(pygame.sprite.Sprite):
             nearest_enemy_angle = math.degrees(math.atan2(nearest_enemy.rect.y - self.rect.y, nearest_enemy.rect.x - self.rect.x))
         return nearest_enemy_angle
 
-
-class Invincibility(PowerUp):
-    def __init__(self, power_box_weight, power_box_height, chance, image):
-        super().__init__("Invincibility", power_box_weight, power_box_height, chance, image)
-
-    def power_affect_player(self, player):
-        """ºinvicible activate, with this variable I deactivated the damage system."""
-        player.invincible = True
-
-        player.image.fill(gold)  # Change color to indicate invincibility
-
-    def detransform(self, player):
-        """Go back to normal."""
-        player.image.fill(cute_purple)  # Reset to original color
-        player.invincible = False
-        player.power_active = False
-    def power_affect_game(self, target, target2):
-        pass

@@ -6,10 +6,14 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from PowerUp import *
+from powerups.PowerUp import PowerUp
+from powerups.heal import Heal
+from powerups.despawn_machine import Desspawn_machine
+from powerups.slow_respawn import Slow_respawn
+from powerups.invincibility import Invincibility
 import math
 from game_over import game_over_screen
-from Power_up_timer import Timer
+from powerups.Power_up_timer import Timer
 from pause import Pause
 from rounds import Rounds
 def circle_collision(sprite1, sprite2):
@@ -106,7 +110,7 @@ def execute_game(player):
         gambling_despawn = random.randint(0, 1) # 15
         gambling_slowdown = random.randint(0, 1) # 30
         gambling_heal = random.randint(0, 1) # 5
-        untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
+        untouch = Invincibility(48, 48, gambling_untouch, image= "images/snus-powerup.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
         healup = Heal(48, 48, gambling_heal, image="images/heal.png")
