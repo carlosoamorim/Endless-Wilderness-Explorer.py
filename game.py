@@ -92,13 +92,13 @@ def execute_game(player):
     font = pygame.font.Font(None, 36)
 
     # Pre-round countdown and shed exploration
-    rounds.pre_round_countdown(screen, font, player)
+    rounds.pre_round_countdown(screen, font, player, power_timer=active_timer, power_timer2=slowdown_timer,
+                                                power_timer3=kboom_timer, power_timer4=heal_timer)
 
     # MAIN GAME LOOP
     while running:
         clock.tick(fps)
         screen.blit(background, (0, 0))  # Draw background
-        #rounds systems:
 
 
         # Power-ups
@@ -144,7 +144,8 @@ def execute_game(player):
             rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
             pygame.display.flip()
             pygame.time.wait(2000)
-            rounds.pre_round_countdown(screen, font, player)
+            rounds.pre_round_countdown(screen, font, player, power_timer=active_timer, power_timer2=slowdown_timer,
+                                                power_timer3=kboom_timer, power_timer4=heal_timer)
              # Return to the shed
             current_round += 1
             enemies_per_round += 2
@@ -201,6 +202,7 @@ def execute_game(player):
                         powers.remove(power)
                         kboom_timer.start(3)
                         power.power_affect_game(enemies)
+
                         player.power_active = "Kboom"
                     elif isinstance(power, Slow_respawn):
                         slowdown_timer.start(15)
@@ -301,6 +303,10 @@ def execute_game(player):
         health_text = font.render(f'Health: {player.health}', True, white)
         screen.blit(health_text, (220, 10))
 
+
+        #Draw the wallet:
+        wallet_text =font.render(f'your Wallet: {player.wallet}', True, white)
+        screen.blit(wallet_text, (220, 50))
         # Draw round number
         round_text = font.render(f"Round: {current_round}", True, white)
         screen.blit(round_text, (10, 40))
@@ -310,6 +316,8 @@ def execute_game(player):
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
         print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
+
+
 
         pygame.display.flip()
 
