@@ -15,14 +15,26 @@ class Player(pygame.sprite.Sprite):
         # VISUAL VARIABLES
         
         self.image = pygame.Surface(player_size)
+        # Load the original image
+        self.image_R = pygame.image.load("images/Characters/Kalle_R.png").convert_alpha()
+        # Get the original dimensions of the image
+        original_width, original_height = self.image.get_size()
+
+        # Target height and calculate width to maintain aspect ratio
+        target_height = 100
+        aspect_ratio = original_width / original_height
+        target_width = int(target_height * aspect_ratio)
+
+        # Scale the image while maintaining aspect ratio
+        self.image_R = pygame.transform.scale(self.image_R, (target_width, target_height))
+        self.image_L = pygame.transform.flip(self.image_R, True, False)
+        
+        self.image = self.image_R
+
+        # Create the rect based on the scaled image
         self.rect = self.image.get_rect()
-        self.rect.center = (width / 2, height / 2)
+        self.rect.center = (width // 2, height // 2)  # Center the rect on the screen
         
-        self.image = pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (50, 100))
-
-        
-
         # GAMEPLAY VARIABLES
         self.speed = 5
         self.health = 100
@@ -45,8 +57,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.speed
         if keys[pygame.K_a] and self.rect.left > 0:
             self.rect.x -= self.speed
+            self.image = self.image_L
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
+            self.image = self.image_R
 
     def attack(self, bullets, enemies):
         bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))

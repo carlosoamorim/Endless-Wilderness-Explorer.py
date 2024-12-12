@@ -292,8 +292,8 @@ def execute_game(player):
                         return
 
         # Reset player color after damage cooldown
-        if time.time() - last_damage_time > damage_cooldown and not player.invincible:
-            player.image.fill(cute_purple) if not player.heal else player.image.fill(blue)
+        #if time.time() - last_damage_time > damage_cooldown and not player.invincible:
+        #    player.image.fill(cute_purple) if not player.heal else player.image.fill(blue)
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
