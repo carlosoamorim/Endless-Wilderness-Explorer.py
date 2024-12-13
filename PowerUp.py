@@ -96,7 +96,7 @@ class Heal(PowerUp):
     def power_affect_player(self, player):
 
         player.health += 25
-        player.image.fill(blue)
+        player.image = player.load_image("images\Characters\Kalle_Postman_Left_1.1.png") 
         player.heal = True
 
     def detransform(self, player):
