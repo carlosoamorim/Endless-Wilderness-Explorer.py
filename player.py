@@ -13,27 +13,15 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # VISUAL VARIABLES
-        
         self.image = pygame.Surface(player_size)
-        # Load the original image
         self.image_R = pygame.image.load("images/Characters/Kalle_R.png").convert_alpha()
-        # Get the original dimensions of the image
-        original_width, original_height = self.image.get_size()
-
-        # Target height and calculate width to maintain aspect ratio
-        target_height = 100
-        aspect_ratio = original_width / original_height
-        target_width = int(target_height * aspect_ratio)
-
-        # Scale the image while maintaining aspect ratio
-        self.image_R = pygame.transform.scale(self.image_R, (target_width, target_height))
-        self.image_L = pygame.transform.flip(self.image_R, True, False)
         
+        self.image_R = pygame.transform.scale(self.image_R, (57, 141))
+        self.image_L = pygame.transform.flip(self.image_R, True, False)  
+              
         self.image = self.image_R
-
-        # Create the rect based on the scaled image
         self.rect = self.image.get_rect()
-        self.rect.center = (width // 2, height // 2)  # Center the rect on the screen
+        self.rect.center = (width // 2, height // 2)
         
         # GAMEPLAY VARIABLES
         self.speed = 5
