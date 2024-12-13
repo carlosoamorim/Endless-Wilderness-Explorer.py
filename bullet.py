@@ -28,6 +28,5 @@ class Bullet(pygame.sprite.Sprite):
         for enemy in enemies:
             if self.rect.colliderect(enemy.rect):
                 enemy.health -= self.damage
-                self.kill()
                 return True
         return False

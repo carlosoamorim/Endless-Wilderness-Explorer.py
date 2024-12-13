@@ -9,8 +9,6 @@ def game_over_screen():
     # Initialize the mixer for sound
     pygame.mixer.init()
 
-
-
     # Screen setup
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Game Over")
@@ -18,9 +16,6 @@ def game_over_screen():
     # Fonts
     font = pygame.font.Font(None, 72)
     button_font = pygame.font.Font(None, 48)
-
-
-
 
     # Button setup
     button_rect = pygame.Rect((width // 2 - 100, height // 2 + 50), (200, 50))
