@@ -285,6 +285,9 @@ def execute_game(player):
                 current_time = time.time()
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
                     player.health -= 10
+
+                    player.image = pygame.image.load("images/Characters/Kalle_Hurt.png").convert_alpha()
+
                     last_damage_time = current_time
                     if player.health <= 0:
                         print("Game Over")
@@ -295,6 +298,10 @@ def execute_game(player):
                         pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
                         return
+
+        # Reset player color after damage cooldown
+        #if time.time() - last_damage_time > damage_cooldown and not player.invincible:
+        #    player.image.fill(cute_purple) if not player.heal else player.image.fill(blue)
 
 
         # Draw health bar

@@ -14,16 +14,16 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # VISUAL VARIABLES
-        self.image = pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png")
+        self.image = pygame.Surface(player_size)
+        self.image_R = pygame.image.load("images/Characters/Kalle_R.png").convert_alpha()
 
+        self.image_R = pygame.transform.scale(self.image_R, (57, 141))
+        self.image_L = pygame.transform.flip(self.image_R, True, False)  
+              
+        self.image = self.image_R
         self.rect = self.image.get_rect()
-        self.rect.center = (width / 2, height / 2)
+        self.rect.center = (width // 2, height // 2)
         
-        self.image = pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (50, 100))
-
-        
-
         # GAMEPLAY VARIABLES
         self.speed = 5
         self.health = 100
@@ -46,8 +46,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.speed
         if keys[pygame.K_a] and self.rect.left > 0:
             self.rect.x -= self.speed
+            self.image = self.image_L
         if keys[pygame.K_d] and self.rect.right < width:
             self.rect.x += self.speed
+            self.image = self.image_R
 
     def attack(self, bullets, enemies):
         bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
