@@ -9,8 +9,9 @@ class Rounds:
 
     def increase_difficulty(self, current_round, enemies):
         for enemy in enemies:
-            enemy.speed += current_round // 2
-            enemy.health += int(10 + current_round * 2.5)  # Slower scaling
+            if len(enemies) > 0:
+                enemy.speed += current_round // 2
+                enemy.health += int(current_round * 2.5)  # Slower scaling
 
     def pre_round_countdown(self, screen, font, player):
         # Move player to the shed location

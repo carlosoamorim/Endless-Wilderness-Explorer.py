@@ -132,6 +132,7 @@ def execute_game(player):
                 enemies.add(enemy)
                 enemy_cooldown = fps * 2 if not slowdown_timer.update() else slowdown.power_affect_game(enemy_cooldown, enemies)
                 enemies_spawned += 1
+                rounds.increase_difficulty(current_round, enemies)
             enemy_cooldown -= 1
 
             # Check if all enemies are defeated to end the round
@@ -147,7 +148,6 @@ def execute_game(player):
              # Return to the shed
             current_round += 1
             enemies_per_round += 2
-            rounds.increase_difficulty(current_round, enemies)
             enemies_spawned = 0  # Reset enemy spawn counter
             round_active = True  # Activate the next round
 
