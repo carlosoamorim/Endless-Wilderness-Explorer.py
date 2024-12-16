@@ -6,14 +6,10 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from powerups.PowerUp import PowerUp
-from powerups.heal import Heal
-from powerups.despawn_machine import Desspawn_machine
-from powerups.slow_respawn import Slow_respawn
-from powerups.invincibility import Invincibility
+from PowerUp import *
 import math
 from game_over import game_over_screen
-from powerups.Power_up_timer import Timer
+from Power_up_timer import Timer
 from pause import Pause
 from rounds import Rounds
 def circle_collision(sprite1, sprite2):
@@ -51,7 +47,7 @@ def execute_game(player):
     pygame.mixer.init()
 
     # Load and play music
-    pygame.mixer.music.load("music/Circles.mp3")
+    pygame.mixer.music.load("music/Undefeatable Epic Version.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
@@ -96,7 +92,7 @@ def execute_game(player):
     font = pygame.font.Font(None, 36)
 
     # Pre-round countdown and shed exploration
-    rounds.pre_round_countdown(screen, font, player)
+    rounds.pre_round_countdown(screen, font, player,current_round)
 
     # MAIN GAME LOOP
     while running:
@@ -104,13 +100,12 @@ def execute_game(player):
         screen.blit(background, (0, 0))  # Draw background
         #rounds systems:
 
-
         # Power-ups
         gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 1) # 15
         gambling_slowdown = random.randint(0, 1) # 30
         gambling_heal = random.randint(0, 1) # 5
-        untouch = Invincibility(48, 48, gambling_untouch, image= "images/snus-powerup.png")
+        untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
         healup = Heal(48, 48, gambling_heal, image="images/heal.png")
@@ -147,12 +142,13 @@ def execute_game(player):
         if not round_active:
             rounds.display_round_message(f"Round {current_round} Complete!", screen, font)
             pygame.display.flip()
-            pygame.time.wait(2000)
-            rounds.pre_round_countdown(screen, font, player)
-             # Return to the shed
+            # Return to the shed
             current_round += 1
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
+            pygame.time.wait(2000)
+            rounds.pre_round_countdown(screen, font, player, current_round)
+
             enemies_spawned = 0  # Reset enemy spawn counter
             round_active = True  # Activate the next round
 
@@ -165,16 +161,10 @@ def execute_game(player):
             power_respawn = fps * 5
         power_respawn -= 1
 
-
         # Update sprites
         player_group.update()
         bullets.update()
         enemies.update(player)
-
-
-        # Check if the player moved to the next area, this code is too dangerous code to be activated
-        #if player.rect.right >= width:
-         #   return "shed"
 
         # Set nearest enemy as target
         for bullet in bullets:
@@ -187,7 +177,6 @@ def execute_game(player):
                 for enemy in enemies:
                     if enemy.health <= 0:
                         enemies.remove(enemy)
-
 
         powers.update()
 
@@ -283,17 +272,20 @@ def execute_game(player):
                 current_time = time.time()
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
                     player.health -= 10
+                    if player.image == player.image_right:
+                        player.image = pygame.image.load(r"images\Characters\player_oof_right.png").convert_alpha()
+                    elif player.image == player.image_left:
+                        player.image = pygame.image.load(r"images\Characters\player_oof_left.png").convert_alpha()
                     last_damage_time = current_time
                     if player.health <= 0:
                         print("Game Over")
                         pygame.mixer.music.stop()
-                        pygame.mixer.music.load("music/Sonic 1 Music_ Game Over.mp3")
+                        pygame.mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
                         return
-
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
