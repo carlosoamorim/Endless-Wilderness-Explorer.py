@@ -27,7 +27,10 @@ class Player(pygame.sprite.Sprite):
         self.power_active = False
         self.invincible = False
         self.heal = False
+        self.wallet = 0
 
+    def money_time(self, player):
+        player.wallet += 5
     def update(self):
         """Handle player movement with boundary checks."""
         keys = pygame.key.get_pressed()
