@@ -177,7 +177,7 @@ def execute_game(player):
                 for enemy in enemies:
                     if enemy.health <= 0:
                         enemies.remove(enemy)
-
+                        player.money_time(player)
         powers.update()
 
         # Handle power-up collision
@@ -193,7 +193,7 @@ def execute_game(player):
                     elif isinstance(power, Desspawn_machine):
                         powers.remove(power)
                         kboom_timer.start(3)
-                        power.power_affect_game(enemies)
+                        power.power_affect_game(enemies, player)
                         player.power_active = "Kboom"
                     elif isinstance(power, Slow_respawn):
                         slowdown_timer.start(15)
@@ -292,7 +292,9 @@ def execute_game(player):
         pygame.draw.rect(screen, green, (10, 10, player.health * 2, 20))
         health_text = font.render(f'Health: {player.health}', True, white)
         screen.blit(health_text, (220, 10))
-
+        #Wallet show:
+        wallet_text = font.render(f'Wallet: {player.wallet}', True, white)
+        screen.blit(wallet_text, (220, 60))
         # Draw round number
         round_text = font.render(f"Round: {current_round}", True, white)
         screen.blit(round_text, (10, 40))

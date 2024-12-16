@@ -44,11 +44,11 @@ class Desspawn_machine(PowerUp):
 
 
 
-    def power_affect_game(self, target, target2=None):
+    def power_affect_game(self, target, target2):
         for enemy in target:
             if len(target) > 2:
                 enemy.kill()
-
+                target2.money_time(target2)
 
 class Slow_respawn(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):
