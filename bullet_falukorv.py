@@ -13,6 +13,17 @@ class BulletFalukorv(Bullet):
         self.rect.x += self.speed * math.cos(math.radians(self.direction))
         self.rect.y -= self.speed * math.sin(math.radians(self.direction))
         self.distance_travelled += self.speed
+
+        # Handle boomerang effect
+        if self.distance_travelled == 200:
+            self.direction += 180
+
+        # If the bullet is off the screen, remove it
+        if self.rect.x < 0 or self.rect.x > width or self.rect.y < 0 or self.rect.y > height or self.distance_travelled > 400:
+            self.kill()
+
+
+
         
     def collide(self, enemies):
         for enemy in enemies:

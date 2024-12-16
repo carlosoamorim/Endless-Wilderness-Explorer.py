@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         # GAMEPLAY VARIABLES
         self.speed = 5
         self.health = 100
-        self.weapon = Meatball()
+        self.weapon = Falukorv()
         self.bullet_cooldown = 0
         self.power_active = False
         self.invincible = False
