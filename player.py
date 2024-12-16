@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.power_active = False
         self.invincible = False
         self.heal = False
-
+        self.wallet = 0
     def update(self):
         """Handle player movement with boundary checks."""
         keys = pygame.key.get_pressed()
@@ -47,6 +47,8 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_s] and self.rect.bottom < height:  # Moving down
             self.rect.y += self.speed
 
+    def money_time(self, player):
+        player.wallet += 5
     def attack(self, bullets, enemies):
         bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
         if bullet:
