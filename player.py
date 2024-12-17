@@ -13,8 +13,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # VISUAL VARIABLES
-        self.image_right = pygame.image.load(r"images\Characters\Kalle_Postman_Right_1.1.png").convert_alpha()
-        self.image_left = pygame.image.load(r"images\Characters\Kalle_Postman_Left_1.1.png").convert_alpha()
+        self.image_right = pygame.image.load(r"images\Player\Kalle_Postman_Right_1.1.png").convert_alpha()
+        self.image_left = pygame.image.load(r"images\Player\Kalle_Postman_Left_1.1.png").convert_alpha()
         self.image = self.image_right
         self.rect = self.image.get_rect()
         self.rect.center = (width // 2, height // 2)
@@ -27,10 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.power_active = False
         self.invincible = False
         self.heal = False
-        self.wallet = 0
 
-    def money_time(self, player):
-        player.wallet += 5
     def update(self):
         """Handle player movement with boundary checks."""
         keys = pygame.key.get_pressed()
