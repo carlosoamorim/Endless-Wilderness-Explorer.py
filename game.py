@@ -87,6 +87,7 @@ def execute_game(player):
     slowdown_timer = Timer()  # De-spawner timer
     kboom_timer = Timer()
     heal_timer = Timer()
+    freeze_timer = Timer()
     running = True
     pause_game = Pause()
     font = pygame.font.Font(None, 36)
@@ -105,6 +106,8 @@ def execute_game(player):
         gambling_despawn = random.randint(0, 1) # 15
         gambling_slowdown = random.randint(0, 1) # 30
         gambling_heal = random.randint(0, 1) # 5
+        gambling_freeze = random.randint(0,1)
+        chaos_control = Freeze(48, 48, gambling_freeze, image="images/coffee_break.jpg")
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
@@ -130,8 +133,17 @@ def execute_game(player):
             if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
                 enemy = Enemy(player)
                 enemies.add(enemy)
+
+
                 enemy_cooldown = fps * 2 if not slowdown_timer.update() else slowdown.power_affect_game(enemy_cooldown, enemies)
                 enemies_spawned += 1
+                enemy_cooldown -= 1
+
+                if freeze_timer.update():
+
+                    chaos_control.power_affect_game(enemies, enemy_cooldown)
+
+
             enemy_cooldown -= 1
 
             # Check if all enemies are defeated to end the round
@@ -158,6 +170,7 @@ def execute_game(player):
             powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
             powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
             powers.add(healup) if healup.chance == 1 or healup.chance == 5 else None
+            powers.add(chaos_control) if chaos_control.chance == 1 else None
             power_respawn = fps * 5
         power_respawn -= 1
 
@@ -206,6 +219,12 @@ def execute_game(player):
                         power.power_affect_player(player)
                         player.power_active = "Healing"
 
+                    elif isinstance(power, Freeze):
+                        freeze_timer.start(6)
+                        powers.remove(power)
+
+                        player.power_active = "Chaos Control"
+
         # Check timers
         if active_timer.running and not active_timer.update():
             untouch.detransform(player)  # Revert invincibility
@@ -220,9 +239,10 @@ def execute_game(player):
         if heal_timer.running and not heal_timer.update():
             player.power_active = False
             healup.detransform(player)
-                # Check if the player moved to the next area
-        #if player.rect.right >= width and not player.power_active or round_active:
-        #    return "shed"
+
+        if freeze_timer.running and not freeze_timer.update():
+            player.power_active = False
+
 
         # Draw sprites
         player_group.draw(screen)
@@ -238,6 +258,12 @@ def execute_game(player):
             bar_width = int((remaining_time / active_timer.maximum) * 200)
             pygame.draw.rect(screen, black, (10, 40, 200, 20))
             pygame.draw.rect(screen, gold, (10, 40, bar_width, 20))
+
+        if freeze_timer.running:
+            remaining_time = freeze_timer.get_remaining_time()
+            bar_width = int((remaining_time/freeze_timer.maximum)*200)
+            pygame.draw.rect(screen, black, (10, 40, 200, 20))
+            pygame.draw.rect(screen, white, (10, 40, bar_width, 20))
 
         if slowdown_timer.running:
             remaining_time = slowdown_timer.get_remaining_time()
