@@ -13,7 +13,7 @@ class Chest(pygame.sprite.Sprite):
         super().__init__()
 
         # Load chest image
-        self.image = pygame.image.load("images/chest.png").convert_alpha()
+        self.image = pygame.image.load("images/chest_IKEA.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))  # Resize to desired dimensions
 
         # Chest rect for positioning and collision
