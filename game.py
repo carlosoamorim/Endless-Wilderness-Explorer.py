@@ -340,8 +340,8 @@ def execute_game(player):
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
-        pygame.draw.rect(screen, green, (10, 10, player.health * 2, 20))
-        health_text = font.render(f'Health: {player.health}', True, white)
+        pygame.draw.rect(screen, green, (10, 10, player.base_attributes["health"] * 2, 20))
+        health_text = font.render(f'Health: {player.base_attributes["health"]}', True, white)
         screen.blit(health_text, (220, 10))
 
         # Draw round number
