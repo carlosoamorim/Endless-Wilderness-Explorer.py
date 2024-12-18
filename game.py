@@ -11,6 +11,7 @@ from game_over import game_over_screen
 from Power_up_timer import Timer
 from pause import Pause
 from rounds import Rounds
+from chest import Chest
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -78,6 +79,7 @@ def execute_game(player):
     bullets = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     powers = pygame.sprite.Group()
+    chests = pygame.sprite.Group()
 
     # Game variables
     clock = pygame.time.Clock()
@@ -87,6 +89,11 @@ def execute_game(player):
     last_damage_time = 0
     power_respawn = 0
 
+    
+    chest = Chest(width, height, spawn_chance=0.9)
+    if chest.spawned: 
+        chests.add(chest)
+    
     #round system:
     # Initialize round variables
     current_round = 1
@@ -208,6 +215,7 @@ def execute_game(player):
         player_group.update()
         bullets.update()
         enemies.update(player)
+        chests.update(player_group)
 
         # Set nearest enemy as target
         for bullet in bullets:
@@ -277,6 +285,7 @@ def execute_game(player):
         # Draw sprites
         player_group.draw(screen)
         enemies.draw(screen)
+        chests.draw(screen)
         powers.draw(screen)
         for bullet in bullets:
             bullet.draw(screen)
