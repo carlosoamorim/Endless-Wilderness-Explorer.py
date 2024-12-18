@@ -52,18 +52,18 @@ def execute_game(player):
 
     # Background setup
     backgrounds = [
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/dinossauro.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/flor.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/ave.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/borboleta.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/peixe.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/tubarao.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/dragao.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/robo.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/alien.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/neve.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/grinch.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/Backgrounds/elfo.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/dinossauro.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/flor.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/ave.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/borboleta.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/peixe.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/tubarao.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/dragao.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/robo.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/alien.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/neve.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/grinch.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/elfo.png"), (width, height)),
             
         ]
     
@@ -121,11 +121,11 @@ def execute_game(player):
         gambling_slowdown = random.randint(0, 30) # 30
         gambling_heal = random.randint(0, 45) # 5
         gambling_freeze = random.randint(0, 1)
-        untouch = Invincibility(48, 48, gambling_untouch, image= "images/invincible.png")
-        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
-        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
-        healup = Heal(48, 48, gambling_heal, image="images/heal.png")
-        chaos_control = Freeze(48,48, gambling_freeze, image="images/coffee_break.jpg")
+        untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/invincible.png")
+        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/order66.png")
+        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/despawn.png")
+        healup = Heal(48, 48, gambling_heal, image="images/powerups/heal.png")
+        chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/coffee_break.jpg")
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
