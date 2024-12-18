@@ -17,18 +17,18 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface(player_size)
 
         self.default = {
-            "right": pygame.image.load("images\Characters\Kalle_Postman_Right_1.1.png"),
-            "left": pygame.image.load("images\Characters\Kalle_Postman_Left_1.1.png")
+            "right": pygame.image.load("images/characters/player/Kalle_Right.png"),
+            "left": pygame.image.load("images/characters/player/Kalle_Left.png")
             }
         
         self.invincible = {
-            "right": pygame.image.load("images\Characters\Kalle_Postman_Right_invincible1.1.png"),
-            "left": pygame.image.load("images\Characters\Kalle_Postman_Left_invincible1.1.png")
+            "right": pygame.image.load("images/characters/player/Kalle_Postman_Right_invincible1.1.png"),
+            "left": pygame.image.load("images/characters/player/Kalle_Postman_Left_invincible1.1.png")
             }
         
         self.hurt = {
-            "left":pygame.image.load("images\Characters\Kalle_Hurt_L.png"),
-            "right":pygame.image.load("images\Characters\Kalle_Hurt.png")
+            "left":pygame.image.load("images/characters/player/Kalle_Hurt_Left.png"),
+            "right":pygame.image.load("images/characters/player/Kalle_Hurt_Right.png")
             }
 
         # Default settings
@@ -38,8 +38,17 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (width // 2, height // 2)
 
         # Gameplay variables
-        self.speed = 5
-        self.health = 100
+        
+        self.base_attributes = {
+        "speed" : 5,
+        "health" : 100,
+    
+        }
+        self.upgrades = {
+        "speed" : 0,
+        "health" : 0,
+        }
+        self.current_attributes = self.base_attributes.copy()
         self.weapon = Meatball()
         self.bullet_cooldown = 0
         self.power_active = False
@@ -59,6 +68,7 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, keys):
         """Move the player within screen boundaries and update the image."""
+        self.speed = self.current_attributes["speed"] 
         if keys[pygame.K_a] and self.rect.left > 0:  # Move left
             self.rect.x -= self.speed
             self.image = self.active_image["left"]
@@ -77,7 +87,7 @@ class Player(pygame.sprite.Sprite):
        
         if not self.invincible:
             self.active_image = self.hurt
-            self.health -= damage
+            self.current_attributes["health"] -= damage
             self.hurt_time = pygame.time.get_ticks()  # Record the time when hurt
 
             
@@ -87,7 +97,15 @@ class Player(pygame.sprite.Sprite):
         bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
         if bullet:
             bullets.add(bullet)
-
+            
+    def apply_upgrade(self, upgrade_type, amount):
+        if upgrade_type in self.upgrades:
+            self.upgrades[upgrade_type] += amount
+            self.current_attributes[upgrade_type] = self.base_attributes[upgrade_type] + self.upgrades[upgrade_type]
+            print(f"{upgrade_type.capitalize()} upgraded by {amount}. New {upgrade_type}: {self.current_attributes[upgrade_type]}")
+        else:
+            print("Invalid upgrade type!")
+            
     def nearest_enemy(self, enemies):
         """Find the nearest enemy to the player."""
         nearest_enemy = None

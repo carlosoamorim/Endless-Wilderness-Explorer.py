@@ -9,18 +9,18 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
 
         enemy_images = [
-            "images/Enemies/dinossauro.png",  # Round 1
-            "images/Enemies/flor.png",    # Round 2
-            "images/Enemies/ave.png",    # Round 3
-            "images/Enemies/borboleta.png",   # Round 4
-            "images/Enemies/peixe.png",   # Round 5
-            "images/Enemies/tubarao.png",   # Round 6
-            "images/Enemies/dragao.png",   # Round 7
-            "images/Enemies/robo.png",   # Round 8
-            "images/Enemies/alien.png",   # Round 9
-            "images/Enemies/neve.png",   # Round 10
-            "images/Enemies/grinch.png",   # Round 11
-            "images/Enemies/elfo.png",   # Round 12
+            "images/characters/enemies/dinossauro.png",  # Round 1
+            "images/characters/enemies/flor.png",    # Round 2
+            "images/characters/enemies/ave.png",    # Round 3
+            "images/characters/enemies/borboleta.png",   # Round 4
+            "images/characters/enemies/peixe.png",   # Round 5
+            "images/characters/enemies/tubarao.png",   # Round 6
+            "images/characters/enemies/dragao.png",   # Round 7
+            "images/characters/enemies/robo.png",   # Round 8
+            "images/characters/enemies/alien.png",   # Round 9
+            "images/characters/enemies/neve.png",   # Round 10
+            "images/characters/enemies/grinch.png",   # Round 11
+            "images/characters/enemies/elfo.png",   # Round 12
 
         ]
 
