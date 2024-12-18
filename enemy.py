@@ -7,7 +7,7 @@ import math
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, player, current_round):
         super().__init__()
-
+        self.damage = 10
         enemy_images = [
             "images/Enemies/dinossauro.png",  # Round 1
             "images/Enemies/flor.png",    # Round 2

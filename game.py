@@ -125,7 +125,7 @@ def execute_game(player):
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/despawn.png")
         healup = Heal(48, 48, gambling_heal, image="images/heal.png")
-        chaos_control = Freeze(48,48, gambling_freeze, image="images/coffee_break.jpg")
+        chaos_control = Freeze(48,48, gambling_freeze, image="images/fika-powerup.png")
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -249,10 +249,7 @@ def execute_game(player):
                         power.power_affect_player(player)
                         player.power_active = "Healing"
 
-                    elif isinstance(power, chaos_control):
-                        freeze_timer.start(10)
-                        powers.remove(power)
-                        player.power_active ="Coffee Break"
+
 
         # Check timers
         if active_timer.running and not active_timer.update():
