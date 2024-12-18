@@ -8,6 +8,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, player):
         super().__init__()
 
+        self.damage = 10
+
         # Create a surface for the dinosaur with transparency
         self.image = pygame.Surface((60, 60), pygame.SRCALPHA, 32)
 

@@ -120,7 +120,6 @@ def execute_game(player):
                                           active_timer3=kboom_timer,
                                           active_timer4=heal_timer)
 
-
         # Shooting bullets
         if player.nearest_enemy(enemies) is not None:
             player.attack(bullets, enemies)
@@ -271,11 +270,7 @@ def execute_game(player):
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
-                    player.health -= 10
-                    if player.image == player.image_right:
-                        player.image = pygame.image.load(r"images\Characters\player_oof_right.png").convert_alpha()
-                    elif player.image == player.image_left:
-                        player.image = pygame.image.load(r"images\Characters\player_oof_left.png").convert_alpha()
+                    player.take_damage(enemy.damage)
                     last_damage_time = current_time
                     if player.health <= 0:
                         print("Game Over")
