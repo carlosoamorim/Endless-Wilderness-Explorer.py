@@ -5,35 +5,30 @@ import math
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, player):
+    def __init__(self, player, current_round):
         super().__init__()
 
-        self.damage = 10
+        enemy_images = [
+            "images/Enemies/dinossauro.png",  # Round 1
+            "images/Enemies/flor.png",    # Round 2
+            "images/Enemies/ave.png",    # Round 3
+            "images/Enemies/borboleta.png",   # Round 4
+            "images/Enemies/peixe.png",   # Round 5
+            "images/Enemies/tubarao.png",   # Round 6
+            "images/Enemies/dragao.png",   # Round 7
+            "images/Enemies/robo.png",   # Round 8
+            "images/Enemies/alien.png",   # Round 9
+            "images/Enemies/neve.png",   # Round 10
+            "images/Enemies/grinch.png",   # Round 11
+            "images/Enemies/elfo.png",   # Round 12
 
-        # Create a surface for the dinosaur with transparency
-        self.image = pygame.Surface((60, 60), pygame.SRCALPHA, 32)
+        ]
 
-        # Draw a detailed dinosaur using shapes
+        # Select the image based on the current round
+        self.image = pygame.image.load(enemy_images[(current_round - 1) % len(enemy_images)]).convert_alpha()
 
-        # Body
-        pygame.draw.rect(self.image, (34, 139, 34), (20, 20, 30, 20))  # Green rectangular body
-        # Head
-        pygame.draw.rect(self.image, (34, 139, 34), (10, 10, 15, 15))  # Smaller rectangle for the head
-        # Tail
-        pygame.draw.polygon(self.image, (34, 139, 34), [(50, 25), (70, 30), (50, 35)])  # Triangle tail
-        # Legs
-        pygame.draw.rect(self.image, (34, 139, 34), (25, 40, 8, 12))  # Left leg
-        pygame.draw.rect(self.image, (34, 139, 34), (37, 40, 8, 12))  # Right leg
-        # Arms
-        pygame.draw.line(self.image, (34, 139, 34), (15, 30), (10, 35), 3)  # Left arm
-        pygame.draw.line(self.image, (34, 139, 34), (25, 30), (30, 35), 3)  # Right arm
-        # Eye
-        pygame.draw.circle(self.image, (0, 0, 0), (15, 15), 2)  # Black eye
-        # Mouth
-        pygame.draw.line(self.image, (0, 0, 0), (12, 20), (18, 20), 2)  # Horizontal line for mouth
-        # Spikes
-        pygame.draw.polygon(self.image, (0, 100, 0), [(22, 20), (26, 10), (30, 20)])  # Middle spike
-        pygame.draw.polygon(self.image, (0, 100, 0), [(30, 20), (34, 10), (38, 20)])  # Right spike
+        # Scale the image to the desired size
+        self.image = pygame.transform.scale(self.image, (60, 60))
 
         # Get the rectangle for positioning
         self.rect = self.image.get_rect()
