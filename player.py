@@ -17,8 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface(player_size)
 
         self.default = {
-            "right": pygame.image.load("images/Characters/Kalle_Postman_Right_1.1.png"),
-            "left": pygame.image.load("images/Characters/Kalle_Postman_Left_1.1.png")
+            "right": pygame.image.load("images/Characters/Kalle_Right.png"),
+            "left": pygame.image.load("images/Characters/Kalle_Left.png")
             }
         
         self.invincible = {
@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
             }
         
         self.hurt = {
-            "left":pygame.image.load("images/Characters/Kalle_Hurt_L.png"),
-            "right":pygame.image.load("images/Characters/Kalle_Hurt.png")
+            "left":pygame.image.load("images/Characters/Kalle_Hurt_Left.png"),
+            "right":pygame.image.load("images/Characters/Kalle_Hurt_Right.png")
             }
 
         # Default settings
