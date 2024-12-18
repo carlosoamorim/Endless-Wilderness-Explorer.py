@@ -5,16 +5,22 @@ from shed import shed  # Importa a função ou classe relacionada ao "shed" (gal
 # Classe Rounds: responsável pela lógica das rondas no jogo
 class Rounds:
     def display_round_message(self, message, screen, font):
-        """Exibe uma mensagem no centro do ecrã com efeito de sombra."""
+        """Exibe uma mensagem no centro do ecrã com efeito de sombra e sublinhado."""
         # Renderizar uma sombra para o texto com uma cor cinzenta escura
         shadow_text = font.render(message, True, (50, 50, 50))  # Cor da sombra
-        shadow_rect = shadow_text.get_rect(center=(width // 2 + 2, height // 2 + 2))  # Posiciona a sombra
+        shadow_rect = shadow_text.get_rect(center=(width // 2 + 2, height // 2 + 2))
         screen.blit(shadow_text, shadow_rect)  # Desenha a sombra no ecrã
-    
-        # Renderizar o texto principal a branco e centralizado
-        text = font.render(message, True, white)  # Texto principal
-        text_rect = text.get_rect(center=(width // 2, height // 2))  # Posiciona o texto
+
+        # Renderizar o texto principal a branco
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(width // 2, height // 2))
         screen.blit(text, text_rect)  # Desenha o texto no ecrã
+
+        # Desenhar o sublinhado a branco
+        underline_y = text_rect.bottom + 5  # Define a posição logo abaixo do texto
+        underline_start = (text_rect.left, underline_y)  # Ponto inicial da linha
+        underline_end = (text_rect.right, underline_y)  # Ponto final da linha
+        pygame.draw.line(screen, white, underline_start, underline_end, 2)  # Linha branca com espessura 2
 
     def increase_difficulty(self, current_round, enemies):
         """Aumenta a dificuldade dos inimigos com base na ronda atual."""
@@ -27,9 +33,27 @@ class Rounds:
         
         shed_exploration = True  # Define que o jogador está na fase de exploração do "shed"
 
+
+            # Background setup
+        backgrounds = [
+                pygame.transform.scale(pygame.image.load("images/rounds/dino.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/flor.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/ave.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/borbo.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/peixe.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/tuba.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/dragao.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/robo.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/alien.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/neve.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/grinch.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/elfo.png"), (width, height)),
+            ]
+
         # Carregar a imagem de fundo com o tema de dinossauros
-        background = pygame.image.load("images/dinosaur_background.png").convert()  # Carrega a imagem de fundo
-        background = pygame.transform.scale(background, (width, height))  # Ajusta o tamanho ao ecrã
+        background = backgrounds[current_round-1]
+   
+
 
         # Renderizar e posicionar a primeira linha de texto
         shed_text1 = font.render("Explore the Shed!", True, white)  # Primeira mensagem

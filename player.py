@@ -4,26 +4,36 @@ from config import *
 from utils import *
 from bullet import Bullet
 from meatball import Meatball
+from falukorv import Falukorv
 from PowerUp import *
 
 
 class Player(pygame.sprite.Sprite):
+    HURT_IMAGE_DURATION = fps * 10
     def __init__(self):
         super().__init__()
 
         # Preload all images for efficiency
         self.image = pygame.Surface(player_size)
-        self.image_R = pygame.image.load("images/Characters/Kalle_R.png").convert_alpha()
 
-        self.image_R = pygame.transform.scale(self.image_R, (57, 141))
-        self.image_L = pygame.transform.flip(self.image_R, True, False)
-        self.active_skin = None
-        self.image_right_invincible = pygame.image.load(r"images\Characters\Kalle_Postman_Right_invincible1.1.png").convert_alpha()
-        self.image
-        self.image_right_damage = pygame.image.load(r"images\Characters\player_oof_right.png").convert_alpha()
+        self.default = {
+            "right": pygame.image.load("images\Characters\Kalle_Postman_Right_1.1.png"),
+            "left": pygame.image.load("images\Characters\Kalle_Postman_Left_1.1.png")
+            }
+        
+        self.invincible = {
+            "right": pygame.image.load("images\Characters\Kalle_Postman_Right_invincible1.1.png"),
+            "left": pygame.image.load("images\Characters\Kalle_Postman_Left_invincible1.1.png")
+            }
+        
+        self.hurt = {
+            "left":pygame.image.load("images\Characters\Kalle_Hurt_L.png"),
+            "right":pygame.image.load("images\Characters\Kalle_Hurt.png")
+            }
 
         # Default settings
-        self.image = self.image_right
+        self.image = self.default["right"]
+        self.active_image = self.default
         self.rect = self.image.get_rect()
         self.rect.center = (width // 2, height // 2)
 
@@ -35,30 +45,42 @@ class Player(pygame.sprite.Sprite):
         self.power_active = False
         self.invincible = False
         self.heal = False
-
-    def set_image(self, image):
-        """Set the player's image and update the rect."""
-        self.image = image
-        self.rect = self.image.get_rect(center=self.rect.center)
+        self.hurt_time = None
 
     def update(self):
         """Handle player movement and image updates."""
         keys = pygame.key.get_pressed()
         self.move(keys)
 
+        if self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
+            self.image = self.default["right"]
+            self.active_image = self.default
+            self.hurt_time = None
+
     def move(self, keys):
         """Move the player within screen boundaries and update the image."""
         if keys[pygame.K_a] and self.rect.left > 0:  # Move left
             self.rect.x -= self.speed
-            self.active_skin = self.image_right if not
+            self.image = self.active_image["left"]
+            
         elif keys[pygame.K_d] and self.rect.right < width:  # Move right
             self.rect.x += self.speed
-
+            self.image = self.active_image["right"]
 
         if keys[pygame.K_w] and self.rect.top > 0:  # Move up
             self.rect.y -= self.speed
         if keys[pygame.K_s] and self.rect.bottom < height:  # Move down
             self.rect.y += self.speed
+
+    def take_damage(self, damage):
+        """Reduce the player's health by the given amount."""
+       
+        if not self.invincible:
+            self.active_image = self.hurt
+            self.health -= damage
+            self.hurt_time = pygame.time.get_ticks()  # Record the time when hurt
+
+            
 
     def attack(self, bullets, enemies):
         """Fire a bullet towards the nearest enemy."""
@@ -105,17 +127,14 @@ class Invincibility(PowerUp):
 
     def apply_invincibility_visuals(self, player):
         """Update the player's visuals to reflect invincibility."""
-        if player.image == player.image_right:
-            player.set_image(player.image_right_invincible)
-        elif player.image == player.image_left:
-            player.set_image(player.image_left_invincible)
+        player.active_image = player.invincible
 
     def revert_invincibility_visuals(self, player):
         """Revert the player's visuals to the default state."""
         if player.image == player.image_right_invincible:
-            player.set_image(player.image_right)
+            player.set_image(player.image_R)
         elif player.image == player.image_left_invincible:
-            player.set_image(player.image_left)
+            player.set_image(player.image_L)
 
     def power_affect_game(self, target, target2):
 
