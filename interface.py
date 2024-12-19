@@ -13,15 +13,17 @@ def interface():
     # Fonts
     corbelfont = pygame.font.SysFont("Corbel", 50)
     comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
+    optimafont = pygame.font.SysFont("Optima", 60)
 
 
     # Text renderings
-    wilderness_text = corbelfont.render("Wilderness Explorer", True, white)
-    title_text = comicsansfont.render("Computation III - Project", True, glowing_light_red)
+    wilderness_text = corbelfont.render("Slaget om Sverige", True, white)
+    title_text = optimafont.render("Slaget om Sverige", True, glowing_light_red)
+    
 
     # Button coordinates and sizes
     buttons = [
-        {"label": "Wilderness Explorer", "action": wilderness_explorer, "rect": (90, 240, 540, 60), "color": dark_red},
+        {"label": "Start Game", "action": wilderness_explorer, "rect": (90, 240, 540, 60), "color": dark_red},
         {"label": "Rules", "action":  rules, "rect": (90, 480, 140, 60), "color": grey},
         {"label": "Options", "action": under_construction, "rect": (90, 600, 140, 60), "color": grey},
         {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": grey},

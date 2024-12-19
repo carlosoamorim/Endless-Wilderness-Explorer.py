@@ -6,10 +6,15 @@ from utils import under_construction
 
 def shed(player):
     # Basic setup
-    background = pygame.image.load("images/troll.png")
+    background = pygame.image.load("images/ikea_shed.webp")
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
+    
+    # Music
+    pygame.mixer.music.load("music/wigwalk.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
 
     player.rect.left = 1
 
@@ -44,7 +49,8 @@ def shed(player):
             return "main"  # Transition back to the main game
 
         # Draw player
-        pygame.draw.rect(screen, cute_purple, player.rect)
+        screen.blit(player.image, player.rect)
+        
 
         # Add exit hint
         exit_hint = pygame.font.Font(None, 36).render("← Exit to Main Area", True, white)
