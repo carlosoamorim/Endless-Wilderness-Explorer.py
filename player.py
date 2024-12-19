@@ -26,7 +26,6 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface(player_size)
 
         self.default = {
-
             "right": pygame.image.load("images\Characters\Kalle\Kalle_Postman_Right_1.1.png"),
             "left": pygame.image.load("images\Characters\Kalle\Kalle_Left.png")
             }       
