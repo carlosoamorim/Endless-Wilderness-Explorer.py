@@ -48,12 +48,12 @@ def execute_game(player):
 
     # Load and play music
     pygame.mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
-    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(-1)
 
     # Background setup
     backgrounds = [
-            pygame.transform.scale(pygame.image.load("images/backgrounds/dinossauro.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/backgrounds/ikea_arena.webp"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/flor.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/ave.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/borboleta.png"), (width, height)),
