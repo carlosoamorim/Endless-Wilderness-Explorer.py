@@ -2,6 +2,7 @@ import pygame
 from config import *
 from utils import *
 from utils import under_construction
+from storeInside import load_store
 
 
 def shed(player):
@@ -11,12 +12,12 @@ def shed(player):
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
     
+    player.rect.left = 1
+    
     # Music
     pygame.mixer.music.load("music/wigwalk.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
-
-    player.rect.left = 1
 
     # Interactive area
     special_area = pygame.Rect(530, 30, 140, 140)
@@ -39,7 +40,7 @@ def shed(player):
 
         # Handle special area interaction
         if special_area.colliderect(player.rect):
-            under_construction()  # Trigger the under_construction screen
+            load_store(player)  # Trigger the under_construction screen
             player.rect.top = 200  # Reset player position to prevent instant re-trigger
             player.rect.left = 560
 
