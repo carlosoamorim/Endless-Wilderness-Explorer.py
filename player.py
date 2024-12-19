@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         self.invincible = False
         self.heal = False
         self.hurt_time = None
-
+        self.wallet = 0
     def update(self):
         """Handle player movement and image updates."""
         keys = pygame.key.get_pressed()
@@ -82,6 +82,8 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_s] and self.rect.bottom < height:  # Move down
             self.rect.y += self.speed
 
+    def wallet_time(self, player):
+        player.wallet += 5
     def take_damage(self, damage):
         """Reduce the player's health by the given amount."""
        

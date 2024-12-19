@@ -11,7 +11,7 @@ def shed(player):
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
-    
+    font = pygame.font.Font(None, 36)
     player.rect.left = 1
     
     # Music
@@ -56,5 +56,7 @@ def shed(player):
         # Add exit hint
         exit_hint = pygame.font.Font(None, 36).render("← Exit to Main Area", True, white)
         screen.blit(exit_hint, (10, height // 2))
-
+        # draw wallet:
+        wallet_text = font.render(f"Wallet: {player.wallet}", True, white)
+        screen.blit(wallet_text, (220, 50))
         pygame.display.flip()

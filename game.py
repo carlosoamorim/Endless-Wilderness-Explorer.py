@@ -228,7 +228,7 @@ def execute_game(player):
                 for enemy in enemies:
                     if enemy.health <= 0:
                         enemies.remove(enemy)
-
+                        player.wallet_time(player)
         powers.update()
 
         # Handle power-up collision
@@ -353,6 +353,9 @@ def execute_game(player):
         health_text = font.render(f'Health: {player.base_attributes["health"]}', True, white)
         screen.blit(health_text, (220, 10))
 
+        #draw wallet:
+        wallet_text = font.render(f"Wallet: {player.wallet}", True, white)
+        screen.blit(wallet_text, (220, 50))
         # Draw round number
         round_text = font.render(f"Round: {current_round}", True, white)
         screen.blit(round_text, (10, 40))
