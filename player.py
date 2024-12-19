@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon = Meatball()
         self.bullet_cooldown = 0
         self.power_active = False
-        self.invincible = False
+        self.is_invincible = False
         self.heal = False
         self.hurt_time = None
         # Preload all images for efficiency
@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
 
         self.default = {
 
-            "right": pygame.image.load("images\Characters\Kalle\Kalle_Postman_Right_1.1.png"),
-            "left": pygame.image.load("images\Characters\Kalle\Kalle_Left.png")
+            "right": pygame.image.load("images/Characters/Kalle/Kalle_Postman_Right_1.1.png"),
+            "left": pygame.image.load("images/Characters/Kalle/Kalle_Left.png")
             }       
 
         self.invincible = {
@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
 
     def take_damage(self, damage):
         """Reduce the player's health by the given amount."""
-        if not self.invincible:
+        if not self.is_invincible:
             self.active_image = self.hurt
             self.current_health -= damage
             self.hurt_time = pygame.time.get_ticks()  # Record the time when hurt
@@ -127,19 +127,19 @@ class Invincibility(PowerUp):
 
     def power_affect_player(self, player):
         """Activate invincibility for the player."""
-        player.invincible = True
+        player.is_invincible = True
         player.power_active = True
         self.apply_invincibility_visuals(player)
 
     def detransform(self, player):
         """Deactivate invincibility and reset visuals."""
         self.revert_invincibility_visuals(player)
-        player.invincible = False
+        player.is_invincible = False
         player.power_active = False
 
     def apply_invincibility_visuals(self, player):
         """Update the player's visuals to reflect invincibility."""
-        player.active_image = player.invincible
+        player.active_image = player.is_invincible
 
     def revert_invincibility_visuals(self, player):
         """Revert the player's visuals to the default state."""
