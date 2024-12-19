@@ -330,14 +330,22 @@ def execute_game(player):
                     enemy.kill()
 
         # Handle player and enemy collisions
+        # Handle player and enemy collisions
         for enemy in enemies:
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
-                if current_time - last_damage_time > damage_cooldown and not player.invincible:
+                
+                # Check if enough time has passed since the last damage and player is not invincible
+                if (current_time - last_damage_time > damage_cooldown) and not player.is_invincible:
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
+                    
+                    # Debugging logs
                     print(f"Player health: {player.current_health}")
-                    if player.health <= 0:
+                    print(f"Enemy damage: {enemy.damage}")
+
+                    
+                    if player.current_health <= 0:
                         print("Game Over")
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
