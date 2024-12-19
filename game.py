@@ -142,7 +142,7 @@ def execute_game(player):
                 if event.key == pygame.K_ESCAPE:  # Pause game
                     pause_game.pause_game(screen, font, active_timer=active_timer, active_timer2=slowdown_timer,
                                           active_timer3=kboom_timer,
-                                          active_timer4=heal_timer)
+                                          active_timer4=heal_timer, active_timer5= freeze_timer)
 
         # Shooting bullets
         if player.nearest_enemy(enemies) is not None:
@@ -151,16 +151,18 @@ def execute_game(player):
         # Spawn enemies if the round is active
         if round_active:
             if enemy_cooldown <= 0 and enemies_spawned < enemies_per_round:
+
                 enemy = Enemy(player,current_round)
                 enemies.add(enemy)
                 enemy_cooldown = fps * 2 if not slowdown_timer.update() else slowdown.power_affect_game(enemy_cooldown, enemies)
+                if freeze_timer.update():
+                    enemy_cooldown = chaos_control.power_affect_game(enemy_cooldown, enemies)
                 enemies_spawned += 1
             enemy_cooldown -= 1
 
             # Check if all enemies are defeated to end the round
             if enemies_spawned == enemies_per_round and len(enemies) == 0:
                 round_active = False  # End the current round
-
         # Transition to the next round if round is not active
         if not round_active:
 
@@ -257,7 +259,7 @@ def execute_game(player):
                         power.power_affect_player(player)
                         player.power_active = "Healing"
 
-                    elif isinstance(power, chaos_control):
+                    elif isinstance(power, Freeze):
                         freeze_timer.start(10)
                         powers.remove(power)
                         player.power_active ="Coffee Break"
