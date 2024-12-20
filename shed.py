@@ -20,7 +20,7 @@ def shed(player):
     pygame.mixer.music.play(-1)
 
     # Interactive area
-    special_area = pygame.Rect(530, 30, 140, 140)
+    ikea_entrance = pygame.Rect(450, 80, 160, 120)
 
     running = True
     while running:
@@ -36,13 +36,13 @@ def shed(player):
         player.update()
 
         # Highlight special area
-        pygame.draw.rect(screen, (255, 255, 0), special_area, 3)  # Yellow border
+        pygame.draw.rect(screen, (255, 255, 0), ikea_entrance, 3)  # Yellow border
 
         # Handle special area interaction
-        if special_area.colliderect(player.rect):
+        if ikea_entrance.colliderect(player.rect):
             load_store(player)  # Trigger the under_construction screen
             player.rect.top = 200  # Reset player position to prevent instant re-trigger
-            player.rect.left = 560
+            player.rect.left = 450
 
         # Return to main game
         if player.rect.left <= 0:
