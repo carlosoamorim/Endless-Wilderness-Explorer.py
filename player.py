@@ -48,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (width // 2, height // 2)
 
-        # Gameplay variables
+        self.prev_position = self.rect.topleft 
         
 
     def update(self):
@@ -63,6 +63,8 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, keys):
         """Move the player within screen boundaries and update the image."""
+        self.prev_position = self.rect.topleft  # Save position before moving
+        
         if keys[pygame.K_a] and self.rect.left > 0:  # Move left
             self.rect.x -= self.speed
             self.image = self.active_image["left"]
@@ -75,7 +77,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.speed
         if keys[pygame.K_s] and self.rect.bottom < height:  # Move down
             self.rect.y += self.speed
-
+            
+    def revert_position(self):
+        self.rect.topleft = self.prev_position
+            
     def wallet_time(self, player):
         player.wallet += 5
     def take_damage(self, damage):
