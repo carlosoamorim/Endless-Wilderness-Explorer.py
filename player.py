@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.max_health = 100
         self.current_health = self.max_health
 
-        self.weapon = Meatball()
+        self.weapon = Falukorv()
         self.bullet_cooldown = 0
         self.power_active = False
         self.is_invincible = False
