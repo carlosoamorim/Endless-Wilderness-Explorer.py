@@ -12,7 +12,7 @@ class Meatball(Weapon):
     def fire(self, x, y, direction):
         if self.cooldown <= 0:
             self.cooldown = self.attack_speed
-            return BulletMeatball(x, y, 10, direction, "images/meatball.png")
+            return BulletMeatball(x, y, direction)
         else:
             self.cooldown -= 1
             return None

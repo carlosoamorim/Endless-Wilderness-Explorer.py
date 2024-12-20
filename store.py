@@ -6,15 +6,20 @@ from utils import under_construction
 
 def load_store (player):
     # Basic setup
-    background = pygame.image.load("images/backgrounds/shop.png")
+    background = pygame.image.load("images/backgrounds/store.png")
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
 
-    player.rect.left = 1
+    player.rect.left = 320
+    player.rect.top = height - player.rect.height - 10
 
     # Interactive area
-    special_area = pygame.Rect(530, 30, 140, 140)
+    store_area = pygame.Rect(280, 300, 160, 70)
+    
+    store_shelf_left = pygame.Rect(0, 0, 190, 720)
+    store_shelf_right = pygame.Rect(530, 0, 190, 720)
+    store_shelf_back = pygame.Rect(0, 0, 720, 300)
 
     running = True
     while running:
@@ -29,14 +34,17 @@ def load_store (player):
         # Update the player's position
         player.update()
 
-        # Highlight special area
-        pygame.draw.rect(screen, (255, 255, 0), special_area, 3)  # Yellow border
+         # Highlight special area
+        pygame.draw.rect(screen, (255, 255, 0), store_area, 3)  # Yellow border
+        pygame.draw.rect(screen, (255, 255, 0), store_shelf_left, 3)  
+        pygame.draw.rect(screen, (255, 255, 0), store_shelf_right, 3)  
+        pygame.draw.rect(screen, (255, 255, 0), store_shelf_back, 3)
 
         # Handle special area interaction
-        if special_area.colliderect(player.rect):
+        if store_area.colliderect(player.rect):
             under_construction()  # Trigger the under_construction screen
-            player.rect.top = 200  # Reset player position to prevent instant re-trigger
-            player.rect.left = 560
+            player.rect.top = 420  # Reset player position to prevent instant re-trigger
+            player.rect.left = 320
 
         # Return to main game
         if player.rect.left <= 0:
@@ -45,11 +53,6 @@ def load_store (player):
 
         # Draw player
         screen.blit(player.image, player.rect)
-        
-
-        # Add exit hint
-       #exit_hint = pygame.font.Font(None, 36).render("← Exit to Main Area", True, white)
-        #screen.blit(exit_hint, (10, height // 2))
 
         pygame.display.flip()
 

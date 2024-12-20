@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.max_health = 100
         self.current_health = self.max_health
 
-        self.weapon = Meatball()
+        self.weapon = Falukorv()
         self.bullet_cooldown = 0
         self.power_active = False
         self.is_invincible = False
@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
         self.wallet = 0
 
         self.default = {
-            "right": pygame.image.load("images\Characters\Kalle\Kalle_Postman_Right_1.1.png"),
-            "left": pygame.image.load("images\Characters\Kalle\Kalle_Left.png")
+            "right": pygame.image.load("images/Characters/Kalle/Kalle_Postman_Right_1.1.png"),
+            "left": pygame.image.load("images/Characters/Kalle/Kalle_Left.png")
             }       
 
         self.invincible = {
@@ -140,14 +140,17 @@ class Invincibility(PowerUp):
 
     def apply_invincibility_visuals(self, player):
         """Update the player's visuals to reflect invincibility."""
-        player.active_image = player.is_invincible
+        player.active_image = player.invincible
 
     def revert_invincibility_visuals(self, player):
         """Revert the player's visuals to the default state."""
-        if player.image == player.image_right_invincible:
-            player.set_image(player.image_R)
-        elif player.image == player.image_left_invincible:
-            player.set_image(player.image_L)
+        if player.active_image == player.invincible:
+            player.active_image = player.default
+            # Set the player's current image to match the default direction (right or left)
+            if player.image == player.invincible["right"]:
+                player.image = player.default["right"]
+            elif player.image == player.invincible["left"]:
+                player.image = player.default["left"]
 
     def power_affect_game(self, target, target2):
 

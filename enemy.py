@@ -13,6 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 10
         self.speed = 5
         self.hurt_time = None
+        self.frozen = False
 
         self.default = {
             "right": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_right.png").convert_alpha(), enemy_size),
@@ -61,14 +62,30 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += int(self.speed * math.cos(direction))
         self.rect.y += int(self.speed * math.sin(direction))
         
-        if self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
+        if self.frozen:
+            self.image = self.affected["freeze"]
+            self.active_image = self.affected
+        elif self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
             self.image = self.default["right"]
             self.active_image = self.default
             self.hurt_time = None
+        
 
     def take_damage(self, damage):
+
         print("Enemy took damage")  # Debug print statement
-        self.image = self.hurt["right"]
-        self.active_image = self.hurt
+        if self.frozen is not True:
+            self.image = self.hurt["right"]
+            self.active_image = self.hurt
         self.health -= damage
         self.hurt_time = pygame.time.get_ticks()
+
+    def freeze(self):
+        self.frozen = True
+        self.speed = 0
+
+    def unfreeze(self):
+        self.frozen = False
+        self.image = self.default["right"]
+        self.active_image = self.default
+        self.speed = random.randint(2, 3)

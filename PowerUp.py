@@ -125,6 +125,6 @@ class Freeze(PowerUp):
 
             # Update the enemy's image
 
-            enemy.speed = 0
+            enemy.freeze()
 
         return current_enemy_cooldown

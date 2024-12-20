@@ -123,7 +123,7 @@ def execute_game(player):
         #rounds systems:
 
         # Power-ups
-        gambling_untouch = random.randint(0, 20) #20, estas são as chances originais, caso alteradas: repor
+        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 15) # 15
         gambling_slowdown = random.randint(0, 30) # 30
         gambling_heal = random.randint(0, 45) # 5
@@ -302,6 +302,11 @@ def execute_game(player):
             bar_width = int((remaining_time/freeze_timer.maximum)*200)
             pygame.draw.rect(screen, black, (10, 40, 200, 20))
             pygame.draw.rect(screen, white, (10,40, bar_width, 20))
+            if freeze_timer.get_remaining_time() == 0:
+                for enemy in enemies:
+                    enemy.unfreeze()
+                    enemy.frozen = False
+
         if active_timer.running:
             remaining_time = active_timer.get_remaining_time()
             bar_width = int((remaining_time / active_timer.maximum) * 200)
@@ -331,7 +336,6 @@ def execute_game(player):
             collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False, circle_collision)
             for enemy in collided_enemies:
                 bullet.collide(collided_enemies)
-                bullet.kill()
                 if enemy.health <= 0:
                     enemy.kill()
 
