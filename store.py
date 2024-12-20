@@ -12,14 +12,12 @@ class Store:
             pygame.Rect(0, 0, 720, 300),  # Back shelf
         ]
     def check_collision(self, player):
-        """Revert player position if it collides with any restricted area."""
         for area in self.restricted_areas:
             if player.rect.colliderect(area):
-                player.revert_position()  # Revert to previous position
+                player.revert_position()  
                 break
     
 def load_store (player):
-    # Basic setup
     background = pygame.image.load("images/backgrounds/store.png")
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
