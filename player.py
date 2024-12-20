@@ -52,7 +52,6 @@ class Player(pygame.sprite.Sprite):
         
 
     def update(self):
-        """Handle player movement and image updates."""
         keys = pygame.key.get_pressed()
         self.move(keys)
 
@@ -62,7 +61,6 @@ class Player(pygame.sprite.Sprite):
             self.hurt_time = None
 
     def move(self, keys):
-        """Move the player within screen boundaries and update the image."""
         self.prev_position = self.rect.topleft  # Save position before moving
         
         if keys[pygame.K_a] and self.rect.left > 0:  # Move left

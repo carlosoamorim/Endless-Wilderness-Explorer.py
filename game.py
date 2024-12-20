@@ -12,6 +12,7 @@ from Power_up_timer import Timer
 from pause import Pause
 from rounds import Rounds
 from chest import Chest
+from store import *
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -33,13 +34,14 @@ def game_loop():
     # Endless game loop
     while True:
         if current_state == "main":
-            # Pass `current_state` to execute_game to allow state transitions
             next_state = execute_game(player)
             if next_state is None:
-                break  # Exit the game if `None` is returned
+                break  
             current_state = next_state
         elif current_state == "shed":
             current_state = shed(player)
+        elif current_state == "store":
+            current_state = load_store(player)
 
 
 def execute_game(player):
