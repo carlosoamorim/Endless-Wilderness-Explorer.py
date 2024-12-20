@@ -10,6 +10,7 @@ class BulletFalukorv(Bullet):
         speed = 10
         image_path = "images/falukorv.png"
         super().__init__(x, y, speed, direction, image_path, damage)
+        self.hit = False
 
     def update(self):
         # Move the bullet in the direction it is facing
@@ -19,6 +20,7 @@ class BulletFalukorv(Bullet):
 
         # Handle boomerang effect
         if self.distance_travelled == 200:
+            self.hit = False
             self.direction += 180
 
         # If the bullet is off the screen, remove it
@@ -29,7 +31,8 @@ class BulletFalukorv(Bullet):
         
     def collide(self, enemies):
         for enemy in enemies:
-            if self.rect.colliderect(enemy.rect):
+            if self.rect.colliderect(enemy.rect) and not self.hit:
                 enemy.take_damage(self.damage)
+                self.hit = True
                 return True
         return False
