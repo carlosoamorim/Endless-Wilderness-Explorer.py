@@ -302,6 +302,11 @@ def execute_game(player):
             bar_width = int((remaining_time/freeze_timer.maximum)*200)
             pygame.draw.rect(screen, black, (10, 40, 200, 20))
             pygame.draw.rect(screen, white, (10,40, bar_width, 20))
+            if freeze_timer.get_remaining_time() == 0:
+                for enemy in enemies:
+                    enemy.unfreeze()
+                    enemy.frozen = False
+
         if active_timer.running:
             remaining_time = active_timer.get_remaining_time()
             bar_width = int((remaining_time / active_timer.maximum) * 200)
