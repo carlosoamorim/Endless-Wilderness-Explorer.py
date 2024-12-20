@@ -27,7 +27,7 @@ fps = 60
 
 # SIZES
 player_size = (50, 120)
-enemy_size = (40, 40)
+enemy_size = (70, 120)
 bullet_size = 10
 power_up_size = (random.randint(10,50))
 

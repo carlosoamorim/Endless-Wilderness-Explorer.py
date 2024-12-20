@@ -1,37 +1,39 @@
-from config import *
 import pygame
 import random
 import math
-
+from config import width, height, enemy_size, fps
 
 class Enemy(pygame.sprite.Sprite):
+    HURT_IMAGE_DURATION = 500  # Duration to show hurt image in milliseconds
+
     def __init__(self, player, current_round):
         super().__init__()
+        
+        self.damage = 10
+        self.health = 10
+        self.speed = 5
+        self.hurt_time = None
 
-        enemy_images = [
-            "images/characters/enemies/dinossauro.png",  # Round 1
-            "images/characters/enemies/flor.png",    # Round 2
-            "images/characters/enemies/ave.png",    # Round 3
-            "images/characters/enemies/borboleta.png",   # Round 4
-            "images/characters/enemies/peixe.png",   # Round 5
-            "images/characters/enemies/tubarao.png",   # Round 6
-            "images/characters/enemies/dragao.png",   # Round 7
-            "images/characters/enemies/robo.png",   # Round 8
-            "images/characters/enemies/alien.png",   # Round 9
-            "images/characters/enemies/neve.png",   # Round 10
-            "images/characters/enemies/grinch.png",   # Round 11
-            "images/characters/enemies/elfo.png",   # Round 12
+        self.default = {
+            "right": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_right.png").convert_alpha(), enemy_size),
+            "left": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_left.png").convert_alpha(), enemy_size)
+        }
 
-        ]
+        self.hurt = {
+            "right": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_hurt_right.png").convert_alpha(), (110, 120)),
+            "left": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_hurt_left.png").convert_alpha(), (110, 120))
+        }
 
-        # Select the image based on the current round
-        self.image = pygame.image.load(enemy_images[(current_round - 1) % len(enemy_images)]).convert_alpha()
+        self.affected = {
+            "freeze": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_freeze.png").convert_alpha(), (110, 120))
+        }
 
-        # Scale the image to the desired size
-        self.image = pygame.transform.scale(self.image, (60, 60))
+        self.image = self.default["right"]
+        self.image = pygame.transform.scale(self.image, enemy_size)
 
-        # Get the rectangle for positioning
+        self.active_image = self.default
         self.rect = self.image.get_rect()
+
         # Ensure the enemy does not spawn at the same position as the player
         valid_position = False
         while not valid_position:
@@ -43,9 +45,6 @@ class Enemy(pygame.sprite.Sprite):
                 valid_position = True
         # Set a random initial speed for the enemy
         self.speed = random.randint(2, 3)
-
-        # Set the health of the enemy
-        self.health = 10
 
     def update(self, player):
         """
@@ -61,3 +60,15 @@ class Enemy(pygame.sprite.Sprite):
         # Move the enemy towards the player
         self.rect.x += int(self.speed * math.cos(direction))
         self.rect.y += int(self.speed * math.sin(direction))
+        
+        if self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
+            self.image = self.default["right"]
+            self.active_image = self.default
+            self.hurt_time = None
+
+    def take_damage(self, damage):
+        print("Enemy took damage")  # Debug print statement
+        self.image = self.hurt["right"]
+        self.active_image = self.hurt
+        self.health -= damage
+        self.hurt_time = pygame.time.get_ticks()

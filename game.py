@@ -128,11 +128,13 @@ def execute_game(player):
         gambling_slowdown = random.randint(0, 30) # 30
         gambling_heal = random.randint(0, 45) # 5
         gambling_freeze = random.randint(0, 1)
+
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/invincible.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/order66.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/despawn.png")
         healup = Heal(48, 48, gambling_heal, image="images/powerups/heal.png")
-        chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/coffee_break.jpg")
+        chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/fika-powerup.png")
+        
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -259,6 +261,7 @@ def execute_game(player):
                         power.power_affect_player(player)
                         player.power_active = "Healing"
 
+
                     elif isinstance(power, Freeze):
                         freeze_timer.start(10)
                         powers.remove(power)
@@ -327,7 +330,7 @@ def execute_game(player):
         for bullet in bullets:
             collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False, circle_collision)
             for enemy in collided_enemies:
-                enemy.health -= 5
+                bullet.collide(collided_enemies)
                 bullet.kill()
                 if enemy.health <= 0:
                     enemy.kill()
@@ -339,6 +342,7 @@ def execute_game(player):
                 if current_time - last_damage_time > damage_cooldown and not player.invincible:
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
+                    print(f"Player health: {player.current_health}")
                     if player.health <= 0:
                         print("Game Over")
                         pygame.mixer.music.stop()
@@ -351,8 +355,8 @@ def execute_game(player):
 
         # Draw health bar
         pygame.draw.rect(screen, red, (10, 10, 200, 20))
-        pygame.draw.rect(screen, green, (10, 10, player.base_attributes["health"] * 2, 20))
-        health_text = font.render(f'Health: {player.base_attributes["health"]}', True, white)
+        pygame.draw.rect(screen, green, (10, 10, player.current_health*2, 20))
+        health_text = font.render(f'Health: {player.current_health}', True, white)
         screen.blit(health_text, (220, 10))
 
         #draw wallet:
@@ -366,7 +370,7 @@ def execute_game(player):
         if player.power_active:
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
-        print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
+        ##print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
 
         pygame.display.flip()
 
