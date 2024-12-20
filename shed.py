@@ -2,7 +2,7 @@ import pygame
 from config import *
 from utils import *
 from utils import under_construction
-from storeInside import load_store
+from store import load_store
 
 
 def shed(player):

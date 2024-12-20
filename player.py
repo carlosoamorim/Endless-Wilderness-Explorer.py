@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
         self.wallet = 0
 
         self.default = {
-            "right": pygame.image.load("images\Characters\Kalle\Kalle_Postman_Right_1.1.png"),
-            "left": pygame.image.load("images\Characters\Kalle\Kalle_Left.png")
+            "right": pygame.image.load("images/Characters/Kalle/Kalle_Postman_Right_1.1.png"),
+            "left": pygame.image.load("images/Characters/Kalle/Kalle_Left.png")
             }       
 
         self.invincible = {

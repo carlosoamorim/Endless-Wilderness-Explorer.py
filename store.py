@@ -6,7 +6,7 @@ from utils import under_construction
 
 def load_store (player):
     # Basic setup
-    background = pygame.image.load("images/backgrounds/shop.png")
+    background = pygame.image.load("images/backgrounds/store.png")
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
