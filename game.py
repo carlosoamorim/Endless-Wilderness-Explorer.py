@@ -123,7 +123,7 @@ def execute_game(player):
         #rounds systems:
 
         # Power-ups
-        gambling_untouch = random.randint(0, 20) #20, estas são as chances originais, caso alteradas: repor
+        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 15) # 15
         gambling_slowdown = random.randint(0, 30) # 30
         gambling_heal = random.randint(0, 45) # 5
