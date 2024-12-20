@@ -47,9 +47,9 @@ def load_store (player):
             player.rect.left = 320
 
         # Return to main game
-        if player.rect.left <= 0:
-            player.rect.left = width - player.rect.width
-            return "main"  # Transition back to the main game
+        if player.rect.bottom >= height:
+            player.rect.bottom = 0
+            return "shed"  
 
         # Draw player
         screen.blit(player.image, player.rect)
