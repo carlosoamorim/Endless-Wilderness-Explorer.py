@@ -4,18 +4,23 @@ from config import *
 import pygame
 
 class BulletFalukorv(Bullet):
-    def __init__(self, x, y, speed, direction, image_path, distance_travelled):
+    def __init__(self, x, y, direction):
         self.distance_travelled = 0
-        super().__init__(x, y, speed, direction, image_path, damage = 3)
+        damage = 2
+        speed = 10
+        image_path = "images/falukorv.png"
+        super().__init__(x, y, speed, direction, image_path, damage)
+        self.hit = False
 
     def update(self):
         # Move the bullet in the direction it is facing
         self.rect.x += self.speed * math.cos(math.radians(self.direction))
-        self.rect.y -= self.speed * math.sin(math.radians(self.direction))
+        self.rect.y += self.speed * math.sin(math.radians(self.direction))
         self.distance_travelled += self.speed
 
         # Handle boomerang effect
         if self.distance_travelled == 200:
+            self.hit = False
             self.direction += 180
 
         # If the bullet is off the screen, remove it
@@ -23,11 +28,11 @@ class BulletFalukorv(Bullet):
             self.kill()
 
 
-
         
     def collide(self, enemies):
         for enemy in enemies:
-            if self.rect.colliderect(enemy.rect):
-                enemy.health -= self.damage
+            if self.rect.colliderect(enemy.rect) and not self.hit:
+                enemy.take_damage(self.damage)
+                self.hit = True
                 return True
         return False
