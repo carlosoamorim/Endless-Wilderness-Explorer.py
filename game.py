@@ -324,7 +324,7 @@ def execute_game(player):
         for bullet in bullets:
             collided_enemies = pygame.sprite.spritecollide(bullet, enemies, False, circle_collision)
             for enemy in collided_enemies:
-                enemy.health -= 5
+                bullet.collide(collided_enemies)
                 bullet.kill()
                 if enemy.health <= 0:
                     enemy.kill()
