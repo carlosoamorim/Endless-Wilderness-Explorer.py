@@ -2,16 +2,22 @@ import pygame
 from config import *
 from utils import *
 from utils import under_construction
+from storeInside import load_store
 
 
 def shed(player):
     # Basic setup
-    background = pygame.image.load("images/troll.png")
+    background = pygame.image.load("images/ikea_shed.webp")
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
-
+    font = pygame.font.Font(None, 36)
     player.rect.left = 1
+    
+    # Music
+    pygame.mixer.music.load("music/wigwalk.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
 
     # Interactive area
     special_area = pygame.Rect(530, 30, 140, 140)
@@ -34,7 +40,7 @@ def shed(player):
 
         # Handle special area interaction
         if special_area.colliderect(player.rect):
-            under_construction()  # Trigger the under_construction screen
+            load_store(player)  # Trigger the under_construction screen
             player.rect.top = 200  # Reset player position to prevent instant re-trigger
             player.rect.left = 560
 
@@ -44,10 +50,13 @@ def shed(player):
             return "main"  # Transition back to the main game
 
         # Draw player
-        pygame.draw.rect(screen, cute_purple, player.rect)
+        screen.blit(player.image, player.rect)
+        
 
         # Add exit hint
         exit_hint = pygame.font.Font(None, 36).render("← Exit to Main Area", True, white)
         screen.blit(exit_hint, (10, height // 2))
-
+        # draw wallet:
+        wallet_text = font.render(f"Wallet: {player.wallet}", True, white)
+        screen.blit(wallet_text, (220, 50))
         pygame.display.flip()

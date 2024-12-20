@@ -24,6 +24,7 @@ class Player(pygame.sprite.Sprite):
         self.hurt_time = None
         # Preload all images for efficiency
         self.image = pygame.Surface(player_size)
+        self.wallet = 0
 
         self.default = {
             "right": pygame.image.load("images\Characters\Kalle\Kalle_Postman_Right_1.1.png"),
@@ -49,7 +50,6 @@ class Player(pygame.sprite.Sprite):
 
         # Gameplay variables
         
-  
 
     def update(self):
         """Handle player movement and image updates."""
@@ -76,6 +76,8 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_s] and self.rect.bottom < height:  # Move down
             self.rect.y += self.speed
 
+    def wallet_time(self, player):
+        player.wallet += 5
     def take_damage(self, damage):
         """Reduce the player's health by the given amount."""
         if not self.invincible:
