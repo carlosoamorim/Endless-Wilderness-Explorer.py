@@ -34,7 +34,7 @@ def shed(player):
     
     # Music
     pygame.mixer.music.load("music/wigwalk.mp3")
-    pygame.mixer.music.set_volume(0.0)
+    pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 
     # Interactive area
@@ -55,10 +55,10 @@ def shed(player):
         
         shed.check_collision(player)
 
-        # Highlight special area
-        pygame.draw.rect(screen, (255, 255, 0), ikea_entrance, 3)  # Yellow border
-        for area in shed.restricted_areas:
-                pygame.draw.rect(screen, (255, 0, 0), area, 3)
+        # CODE FOR VISUALIZING THE RESTRICTED AREAS
+        #pygame.draw.rect(screen, (255, 255, 0), ikea_entrance, 3)  # Yellow border
+        #for area in shed.restricted_areas:
+               # pygame.draw.rect(screen, (255, 0, 0), area, 3)
 
         # Handle special area interaction
         if ikea_entrance.colliderect(player.rect):
