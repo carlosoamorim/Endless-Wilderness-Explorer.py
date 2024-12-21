@@ -128,7 +128,7 @@ def execute_game(player):
         gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 15) # 15
         gambling_slowdown = random.randint(0, 30) # 30
-        gambling_heal = random.randint(0, 45) # 5
+        gambling_heal = random.randint(0, 1) # 5
         gambling_freeze = random.randint(0, 1)
 
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/invincible.png")
