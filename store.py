@@ -2,6 +2,7 @@ import pygame
 from config import *
 from utils import *
 from utils import under_construction
+from store_diff_UI_ import *
 
 class Store: 
     def __init__(self):
@@ -22,7 +23,7 @@ def load_store (player):
     background = pygame.transform.scale(background, (width, height))
     screen = pygame.display.set_mode(resolution)
     clock = pygame.time.Clock()
-    
+
     store = Store()
 
     player.rect.left = 320
@@ -43,7 +44,7 @@ def load_store (player):
 
         # Update the player's position
         player.update()
-        
+
         store.check_collision(player)
 
          # CODE FOR VISUALIZING THE RESTRICTED AREAS
@@ -53,14 +54,14 @@ def load_store (player):
 
         # Handle special area interaction
         if store_area.colliderect(player.rect):
-            under_construction()  # Trigger the under_construction screen
+            #show_store_gui(player)
             player.rect.top = 420  # Reset player position to prevent instant re-trigger
             player.rect.left = 320
 
         # Return to main game
         if player.rect.bottom >= height:
             player.rect.bottom = 0
-            return "shed"  
+            return "shed"
 
         # Draw player
         screen.blit(player.image, player.rect)
