@@ -187,19 +187,20 @@ def rules():
 
 
         rules = [
-            "Hello there! If you are confused how this game works no",
-            "worries, here is how the game works:",
-            "-First: To move your the player is the classic: W- UP",
-            " S-DOWN A-Left D-RIGHT",
+            "Hello there! Here is how the game works:",
 
-            "-Second: Your first weapon is a 4 automatic bullets",
-            " that spread UP. DOWN, LEFT and RIGHT, ",
-            "as long you play the",
-            " game and you kill enemies, you will gonna get coins to go,",
-            " after the end of the rounds, to the store and buy",
-            " new weapons.",
-            "And this is it. Good luck with your figth and remember...",
-            "FOR THE SWEDEN!!!"
+            "-First: W- UP, S-DOWN, A-Left, D-RIGHT",
+
+            "-Second: the bullets are automatic ",
+
+            "-Third: There is a store after and before each round",
+            "the store allows you,after collecting coins for killing enemies,",
+            "buy a new weapon.",
+            
+            "-Fourth: This is a game with 12 rounds of enemies, if you",
+            " are able to beat all of then, you win!",
+            
+            "And remember, FOR THE SWEDEN!"
         ]
         rendered_rules = [comicsansfont.render(rule, True, white) for rule in rules]
 

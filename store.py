@@ -54,7 +54,7 @@ def load_store (player):
 
         # Handle special area interaction
         if store_area.colliderect(player.rect):
-            #show_store_gui(player)
+            show_store_gui(player)
             player.rect.top = 420  # Reset player position to prevent instant re-trigger
             player.rect.left = 320
 
