@@ -129,10 +129,19 @@ def rules():
 
 
         rules = [
-            "Rodrigo Silva, 20221926@novaims.unl.pt",
-            "Lukas Andersson, 20241448@novaims.unl.pt",
-            "Philip Munther, 20241463@novaims.unl.pt",
-            "Carlos Amorim,  20211548@novaims.unl.pt",
+            "Hello there! If you are confused how this game works no",
+            "worries, here is how the game works:",
+            "-First: To move your the player is the classic: W- UP",
+            " S-DOWN A-Left D-RIGHT",
+
+            "-Second: Your first weapon is a 4 automatic bullets",
+            " that spread UP. DOWN, LEFT and RIGHT, ",
+            "as long you play the",
+            " game and you kill enemies, you will gonna get coins to go,",
+            " after the end of the rounds, to the store and buy",
+            " new weapons.",
+            "And this is it. Good luck with your figth and remember...",
+            "FOR THE SWEDEN!!!"
         ]
         rendered_rules = [comicsansfont.render(rule, True, white) for rule in rules]
 
