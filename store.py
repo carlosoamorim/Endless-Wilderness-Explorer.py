@@ -46,10 +46,10 @@ def load_store (player):
         
         store.check_collision(player)
 
-         # Highlight special area
-        pygame.draw.rect(screen, (255, 255, 0), store_area, 3)  # Yellow border
-        for area in store.restricted_areas:
-            pygame.draw.rect(screen, (255, 0, 0), area, 3)
+         # CODE FOR VISUALIZING THE RESTRICTED AREAS
+       # pygame.draw.rect(screen, (255, 255, 0), store_area, 3)  # Yellow border
+        #for area in store.restricted_areas:
+           # pygame.draw.rect(screen, (255, 0, 0), area, 3)
 
         # Handle special area interaction
         if store_area.colliderect(player.rect):
