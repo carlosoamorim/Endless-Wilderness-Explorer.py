@@ -95,15 +95,28 @@ class Heal(PowerUp):
 
     def power_affect_player(self, player):
 
-        player.health += 25
-        player.image = player.load_image("images/characters/player/Kalle_Postman_Left_1.1.png") 
+        player.current_health += 25
+        self.visual_aplication(player)
         player.heal = True
 
     def detransform(self, player):
         player.heal = False
-
+        self.revert_heal_visuals(player)
     def power_affect_game(self, target, target2):
         pass
+
+    def visual_aplication(self, player):
+        player.active_image = player.heald
+
+    def revert_heal_visuals(self, player):
+        """Revert the player's visuals to the default state."""
+        if player.active_image == player.heald:
+            player.active_image = player.default
+            # Set the player's current image to match the default direction (right or left)
+            if player.image == player.heald["right"]:
+                player.image = player.default["right"]
+            elif player.image == player.heald["left"]:
+                player.image = player.default["left"]
 
 class Freeze(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):

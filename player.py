@@ -42,6 +42,11 @@ class Player(pygame.sprite.Sprite):
 
             }
 
+        self.heald = {
+            "left": pygame.image.load("images/characters/player/Kalle_Right_heal_left.png"),
+            "right": pygame.image.load("images/characters/player/Kalle_Right_heal_right.png")
+        }
+
         # Default settings
         self.image = self.default["right"]
         self.active_image = self.default
