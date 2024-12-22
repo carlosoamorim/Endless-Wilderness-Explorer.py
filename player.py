@@ -62,7 +62,6 @@ class Player(pygame.sprite.Sprite):
         self.move(keys)
 
         if self.is_invincible:
-            self.image = self.invincible["right"]
             self.active_image = self.invincible
         if self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
             self.image = self.default["right"]
