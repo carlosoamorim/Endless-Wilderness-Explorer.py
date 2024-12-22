@@ -209,15 +209,11 @@ def rules():
                 sys.exit()
             elif ev.type == pygame.MOUSEBUTTONDOWN:
                 if is_mouse_over_button(mouse, (button_x, controls_button_y, button_width, button_height)):
-                    # Display controls
                     display_controls()
-                    print("Controls")
                 elif is_mouse_over_button(mouse, (button_x, powerups_button_y, button_width, button_height)):
                     display_powerups()
-                    
                 elif is_mouse_over_button(mouse, (button_x, weapons_button_y, button_width, button_height)):
                     display_weapons()
-
                 elif is_mouse_over_button(mouse, (450, 600, 140, 60)):  # Back button
                     return  
 

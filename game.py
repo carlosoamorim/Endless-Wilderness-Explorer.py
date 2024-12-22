@@ -340,19 +340,13 @@ def execute_game(player):
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
 
-                    # Debugging logs
-                    print(f"Player health: {player.current_health}")
-                    print(f"Enemy damage: {enemy.damage}")
-
-
                     if player.current_health <= 0:
-                        print("Game Over")
+                        
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
-                        reset_save()
                         game_over_screen()
                         save_game(player, current_round, enemies_per_round)
                         return
@@ -374,7 +368,6 @@ def execute_game(player):
         if player.power_active:
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
-        ##print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
 
         pygame.display.flip()
 

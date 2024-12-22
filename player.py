@@ -92,7 +92,6 @@ class Player(pygame.sprite.Sprite):
             self.active_image = self.hurt
             self.current_health -= damage
             self.hurt_time = pygame.time.get_ticks()  # Record the time when hurt
-            print("Player health:", self.current_health)
 
 
     def attack(self, bullets, enemies):
