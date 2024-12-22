@@ -132,7 +132,7 @@ def execute_game(player):
         gambling_freeze = random.randint(0, 1)
 
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/snus-powerup.png")
-        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/order66.png")
+        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/mjolnir.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/surstromming.png")
         healup = Heal(48, 48, gambling_heal, image="images/powerups/blabarssoppa.png")
         chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/fika-powerup.png")
