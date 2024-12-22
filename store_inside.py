@@ -38,12 +38,12 @@ weapons = [
     {"name": "Sword", "price": 50, "description": "A basic blade. Nothing too fancy, but it does the job."},
     {"name": "The Björn-and-Arrow™", "price": 75, "description": "Ethically-sourced birchwood bow with Runestone Arrows."},
     {"name": "Staff", "price": 100, "description": "A magical staff that channels arcane energy."},
-    {"name": "Meatball Gun", "price": 60, "description": "Launches sizzling köttbullar with pinpoint accuracy."},
-    {"name": "Falukorv Gun", "price": 80, "description": "Slaps foes with salami precision. Don't forget the mustard!"},
+    {"name": "Meatball", "price": 10, "description": "Launches sizzling köttbullar with pinpoint accuracy."},
+    {"name": "Falukorv", "price": 80, "description": "Slaps foes with salami precision. Don't forget the mustard!"},
     {"name": "Exit", "price": 0, "description": "Click this button to get out of the store."}
 ]
-click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
-purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
+#click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
+#purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
 
 # Helper functions
 def wrap_text(text, font, max_width):
@@ -94,7 +94,7 @@ def show_store_gui(player):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                click_sound.play()
+                #click_sound.play()
 
                 # Handle weapon buttons
                 start_y = 120
@@ -106,8 +106,9 @@ def show_store_gui(player):
                             print("Exiting the store...")
                         elif player.wallet >= w["price"]:
                             player.wallet -= w["price"]
-                            current_weapon = w
-                            purchase_sound.play()
+                            player.change_weapon(w["name"])
+
+                            #purchase_sound.play()
                         else:
                             print("Not enough coins!")
 
