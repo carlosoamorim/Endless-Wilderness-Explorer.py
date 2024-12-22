@@ -5,7 +5,7 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from PowerUp import *
+from power_up import *
 import math
 from game_over import game_over_screen
 from Power_up_timer import Timer
@@ -14,6 +14,11 @@ from rounds import Rounds
 from chest import Chest
 from store import *
 from save_files import *
+from invincibility_powerup import Invincibility
+from despawn_powerup import Desspawn_machine
+from slow_respawn import Slow_respawn
+from heal_powerup import Heal
+from freeze_powerup import Freeze
 
 
 def circle_collision(sprite1, sprite2):
