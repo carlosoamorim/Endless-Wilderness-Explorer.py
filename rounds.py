@@ -36,7 +36,7 @@ class Rounds:
 
             # Background setup
         backgrounds = [
-                pygame.transform.scale(pygame.image.load("images/rounds/dino.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
                 pygame.transform.scale(pygame.image.load("images/rounds/flor.png"), (width, height)),
                 pygame.transform.scale(pygame.image.load("images/rounds/ave.png"), (width, height)),
                 pygame.transform.scale(pygame.image.load("images/rounds/borbo.png"), (width, height)),
@@ -56,23 +56,23 @@ class Rounds:
 
 
         # Renderizar e posicionar a primeira linha de texto
-        shed_text1 = font.render("Explore the Shed!", True, white)  # Primeira mensagem
-        shed_text_rect1 = shed_text1.get_rect(center=(width // 2, height // 2 - 70))  # Posição acima do centro
+       # shed_text1 = font.render("Explore the Shed!", True, white)  # Primeira mensagem
+       # shed_text_rect1 = shed_text1.get_rect(center=(width // 2, 90))  
 
         # Renderizar e posicionar a segunda linha de texto (número da ronda)
         shed_text2 = font.render(f"Press Enter to Start Round {current_round}", current_round, True, white)
-        shed_text_rect2 = shed_text2.get_rect(center=(width // 2, height // 2 - 40))  # Posição intermédia
+        shed_text_rect2 = shed_text2.get_rect(center=(width // 2, 115))
 
         # Renderizar e posicionar a terceira linha de texto
-        shed_text3 = font.render("or P to go to the Shed", True, white)  # Mensagem adicional
-        shed_text_rect3 = shed_text3.get_rect(center=(width // 2, height // 2 - 10))  # Posição logo abaixo
+        shed_text3 = font.render("or P to visit IKEA", True, black)
+        shed_text_rect3 = shed_text3.get_rect(center=(width // 2, 150))  
 
         # Fase de exploração do "shed"
         while shed_exploration:
             screen.blit(background, (0, 0))  # Desenha o fundo no ecrã
-            screen.blit(shed_text1, shed_text_rect1)  # Exibe a primeira linha de texto
-            screen.blit(shed_text2, shed_text_rect2)  # Exibe a segunda linha de texto
-            screen.blit(shed_text3, shed_text_rect3)  # Exibe a terceira linha de texto
+            #screen.blit(shed_text1, shed_text_rect1)  
+            screen.blit(shed_text2, shed_text_rect2)  
+            screen.blit(shed_text3, shed_text_rect3)  
             pygame.display.flip()  # Atualiza o ecrã para mostrar os elementos
 
             # Processar os eventos do jogador
