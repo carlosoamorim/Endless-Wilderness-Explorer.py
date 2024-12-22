@@ -2,10 +2,10 @@ import pygame
 import math
 from config import *
 from utils import *
-from bullet import Bullet
+from PowerUp import *
+from lingonberry import Lingonberry
 from meatball import Meatball
 from falukorv import Falukorv
-from PowerUp import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.max_health = 100
         self.current_health = self.max_health
 
-        self.weapon = Falukorv()
+        self.weapon = Lingonberry()
         self.bullet_cooldown = 0
         self.power_active = False
         self.is_invincible = False
@@ -136,7 +136,7 @@ class Player(pygame.sprite.Sprite):
         elif weapon == "Meatball":
             self.weapon = Meatball()
         else:
-            raise ValueError("Invalid weapon type")
+            self.weapon = Lingonberry()
 
 class Invincibility(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):
