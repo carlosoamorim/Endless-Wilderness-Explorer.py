@@ -129,6 +129,14 @@ class Player(pygame.sprite.Sprite):
                 math.atan2(nearest_enemy.rect.y - self.rect.y, nearest_enemy.rect.x - self.rect.x))
         return nearest_enemy_angle
 
+    def change_weapon(self, weapon):
+        # Convert weapon (string) to weapon object
+        if weapon == "Falukorv":
+            self.weapon = Falukorv()
+        elif weapon == "Meatball":
+            self.weapon = Meatball()
+        else:
+            raise ValueError("Invalid weapon type")
 
 class Invincibility(PowerUp):
     def __init__(self, power_box_weight, power_box_height, chance, image):

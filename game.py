@@ -13,6 +13,7 @@ from pause import Pause
 from rounds import Rounds
 from chest import Chest
 from store import *
+from save_files import *
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -36,7 +37,7 @@ def game_loop():
         if current_state == "main":
             next_state = execute_game(player)
             if next_state is None:
-                break  
+                break
             current_state = next_state
         elif current_state == "shed":
             current_state = shed(player)
@@ -67,9 +68,9 @@ def execute_game(player):
             pygame.transform.scale(pygame.image.load("images/backgrounds/neve.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/grinch.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/elfo.png"), (width, height)),
-            
+
         ]
-    
+
     current_background = backgrounds[0]  # Start with the first background    background = pygame.transform.scale(background, (width, height))
 
     # Screen setup
@@ -91,11 +92,11 @@ def execute_game(player):
     last_damage_time = 0
     power_respawn = 0
 
-    
+
     chest = Chest(width, height, spawn_chance=0.9)
-    if chest.spawned: 
+    if chest.spawned:
         chests.add(chest)
-    
+
     #round system:
     # Initialize round variables
     current_round = 1
@@ -103,6 +104,7 @@ def execute_game(player):
     enemies_spawned = 0  # Number of enemies spawned in the current round
     round_active = True  # Indicates if the current round is active
     rounds = Rounds()
+    current_round, enemies_per_round = load_game(player)
 
 
     # Timers
@@ -125,18 +127,18 @@ def execute_game(player):
         #rounds systems:
 
         # Power-ups
-        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
+        gambling_untouch = random.randint(0, 20) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 15) # 15
         gambling_slowdown = random.randint(0, 30) # 30
-        gambling_heal = random.randint(0, 1) # 5
-        gambling_freeze = random.randint(0, 1)
+        gambling_heal = random.randint(0, 5) # 5
+        gambling_freeze = random.randint(0, 45)
 
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/snus-powerup.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/mjolnir.png")
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/surstromming.png")
         healup = Heal(48, 48, gambling_heal, image="images/powerups/blabarssoppa.png")
         chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/fika-powerup.png")
-        
+
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -200,6 +202,7 @@ def execute_game(player):
             current_round += 1
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
+            save_game(player, current_round, enemies_per_round)
             current_background = backgrounds[(current_round - 1) % len(backgrounds)]  # Cycle through backgrounds
             pygame.time.wait(2000)
             rounds.pre_round_countdown(screen, font, player, current_round)
@@ -209,11 +212,11 @@ def execute_game(player):
 
         # Spawn power-ups
         if power_respawn <= 0:
-            powers.add(untouch) if untouch.chance == 1 or untouch.chance == 10 else None
-            powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
-            powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
-            powers.add(healup) if healup.chance == 1 or healup.chance == 5 else None
-            powers.add(chaos_control) if chaos_control.chance == 1 else None
+            powers.add(untouch) if untouch.chance == 20 else None
+            powers.add(despawn) if despawn.chance == 15 else None
+            powers.add(slowdown) if  slowdown.chance == 30 else None
+            powers.add(healup) if  healup.chance == 5 else None
+            powers.add(chaos_control) if chaos_control.chance == 45 else None
             power_respawn = fps * 5
         power_respawn -= 1
 
@@ -307,7 +310,6 @@ def execute_game(player):
             if freeze_timer.get_remaining_time() == 0:
                 for enemy in enemies:
                     enemy.unfreeze()
-                    enemy.frozen = False
 
         if active_timer.running:
             remaining_time = active_timer.get_remaining_time()
@@ -346,17 +348,17 @@ def execute_game(player):
         for enemy in enemies:
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
-                
+
                 # Check if enough time has passed since the last damage and player is not invincible
                 if (current_time - last_damage_time > damage_cooldown) and not player.is_invincible:
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
-                    
+
                     # Debugging logs
                     print(f"Player health: {player.current_health}")
                     print(f"Enemy damage: {enemy.damage}")
 
-                    
+
                     if player.current_health <= 0:
                         print("Game Over")
                         pygame.mixer.music.stop()
@@ -365,6 +367,7 @@ def execute_game(player):
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
+                        save_game(player, current_round, enemies_per_round)
                         return
 
         # Draw health bar
