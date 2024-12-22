@@ -154,7 +154,7 @@ def show_store_gui(player):
         pygame.display.flip()
 
 
-def main():
+def open():
     clock = pygame.time.Clock()
     while True:
         screen.fill(dark_bg)
@@ -230,5 +230,5 @@ def main():
         pygame.display.flip()
         clock.tick(60)
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__open__":
+    open()

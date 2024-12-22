@@ -21,12 +21,11 @@ def interface():
     corbelfont = pygame.font.SysFont("Corbel", 50)
 
     
-    # pygame.mixer.music.set_volume(0.1)  
-    # mixer.init()
-
-    # Load a sound for demonstration
-    # mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
-    #mixer.music.play(-1)  # Loop the music
+    pygame.mixer.music.set_volume(0.5)  
+    mixer.init()
+    mixer.music.load("music/Du gamla du fria.mp3")
+    mixer.music.play(-1)  # Loop the music
+    
 
 
     # Text renderings
@@ -151,7 +150,7 @@ def credits_():
 
         "Rodrigo Silva, 20221926@novaims.unl.pt",
         "Lukas, 20241448@novaims.unl.pt",
-        "Philip, lrosenfeld@novaims.unl.pt",
+        "Philip, 20241463@novaims.unl.pt",
         "Carlos Amorim,  ",
 
     ]
