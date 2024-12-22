@@ -1,16 +1,11 @@
+import sys
+
 import pygame
 import random
 
+
 class Chest(pygame.sprite.Sprite):
-    def __init__(self, screen_width, screen_height, spawn_chance=0.9):
-        """
-        Initialize the chest.
-        :param image_path: Path to the chest image.
-        :param screen_width: Width of the game screen.
-        :param screen_height: Height of the game screen.
-        :param spawn_chance: Probability of spawning the chest (default is 5%).
-        """
-        
+    def __init__(self, screen_width, screen_height, spawn_chance=0.5):
         super().__init__()
         # Load chest image
         self.image = pygame.image.load("images/chest_IKEA.png").convert_alpha()
@@ -24,7 +19,7 @@ class Chest(pygame.sprite.Sprite):
         self.rect.y = random.randint(0, screen_height - self.rect.height)
 
         # Spawn logic
-        self.spawned = random.random() < spawn_chance  # Rare chance to spawn
+        self.spawned = random.random() < spawn_chance
 
         self.upgrades = {
             1: "Health",
@@ -33,15 +28,8 @@ class Chest(pygame.sprite.Sprite):
             4: "Attack speed"
         }
 
-
-
-    def update(self, player_group):
-        """
-        Check for collision with the player.
-        :param player_group: The player sprite group for collision detection.
-        """
-        amount = 0
-        if self.spawned and pygame.sprite.spritecollideany(self, player_group):
+    def update(self, player, screen_width, screen_height):
+        if self.spawned and pygame.sprite.spritecollideany(self, player):
             self.offered_upgrades = {}
 
             selected_upgrades = set()
@@ -49,51 +37,87 @@ class Chest(pygame.sprite.Sprite):
                 random_upgrade = random.choice(list(self.upgrades.values()))
                 if random_upgrade not in selected_upgrades:
                     selected_upgrades.add(random_upgrade)
-                    if random_upgrade == "Health":
-                        amount = random.randint(5, 10)
-                    elif random_upgrade == "Speed":
-                        amount = random.randint(1, 3)
-                    elif random_upgrade == "Damage":
-                        amount = random.randint(1, 5)
-                    elif random_upgrade == "Attack speed":
-                        amount = random.randint(1, 5)
-                    
-                    # Add the upgrade to the dictionary
-                    self.offered_upgrades[random_upgrade] = amount
-            self.open(self.offered_upgrades, screen)
+                    amount = {
+                        "Health": random.randint(5, 10),
+                        "Speed": random.randint(1, 3),
+                        "Damage": random.randint(1, 5),
+                        "Attack speed": random.randint(1, 5),
+                    }[random_upgrade]
 
+                    self.offered_upgrades[random_upgrade] = amount
+
+            self.open(self.offered_upgrades, player, screen_width, screen_height)
             self.kill()
 
-    def open(self, offered_upgrades):
-        """
-        Open the chest and offer the player upgrades.
-        :param offered_upgrades: Dictionary of offered upgrades.
-        :param screen: The main screen surface to draw the pop-up.
-        """
-
+    def open(self, offered_upgrades, player, screen_width, screen_height):
         print("Chest opened!")
-        print("You found the following upgrades:")
-        for upgrade, amount in offered_upgrades.items():
-            print(f"{upgrade}: +{amount}")
-        print()
+        print("Choose one of the following upgrades:")
 
-        # Create a pop-up surface
         popup_width, popup_height = 300, 200
         popup_surface = pygame.Surface((popup_width, popup_height))
-        popup_surface.fill((0, 0, 0))  # Fill with black color
+        popup_surface.fill((30, 30, 30))  # Dark background for the popup
 
-        # Draw the pop-up message
+        button_height = 50
+        button_margin = 10
         font = pygame.font.Font(None, 36)
+        buttons = []
+
         y_offset = 20
         for upgrade, amount in offered_upgrades.items():
-            text = font.render(f"{upgrade}: +{amount}", True, (255, 255, 255))
-            popup_surface.blit(text, (20, y_offset))
-            y_offset += 40
+            button_rect = pygame.Rect(
+                20, y_offset, popup_width - 40, button_height
+            )
+            buttons.append((button_rect, upgrade, amount))
+            y_offset += button_height + button_margin
 
-        # Blit the pop-up surface onto the main screen
-        pygame(popup_surface, (screen.get_width() // 2 - popup_width // 2, screen.get_height() // 2 - popup_height // 2))
-        pygame.display.flip()
+        popup_x = (screen_width // 2) - (popup_width // 2)
+        popup_y = (screen_height // 2) - (popup_height // 2)
 
-        # Wait for a few seconds to show the pop
-        pygame.time.wait(3000)
+        running = True
+        while running:
+            screen = pygame.display.get_surface()  # Get the current screen
+            screen.blit(popup_surface, (popup_x, popup_y))
 
+            for button_rect, upgrade, amount in buttons:
+                color = (80, 80, 80)  # Default button color
+                if button_rect.move(popup_x, popup_y).collidepoint(pygame.mouse.get_pos()):  # Adjust for popup position
+                    color = (100, 100, 100)  # Highlighted button color
+                pygame.draw.rect(popup_surface, color, button_rect, border_radius=5)
+                text = font.render(f"{upgrade}: +{amount}", True, (255, 255, 255))
+                popup_surface.blit(
+                    text,
+                    (
+                        button_rect.x + 10,
+                        button_rect.y + (button_height - text.get_height()) // 2,
+                    ),
+                )
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for button_rect, upgrade, amount in buttons:
+                        if button_rect.move(popup_x, popup_y).collidepoint(event.pos):  # Adjust for popup position
+                            print(f"Player chose: {upgrade} (+{amount})")
+                            self.apply_upgrade(player, upgrade, amount)
+                            running = False  # Exit the interaction loop
+                            break
+
+    def apply_upgrade(self, player_group, upgrade, amount):
+        """
+        Apply the chosen upgrade to the player.
+        """
+        for player in player_group:
+            if upgrade == "Health":
+                player.max_health += amount
+                player.current_health = min(player.current_health + amount, player.max_health)
+            elif upgrade == "Speed":
+                player.speed += amount
+
+
+         # Other upgrades can be added here if needed
+            print(f"{upgrade} applied to player: +{amount}")
