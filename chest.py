@@ -5,7 +5,7 @@ import random
 
 
 class Chest(pygame.sprite.Sprite):
-    def __init__(self, screen_width, screen_height, spawn_chance=0.9):
+    def __init__(self, screen_width, screen_height, spawn_chance=0.5):
         super().__init__()
         # Load chest image
         self.image = pygame.image.load("images/chest_IKEA.png").convert_alpha()
