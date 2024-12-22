@@ -307,7 +307,6 @@ def execute_game(player):
             if freeze_timer.get_remaining_time() == 0:
                 for enemy in enemies:
                     enemy.unfreeze()
-                    enemy.frozen = False
 
         if active_timer.running:
             remaining_time = active_timer.get_remaining_time()

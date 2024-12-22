@@ -9,6 +9,7 @@ class Weapon:
         self.attack_speed = attack_speed
 
     def fire(self, bullets):
+        
         pass
 
     
