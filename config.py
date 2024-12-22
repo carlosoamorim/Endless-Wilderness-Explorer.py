@@ -1,6 +1,7 @@
 # Config file used to set global variables and other settings
 # COLORS AND PICTURES HERE FOR NOW
 import random
+import pygame
 # COLORS
 dark_red = (138, 0, 0)  # Dark red for buttons
 deep_black = (19, 20, 20)  # Almost black for background
