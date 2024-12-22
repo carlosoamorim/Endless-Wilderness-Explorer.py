@@ -117,5 +117,7 @@ class Chest(pygame.sprite.Sprite):
                 player.current_health = min(player.current_health + amount, player.max_health)
             elif upgrade == "Speed":
                 player.speed += amount
+
+
          # Other upgrades can be added here if needed
             print(f"{upgrade} applied to player: +{amount}")

@@ -13,6 +13,7 @@ from pause import Pause
 from rounds import Rounds
 from chest import Chest
 from store import *
+from save_files import *
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -36,7 +37,7 @@ def game_loop():
         if current_state == "main":
             next_state = execute_game(player)
             if next_state is None:
-                break  
+                break
             current_state = next_state
         elif current_state == "shed":
             current_state = shed(player)
@@ -67,9 +68,9 @@ def execute_game(player):
             pygame.transform.scale(pygame.image.load("images/backgrounds/neve.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/grinch.png"), (width, height)),
             pygame.transform.scale(pygame.image.load("images/backgrounds/elfo.png"), (width, height)),
-            
+
         ]
-    
+
     current_background = backgrounds[0]  # Start with the first background    background = pygame.transform.scale(background, (width, height))
 
     # Screen setup
@@ -91,11 +92,11 @@ def execute_game(player):
     last_damage_time = 0
     power_respawn = 0
 
-    
+
     chest = Chest(width, height, spawn_chance=0.9)
-    if chest.spawned: 
+    if chest.spawned:
         chests.add(chest)
-    
+
     #round system:
     # Initialize round variables
     current_round = 1
@@ -103,6 +104,7 @@ def execute_game(player):
     enemies_spawned = 0  # Number of enemies spawned in the current round
     round_active = True  # Indicates if the current round is active
     rounds = Rounds()
+    current_round, enemies_per_round = load_game(player)
 
 
     # Timers
@@ -136,7 +138,7 @@ def execute_game(player):
         slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/surstromming.png")
         healup = Heal(48, 48, gambling_heal, image="images/powerups/blabarssoppa.png")
         chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/fika-powerup.png")
-        
+
         # Pause trigger
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -200,6 +202,7 @@ def execute_game(player):
             current_round += 1
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
+            save_game(player, current_round, enemies_per_round)
             current_background = backgrounds[(current_round - 1) % len(backgrounds)]  # Cycle through backgrounds
             pygame.time.wait(2000)
             rounds.pre_round_countdown(screen, font, player, current_round)
@@ -345,17 +348,17 @@ def execute_game(player):
         for enemy in enemies:
             if pygame.sprite.spritecollide(enemy, player_group, False):
                 current_time = time.time()
-                
+
                 # Check if enough time has passed since the last damage and player is not invincible
                 if (current_time - last_damage_time > damage_cooldown) and not player.is_invincible:
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
-                    
+
                     # Debugging logs
                     print(f"Player health: {player.current_health}")
                     print(f"Enemy damage: {enemy.damage}")
 
-                    
+
                     if player.current_health <= 0:
                         print("Game Over")
                         pygame.mixer.music.stop()
@@ -364,6 +367,7 @@ def execute_game(player):
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
                         game_over_screen()
+                        save_game(player, current_round, enemies_per_round)
                         return
 
         # Draw health bar
