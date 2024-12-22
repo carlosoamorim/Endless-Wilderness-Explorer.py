@@ -11,6 +11,7 @@ def interface():
     pygame.init()  # Initialize pygame
     screen = pygame.display.set_mode(resolution)  # Create the screen
     pygame.display.set_caption("Main Interface")  # Set window title
+    pygame.mixer.music.set_volume(0.1)  
 
 
     mixer.init()
