@@ -85,20 +85,26 @@ def is_mouse_over_button(mouse_pos, rect):
     return x <= mouse_pos[0] <= x + width and y <= mouse_pos[1] <= y + height
 
 def options():
+    
+    optimafont = pygame.font.SysFont("Optima", 40)
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Options")
 
-    # Fonts
-    corbelfont = pygame.font.SysFont("Corbel", 50)
-    comicsansfont = pygame.font.SysFont("Comic Sans MS", 25)
-
+    # Button positions and sizes
+    button_width = 250
+    button_height = 60
+    button_x = (resolution[0] - button_width) // 2
+    back_button_y = 600
+    volume_increase_button_y = 300
+    volume_decrease_button_y = 400
+    volume_mute_button_y = 500
     # Initial volume
     volume = 0.5
     mixer.music.set_volume(volume)
 
     running = True
     while running:
-        screen.fill((0, 0, 0))  # Clear screen
+        screen.fill((ikea_blue))
         mouse = pygame.mouse.get_pos()
 
         for ev in pygame.event.get():
@@ -126,13 +132,14 @@ def options():
                     mixer.music.set_volume(volume)
 
         # Draw buttons
-        create_button(screen, "Back", dark_red, 450, 600, 140, 60, corbelfont)
-        create_button(screen, "Volume +", green, 200, 300, 140, 60, corbelfont)
-        create_button(screen, "Volume -", red, 200, 400, 140, 60, corbelfont)
-        create_button(screen, "Mute/Unmute", dark_red, 200, 500, 140, 60, corbelfont)
-
+        create_button(screen, "Back", ikea_yellow, button_x, back_button_y, button_width, button_height, optimafont)
+        create_button(screen, "Volume +", ikea_yellow,button_x, volume_increase_button_y, button_width, button_height, optimafont)
+        create_button(screen, "Volume -", ikea_yellow, button_x, volume_decrease_button_y, button_width, button_height, optimafont)
+        create_button(screen, "Mute/Unmute", ikea_yellow, button_x, volume_mute_button_y, button_width, button_height, optimafont)
+        
+        
         # Display current volume
-        volume_text = comicsansfont.render(f"Volume: {int(volume * 100)}%", True, white)
+        volume_text = optimafont.render(f"Volume: {int(volume * 100)}%", True, white)
         screen.blit(volume_text, (200, 200))
 
         pygame.display.update()
@@ -172,7 +179,6 @@ def credits_():
         create_button(screen, "Back", dark_red, 450, 600, 140, 60, corbelfont)
 
         pygame.display.update()
-
 
 def start_game():
     game_loop()  # Call the game loop
@@ -233,7 +239,7 @@ def display_weapons():
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Weapons")
     
-    optimafont = pygame.font.SysFont("Optima", 60)
+    optimafont = pygame.font.SysFont("Optima", 40)
 
     # Load weapon image
     weapon_image = pygame.image.load("images/weapon_rules.png").convert_alpha()
