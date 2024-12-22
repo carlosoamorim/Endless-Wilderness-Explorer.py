@@ -40,7 +40,7 @@ class Chest(pygame.sprite.Sprite):
                     amount = {
                         "Health": random.randint(5, 10),
                         "Speed": random.randint(1, 3),
-                        "Damage": random.randint(1, 5),
+                        "Damage": random.randint(1, 3),
                         "Attack speed": random.randint(1, 5),
                     }[random_upgrade]
 
@@ -117,7 +117,9 @@ class Chest(pygame.sprite.Sprite):
                 player.current_health = min(player.current_health + amount, player.max_health)
             elif upgrade == "Speed":
                 player.speed += amount
+            elif upgrade == "Damage":
+                player.weapon.damage += amount
+            elif upgrade == "Attack speed":
+                player.weapon.attack_speed -= amount
 
 
-         # Other upgrades can be added here if needed
-            print(f"{upgrade} applied to player: +{amount}")

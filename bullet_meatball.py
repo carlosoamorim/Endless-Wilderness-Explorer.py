@@ -2,12 +2,12 @@ from bullet import Bullet
 import pygame
 
 class BulletMeatball(Bullet):
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction, damage):
         speed = 10
         image_path = "images/meatball.png"
-        damage = 4
+        damage = damage
 
-        super().__init__(x, y, speed, direction, image_path, damage)
+        super().__init__(x, y, speed, direction, image_path)
         self.rect = self.image.get_rect(center = (x, y))
 
         self.image = pygame.image.load(image_path)
