@@ -35,11 +35,8 @@ current_weapon = None
 
 # Weapons and sounds
 weapons = [
-    {"name": "Sword", "price": 50, "description": "A basic blade. Nothing too fancy, but it does the job."},
-    {"name": "The Björn-and-Arrow™", "price": 75, "description": "Ethically-sourced birchwood bow with Runestone Arrows."},
-    {"name": "Staff", "price": 100, "description": "A magical staff that channels arcane energy."},
-    {"name": "Meatball", "price": 10, "description": "Launches sizzling köttbullar with pinpoint accuracy."},
-    {"name": "Falukorv", "price": 80, "description": "Slaps foes with salami precision. Don't forget the mustard!"},
+    {"name": "Meatball", "price": 60, "description": "Launches sizzling köttbullar with pinpoint accuracy."},
+    {"name": "Falukorv", "price": 80, "description": "Deliciously deadly sausage that surprisingly has a boomerang shape..."},
     {"name": "Exit", "price": 0, "description": "Click this button to get out of the store."}
 ]
 #click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")

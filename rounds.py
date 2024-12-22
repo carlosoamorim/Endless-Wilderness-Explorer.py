@@ -1,119 +1,112 @@
 import pygame
-from config import *  # Importa as configurações globais, como dimensões do ecrã e cores
-from shed import shed  # Importa a função ou classe relacionada ao "shed" (galpão/abrigo)
+from config import *  # Import global configurations, such as screen dimensions and colors
+from shed import shed  # Import the function or class related to the "shed" (barn/shelter)
 
-# Classe Rounds: responsável pela lógica das rondas no jogo
+
+# Rounds class: responsible for the game round logic
 class Rounds:
     def display_round_message(self, message, screen, font):
-        """Exibe uma mensagem no centro do ecrã com efeito de sombra e sublinhado."""
-        # Renderizar uma sombra para o texto com uma cor cinzenta escura
-        shadow_text = font.render(message, True, (50, 50, 50))  # Cor da sombra
+        """Displays a message at the center of the screen with a shadow effect and underline."""
+        # Render a shadow for the text with a dark gray color
+        shadow_text = font.render(message, True, (50, 50, 50))  # Shadow color
         shadow_rect = shadow_text.get_rect(center=(width // 2 + 2, height // 2 + 2))
-        screen.blit(shadow_text, shadow_rect)  # Desenha a sombra no ecrã
+        screen.blit(shadow_text, shadow_rect)  # Draw the shadow on the screen
 
-        # Renderizar o texto principal a branco
+        # Render the main text in white
         text = font.render(message, True, white)
         text_rect = text.get_rect(center=(width // 2, height // 2))
-        screen.blit(text, text_rect)  # Desenha o texto no ecrã
+        screen.blit(text, text_rect)  # Draw the text on the screen
 
-        # Desenhar o sublinhado a branco
-        underline_y = text_rect.bottom + 5  # Define a posição logo abaixo do texto
-        underline_start = (text_rect.left, underline_y)  # Ponto inicial da linha
-        underline_end = (text_rect.right, underline_y)  # Ponto final da linha
-        pygame.draw.line(screen, white, underline_start, underline_end, 2)  # Linha branca com espessura 2
+        # Draw the underline in white
+        underline_y = text_rect.bottom + 5  # Define the position just below the text
+        underline_start = (text_rect.left, underline_y)  # Start point of the line
+        underline_end = (text_rect.right, underline_y)  # End point of the line
+        pygame.draw.line(screen, white, underline_start, underline_end, 2)  # White line with thickness 2
 
     def increase_difficulty(self, current_round, enemies):
-        """Aumenta a dificuldade dos inimigos com base na ronda atual."""
-        for enemy in enemies:  # Itera por todos os inimigos
-            enemy.speed += current_round // 2  # Aumenta a velocidade do inimigo
-            enemy.health += int(10 + current_round * 2.5)  # Aumenta a saúde do inimigo progressivamente
+        """Increases the difficulty of enemies based on the current round."""
+        for enemy in enemies:  # Iterate through all enemies
+            enemy.speed += current_round // 2  # Increase enemy speed
+            enemy.health += int(10 + current_round * 2.5)  # Gradually increase enemy health
 
     def pre_round_countdown(self, screen, font, player, current_round):
-        """Faz a gestão da fase de exploração e da contagem decrescente antes de começar a ronda."""
-        
-        shed_exploration = True  # Define que o jogador está na fase de exploração do "shed"
+        """Handles the shed exploration phase and the countdown before starting the round."""
 
+        shed_exploration = True  # Set the player to the exploration phase of the "shed"
 
-            # Background setup
+        # Background setup
         backgrounds = [
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                
-            ]
+            pygame.transform.scale(pygame.image.load("images/rounds/backstory.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height))
+        ]
 
-        # Carregar a imagem de fundo com o tema de dinossauros
-        background = backgrounds[current_round-1]
-   
+        if current_round == 1:  # Show the backstory only on the first round
+            background = backgrounds[0]
+            # Render and position the first line of text
+            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, black)
+            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, height - 75))
+
+            # Render and position the third line of text
+            shed_text3 = font.render("or P to visit IKEA", True, black)
+            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, height - 50))
+
+        else:  # Show the loading screen on subsequent rounds
+            background = backgrounds[1]
+                   # Render and position the second line of text (round number)
+            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, white)
+            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, 115))
+
+            # Render and position the third line of text
+            shed_text3 = font.render("or P to visit IKEA", True, black)
+            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, 150))
 
 
-        # Renderizar e posicionar a primeira linha de texto
-       # shed_text1 = font.render("Explore the Shed!", True, white)  # Primeira mensagem
-       # shed_text_rect1 = shed_text1.get_rect(center=(width // 2, 90))  
 
-        # Renderizar e posicionar a segunda linha de texto (número da ronda)
-        shed_text2 = font.render(f"Press Enter to Start Round {current_round}", current_round, True, white)
-        shed_text_rect2 = shed_text2.get_rect(center=(width // 2, 115))
-
-        # Renderizar e posicionar a terceira linha de texto
-        shed_text3 = font.render("or P to visit IKEA", True, black)
-        shed_text_rect3 = shed_text3.get_rect(center=(width // 2, 150))  
-
-        # Fase de exploração do "shed"
+        # Shed exploration phase
         while shed_exploration:
-            screen.blit(background, (0, 0))  # Desenha o fundo no ecrã
-            #screen.blit(shed_text1, shed_text_rect1)  
-            screen.blit(shed_text2, shed_text_rect2)  
-            screen.blit(shed_text3, shed_text_rect3)  
-            pygame.display.flip()  # Atualiza o ecrã para mostrar os elementos
+            screen.blit(background, (0, 0))  # Draw the background on the screen
+            screen.blit(shed_text2, shed_text_rect2)
+            screen.blit(shed_text3, shed_text_rect3)
+            pygame.display.flip()  # Update the screen to show elements
 
-            # Processar os eventos do jogador
+            # Process player events
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:  # Se o jogador fechar o jogo
+                if event.type == pygame.QUIT:  # If the player closes the game
                     pygame.quit()
-                    return  # Sai imediatamente do programa
-                elif event.type == pygame.KEYDOWN:  # Se o jogador pressionar uma tecla
-                    if event.key == pygame.K_RETURN:  # Inicia a ronda
-                        shed_exploration = False  # Sai da fase de exploração
-                    elif event.key == pygame.K_p:  # Entra no "shed"
-                        shed(player)  # Executa a lógica do "shed"
+                    return  # Exit the program immediately
+                elif event.type == pygame.KEYDOWN:  # If the player presses a key
+                    if event.key == pygame.K_RETURN:  # Start the round
+                        shed_exploration = False  # Exit the exploration phase
+                    elif event.key == pygame.K_p:  # Enter the "shed"
+                        shed(player)  # Execute the shed logic
 
-        # Fase de contagem decrescente
-        for i in range(3, 0, -1):  # Contagem de 3 a 1
-            screen.blit(background, (0, 0))  # Desenha o fundo novamente
-            overlay = pygame.Surface((width, height))  # Cria uma camada por cima do fundo
-            overlay.set_alpha(180)  # Define a transparência da camada
-            overlay.fill((0, 0, 0))  # Preenche a camada com preto
-            screen.blit(overlay, (0, 0))  # Aplica a camada sobre o fundo
+        # Countdown phase
+        for i in range(3, 0, -1):  # Countdown from 3 to 1
+            screen.blit(background, (0, 0))  # Draw the background again
+            overlay = pygame.Surface((width, height))  # Create a layer over the background
+            overlay.set_alpha(180)  # Set the transparency of the layer
+            overlay.fill((0, 0, 0))  # Fill the layer with black
+            screen.blit(overlay, (0, 0))  # Apply the layer over the background
 
-            # Renderizar o texto da contagem decrescente
-            countdown_text = font.render(f"Starting Round in {i}...", True, white)  # Texto com o número atual
-            countdown_rect = countdown_text.get_rect(center=(width // 2, height // 2))  # Centraliza o texto
-            screen.blit(countdown_text, countdown_rect)  # Exibe o texto
+            # Render the countdown text
+            countdown_text = font.render(f"Starting Round in {i}...", True, white)  # Text with the current number
+            countdown_rect = countdown_text.get_rect(center=(width // 2, height // 2))  # Center the text
+            screen.blit(countdown_text, countdown_rect)  # Display the text
 
-            # Criar um efeito visual com círculos concêntricos
-            center = (width // 2, height // 2)  # Centro do círculo
-            base_radius = 100 + i * 20  # Define o raio inicial que aumenta com a contagem
+            # Create a visual effect with concentric circles
+            center = (width // 2, height // 2)  # Circle center
+            base_radius = 100 + i * 20  # Define the initial radius that increases with the countdown
             for alpha, radius in zip(range(50, 0, -10), range(base_radius, base_radius + 50, 10)):
-                # Criar uma superfície transparente para cada círculo
+                # Create a transparent surface for each circle
                 smooth_circle = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
                 pygame.draw.circle(
                     smooth_circle,
-                    (34, 139, 34, alpha),  # Cor verde com transparência (RGBA)
-                    (radius, radius),  # Posição central do círculo
-                    radius  # Raio do círculo
+                    (34, 139, 34, alpha),  # Green color with transparency (RGBA)
+                    (radius, radius),  # Central position of the circle
+                    radius  # Radius of the circle
                 )
-                # Desenha o círculo suavizado no ecrã
+                # Draw the smoothed circle on the screen
                 screen.blit(smooth_circle, (center[0] - radius, center[1] - radius))
 
-            pygame.display.flip()  # Atualiza o ecrã para mostrar as mudanças
-            pygame.time.wait(1000)  # Espera 1 segundo antes de continuar
+            pygame.display.flip()  # Update the screen to show changes
+            pygame.time.wait(1000)  # Wait 1 second before continuing

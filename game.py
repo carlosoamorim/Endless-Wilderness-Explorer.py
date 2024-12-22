@@ -14,6 +14,8 @@ from rounds import Rounds
 from chest import Chest
 from store import *
 from save_files import *
+
+
 def circle_collision(sprite1, sprite2):
     """Calculate distance between the two sprite centers."""
     distance = math.sqrt(
@@ -55,23 +57,7 @@ def execute_game(player):
     pygame.mixer.music.play(-1)
 
     # Background setup
-    backgrounds = [
-            pygame.transform.scale(pygame.image.load("images/backgrounds/ikea_arena.webp"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/flor.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/ave.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/borboleta.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/peixe.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/tubarao.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/dragao.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/robo.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/alien.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/neve.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/grinch.png"), (width, height)),
-            pygame.transform.scale(pygame.image.load("images/backgrounds/elfo.png"), (width, height)),
-
-        ]
-
-    current_background = backgrounds[0]  # Start with the first background    background = pygame.transform.scale(background, (width, height))
+    background = pygame.transform.scale(pygame.image.load("images/backgrounds/ikea_arena.webp"), (width, height))
 
     # Screen setup
     screen = pygame.display.set_mode(resolution)
@@ -123,7 +109,7 @@ def execute_game(player):
     # MAIN GAME LOOP
     while running:
         clock.tick(fps)
-        screen.blit(current_background, (0, 0))  # Draw the current background
+        screen.blit(background, (0, 0))  # Draw the current background
         #rounds systems:
 
         # Power-ups
@@ -168,6 +154,7 @@ def execute_game(player):
 
             # Check if all enemies are defeated to end the round
             if enemies_spawned == enemies_per_round and len(enemies) == 0:
+                player.current_health = player.max_health  # Restore player health
                 round_active = False  # End the current round
         # Transition to the next round if round is not active
         if not round_active:
@@ -203,7 +190,6 @@ def execute_game(player):
             enemies_per_round += 2
             rounds.increase_difficulty(current_round, enemies)
             save_game(player, current_round, enemies_per_round)
-            current_background = backgrounds[(current_round - 1) % len(backgrounds)]  # Cycle through backgrounds
             pygame.time.wait(2000)
             rounds.pre_round_countdown(screen, font, player, current_round)
 
@@ -366,6 +352,7 @@ def execute_game(player):
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
+                        reset_save()
                         game_over_screen()
                         save_game(player, current_round, enemies_per_round)
                         return

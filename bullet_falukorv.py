@@ -6,7 +6,7 @@ import pygame
 class BulletFalukorv(Bullet):
     def __init__(self, x, y, direction):
         self.distance_travelled = 0
-        damage = 2
+        damage = 4
         speed = 10
         image_path = "images/falukorv.png"
         super().__init__(x, y, speed, direction, image_path, damage)
