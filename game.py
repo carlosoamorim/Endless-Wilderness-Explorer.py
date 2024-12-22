@@ -352,6 +352,7 @@ def execute_game(player):
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
+                        reset_save()
                         game_over_screen()
                         save_game(player, current_round, enemies_per_round)
                         return
