@@ -368,6 +368,7 @@ def execute_game(player):
                         pygame.time.wait(5000)  # Wait for music to play
                         reset_save()
                         game_over_screen()
+                        save_game(player, current_round, enemies_per_round)
                         return
 
         # Draw health bar
