@@ -27,17 +27,17 @@ def interface():
 
     # Text renderings
     wilderness_text = corbelfont.render("", True, white)
-    title_text = optimafont.render("KALLE", True, ikea_yellow)
+    title_text = optimafont.render("KALLE STRIKES BACK", True, ikea_yellow)
     
     
 
     # Button coordinates and sizes
     buttons = [
         {"label": "Start Game", "action": start_game, "rect": (90, 240, 540, 60), "color": ikea_yellow},
-        {"label": "Rules", "action":  rules, "rect": (90, 480, 140, 60), "color": ikea_grey},
-        {"label": "Options", "action": options, "rect": (90, 600, 140, 60), "color": ikea_grey},
-        {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": grey},
-        {"label": "Quit", "action": pygame.quit, "rect": (450, 600, 140, 60), "color": grey},
+        {"label": "Rules", "action":  rules, "rect": (90, 480, 140, 60), "color": ikea_yellow},
+        {"label": "Options", "action": options, "rect": (90, 600, 140, 60), "color": ikea_yellow},
+        {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": ikea_yellow},
+        {"label": "Quit", "action": pygame.quit, "rect": (450, 600, 140, 60), "color": ikea_yellow},
     ]
 
     running = True
