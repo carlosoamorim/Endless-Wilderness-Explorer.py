@@ -2,7 +2,7 @@ import pygame
 from config import *
 from utils import *
 from utils import under_construction
-from store_diff_UI_ import *
+from store_inside import *
 
 class Store: 
     def __init__(self):
