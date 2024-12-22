@@ -59,3 +59,13 @@ def load_game(player):
         print("No save file found. Starting a new game.")
         return 1, 5  # Default round and enemies per round
 
+def reset_save():
+    """
+    Reset the save file to start a new game.
+    """
+    try:
+        os.remove("save_game.json")
+        print("Save file reset successfully!")
+    except FileNotFoundError:
+        print("No save file found to reset.")
+
