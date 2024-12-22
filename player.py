@@ -100,15 +100,7 @@ class Player(pygame.sprite.Sprite):
         bullet = self.weapon.fire(self.rect.centerx, self.rect.centery, self.nearest_enemy_angle(enemies))
         if bullet:
             bullets.add(bullet)
-            
-    def apply_upgrade(self, upgrade_type, amount):
-        """Apply an upgrade to the player's attributes."""
-        if upgrade_type == "health":
-            self.max_health += amount
-            self.current_health += amount
-        elif upgrade_type == "speed":
-            self.speed += amount
-            
+
     def nearest_enemy(self, enemies):
         """Find the nearest enemy to the player."""
         nearest_enemy = None

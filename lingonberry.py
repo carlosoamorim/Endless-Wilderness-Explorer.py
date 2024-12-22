@@ -8,7 +8,7 @@ class Lingonberry(Weapon):
     def fire(self, x, y, direction):
         if self.cooldown <= 0:
             self.cooldown = self.attack_speed
-            return BulletLingonberry(x, y, direction)
+            return BulletLingonberry(x, y, direction, self.damage)
         else:
             self.cooldown -= 1
             return None

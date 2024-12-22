@@ -17,13 +17,8 @@ class Falukorv(Weapon):
     def fire(self, x, y, direction):
         if self.cooldown <= 0:
             self.cooldown = self.attack_speed
-            return BulletFalukorv(x, y, direction)
+            return BulletFalukorv(x, y, direction, self.damage)
         else:
             self.cooldown -= 1
             return None                
 
-        bullet.rect.x += int(bullet.speed * math.cos(bullet.direction))
-        bullet.rect.y += int(bullet.speed * math.sin(bullet.direction))
-        bullet.distance_traveled += bullet.speed
-        if bullet.distance_traveled > 200:
-            bullet.direction += math.pi  # Reverse direction
