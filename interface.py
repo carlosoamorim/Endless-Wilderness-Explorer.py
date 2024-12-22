@@ -104,32 +104,36 @@ def options():
 
     running = True
     while running:
-        screen.fill((ikea_blue))
         mouse = pygame.mouse.get_pos()
 
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 pygame.quit()
-                exit()
-            elif ev.type == pygame.MOUSEBUTTONDOWN:
-                # Back button
-                if is_mouse_over_button(mouse, (450, 600, 140, 60)):
-                    return  # Return to the interface
-                # Increase volume button
-                elif is_mouse_over_button(mouse, (200, 300, 140, 60)):
+                sys.exit()
+            elif ev.type == pygame.MOUSEBUTTONDOWN:                    
+                
+                if is_mouse_over_button(mouse, (button_x, volume_increase_button_y, button_width, button_height)):
                     volume = min(volume + 0.1, 1.0)  # Cap at 1.0
                     mixer.music.set_volume(volume)
-                # Decrease volume button
-                elif is_mouse_over_button(mouse, (200, 400, 140, 60)):
+                    # Increase volume
+                
+                elif is_mouse_over_button(mouse, (button_x, volume_decrease_button_y, button_width, button_height)):
                     volume = max(volume - 0.1, 0.0)  # Cap at 0.0
                     mixer.music.set_volume(volume)
-                # Mute/Unmute button
-                elif is_mouse_over_button(mouse, (200, 500, 140, 60)):
+                # Decrease volume
+                
+                elif is_mouse_over_button(mouse, (button_x, volume_mute_button_y, button_width, button_height)):
                     if mixer.music.get_volume() > 0:
                         volume = 0.0
                     else:
                         volume = 0.5
                     mixer.music.set_volume(volume)
+                    # Mute/Unmute
+                    
+                elif is_mouse_over_button(mouse, (button_x, back_button_y, button_width, button_height)):
+                    return  # Back button - Return to the interface 
+                
+        screen.fill(ikea_blue)
 
         # Draw buttons
         create_button(screen, "Back", ikea_yellow, button_x, back_button_y, button_width, button_height, optimafont)
@@ -141,8 +145,9 @@ def options():
         # Display current volume
         volume_text = optimafont.render(f"Volume: {int(volume * 100)}%", True, white)
         screen.blit(volume_text, (200, 200))
-
+        
         pygame.display.update()
+        
 def credits_():
     """Credits screen."""
     screen = pygame.display.set_mode(resolution)
