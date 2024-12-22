@@ -36,18 +36,31 @@ class Rounds:
 
         # Background setup
         backgrounds = [
-            pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/rounds/backstory.png"), (width, height)),
+            pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height))
         ]
 
-        background = backgrounds[current_round - 1]
+        if current_round == 1:  # Show the backstory only on the first round
+            background = backgrounds[0]
+            # Render and position the first line of text
+            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, black)
+            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, height - 75))
 
-        # Render and position the second line of text (round number)
-        shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, white)
-        shed_text_rect2 = shed_text2.get_rect(center=(width // 2, 115))
+            # Render and position the third line of text
+            shed_text3 = font.render("or P to visit IKEA", True, black)
+            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, height - 50))
 
-        # Render and position the third line of text
-        shed_text3 = font.render("or P to visit IKEA", True, black)
-        shed_text_rect3 = shed_text3.get_rect(center=(width // 2, 150))
+        else:  # Show the loading screen on subsequent rounds
+            background = backgrounds[1]
+            # Render and position the second line of text (round number)
+            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, black)
+            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, height - 150))
+
+            # Render and position the third line of text
+            shed_text3 = font.render("or P to visit IKEA", True, black)
+            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, height - 115))
+
+
 
         # Shed exploration phase
         while shed_exploration:
