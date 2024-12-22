@@ -131,10 +131,10 @@ def execute_game(player):
         gambling_heal = random.randint(0, 1) # 5
         gambling_freeze = random.randint(0, 1)
 
-        untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/invincible.png")
-        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/order66.png")
-        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/despawn.png")
-        healup = Heal(48, 48, gambling_heal, image="images/powerups/heal.png")
+        untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/snus-powerup.png")
+        despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/mjolnir.png")
+        slowdown = Slow_respawn(48, 48, gambling_slowdown, image="images/powerups/surstromming.png")
+        healup = Heal(48, 48, gambling_heal, image="images/powerups/blabarssoppa.png")
         chaos_control = Freeze(48,48, gambling_freeze, image="images/powerups/fika-powerup.png")
         
         # Pause trigger
@@ -221,7 +221,7 @@ def execute_game(player):
         player_group.update()
         bullets.update()
         enemies.update(player)
-        chests.update(player_group)
+        chests.update(player_group, 720, 720)
 
         # Set nearest enemy as target
         for bullet in bullets:
