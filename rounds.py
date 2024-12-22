@@ -37,17 +37,18 @@ class Rounds:
             # Background setup
         backgrounds = [
                 pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/flor.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/ave.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/borbo.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/peixe.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/tuba.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/dragao.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/robo.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/alien.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/neve.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/grinch.png"), (width, height)),
-                pygame.transform.scale(pygame.image.load("images/rounds/elfo.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                pygame.transform.scale(pygame.image.load("images/rounds/loading_screen.png"), (width, height)),
+                
             ]
 
         # Carregar a imagem de fundo com o tema de dinossauros
