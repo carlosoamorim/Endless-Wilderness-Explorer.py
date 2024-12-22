@@ -127,11 +127,11 @@ def execute_game(player):
         #rounds systems:
 
         # Power-ups
-        gambling_untouch = random.randint(0, 1) #20, estas são as chances originais, caso alteradas: repor
+        gambling_untouch = random.randint(0, 20) #20, estas são as chances originais, caso alteradas: repor
         gambling_despawn = random.randint(0, 15) # 15
         gambling_slowdown = random.randint(0, 30) # 30
-        gambling_heal = random.randint(0, 1) # 5
-        gambling_freeze = random.randint(0, 1)
+        gambling_heal = random.randint(0, 5) # 5
+        gambling_freeze = random.randint(0, 45)
 
         untouch = Invincibility(48, 48, gambling_untouch, image= "images/powerups/snus-powerup.png")
         despawn = Desspawn_machine(48, 48, gambling_despawn, image="images/powerups/mjolnir.png")
@@ -212,11 +212,11 @@ def execute_game(player):
 
         # Spawn power-ups
         if power_respawn <= 0:
-            powers.add(untouch) if untouch.chance == 1 or untouch.chance == 10 else None
-            powers.add(despawn) if despawn.chance == 1 or despawn.chance == 10 else None
-            powers.add(slowdown) if slowdown.chance == 1 or slowdown.chance == 15 else None
-            powers.add(healup) if healup.chance == 1 or healup.chance == 5 else None
-            powers.add(chaos_control) if chaos_control.chance == 1 else None
+            powers.add(untouch) if untouch.chance == 20 else None
+            powers.add(despawn) if despawn.chance == 15 else None
+            powers.add(slowdown) if  slowdown.chance == 30 else None
+            powers.add(healup) if  healup.chance == 5 else None
+            powers.add(chaos_control) if chaos_control.chance == 45 else None
             power_respawn = fps * 5
         power_respawn -= 1
 
