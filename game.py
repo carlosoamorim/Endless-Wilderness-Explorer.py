@@ -179,7 +179,8 @@ def execute_game(player):
                 rounds.display_round_message("Congratulations! You Won!", screen, font)
                 pygame.display.flip()
 
-                pygame.time.wait(5000)  # Wait for 5 seconds before quitting
+                pygame.time.wait(5000) # Wait for 5 seconds before quitting
+                reset_save()
                 pygame.quit()
                 return
 
@@ -188,7 +189,7 @@ def execute_game(player):
             # Return to the shed
             current_round += 1
             enemies_per_round += 2
-            rounds.increase_difficulty(current_round, enemies)
+            rounds.increase_difficulty(enemies)
             save_game(player, current_round, enemies_per_round)
             pygame.time.wait(2000)
             rounds.pre_round_countdown(screen, font, player, current_round)

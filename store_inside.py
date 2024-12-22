@@ -39,8 +39,8 @@ weapons = [
     {"name": "Falukorv", "price": 80, "description": "Deliciously deadly sausage that surprisingly has a boomerang shape..."},
     {"name": "Exit", "price": 0, "description": "Click this button to get out of the store."}
 ]
-#click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
-#purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
+click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
+purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
 
 # Helper functions
 def wrap_text(text, font, max_width):
