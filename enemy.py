@@ -77,8 +77,6 @@ class Enemy(pygame.sprite.Sprite):
         
 
     def take_damage(self, damage):
-
-        print("Enemy took damage")  # Debug print statement
         if self.frozen is not True:
             self.image = self.hurt["right"]
             self.active_image = self.hurt

@@ -50,8 +50,6 @@ class Chest(pygame.sprite.Sprite):
             self.kill()
 
     def open(self, offered_upgrades, player, screen_width, screen_height):
-        print("Chest opened!")
-        print("Choose one of the following upgrades:")
 
         popup_width, popup_height = 300, 200
         popup_surface = pygame.Surface((popup_width, popup_height))

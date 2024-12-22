@@ -100,7 +100,6 @@ def show_store_gui(player):
                     if item_rect.collidepoint(mx, my):
                         if w["name"] == "Exit":  # Check if the clicked weapon is the "Exit" button
                             show_store = False  # Exit the store
-                            print("Exiting the store...")
                         elif player.wallet >= w["price"]:
                             player.wallet -= w["price"]
                             player.change_weapon(w["name"])
@@ -177,7 +176,6 @@ def main():
                 exit_button_rect = pygame.Rect((WIDTH - eb_w) // 2, (HEIGHT - eb_h) // 2, eb_w, eb_h)
 
                 if exit_button_rect.collidepoint(mx, my):
-                    print("Returning to store.py")
                     pygame.quit()
                     sys.exit()
 
