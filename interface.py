@@ -1,3 +1,5 @@
+import sys
+
 from pygame import mixer
 
 from utils import *  # Utility functions
