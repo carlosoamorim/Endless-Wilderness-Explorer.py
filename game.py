@@ -221,7 +221,7 @@ def execute_game(player):
         player_group.update()
         bullets.update()
         enemies.update(player)
-        chests.update(player_group)
+        chests.update(player_group, 720, 720)
 
         # Set nearest enemy as target
         for bullet in bullets:

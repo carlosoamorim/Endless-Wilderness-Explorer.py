@@ -5,12 +5,10 @@ class Chest(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height, spawn_chance=0.9):
         """
         Initialize the chest.
-        :param image_path: Path to the chest image.
         :param screen_width: Width of the game screen.
         :param screen_height: Height of the game screen.
-        :param spawn_chance: Probability of spawning the chest (default is 5%).
+        :param spawn_chance: Probability of spawning the chest.
         """
-        
         super().__init__()
         # Load chest image
         self.image = pygame.image.load("images/chest_IKEA.png").convert_alpha()
@@ -33,12 +31,12 @@ class Chest(pygame.sprite.Sprite):
             4: "Attack speed"
         }
 
-
-
-    def update(self, player_group):
+    def update(self, player_group, screen_width, screen_height):
         """
         Check for collision with the player.
         :param player_group: The player sprite group for collision detection.
+        :param screen_width: Width of the game screen.
+        :param screen_height: Height of the game screen.
         """
         amount = 0
         if self.spawned and pygame.sprite.spritecollideany(self, player_group):
@@ -57,20 +55,21 @@ class Chest(pygame.sprite.Sprite):
                         amount = random.randint(1, 5)
                     elif random_upgrade == "Attack speed":
                         amount = random.randint(1, 5)
-                    
+
                     # Add the upgrade to the dictionary
                     self.offered_upgrades[random_upgrade] = amount
-            self.open(self.offered_upgrades, screen)
+
+            self.open(self.offered_upgrades, screen_width, screen_height)
 
             self.kill()
 
-    def open(self, offered_upgrades):
+    def open(self, offered_upgrades, screen_width, screen_height):
         """
         Open the chest and offer the player upgrades.
         :param offered_upgrades: Dictionary of offered upgrades.
-        :param screen: The main screen surface to draw the pop-up.
+        :param screen_width: Width of the game screen.
+        :param screen_height: Height of the game screen.
         """
-
         print("Chest opened!")
         print("You found the following upgrades:")
         for upgrade, amount in offered_upgrades.items():
@@ -90,10 +89,14 @@ class Chest(pygame.sprite.Sprite):
             popup_surface.blit(text, (20, y_offset))
             y_offset += 40
 
+        # Center the popup on the screen
+        popup_x = (screen_width // 2) - (popup_width // 2)
+        popup_y = (screen_height // 2) - (popup_height // 2)
+
         # Blit the pop-up surface onto the main screen
-        pygame(popup_surface, (screen.get_width() // 2 - popup_width // 2, screen.get_height() // 2 - popup_height // 2))
+        screen = pygame.display.get_surface()  # Get the current screen
+        screen.blit(popup_surface, (popup_x, popup_y))
         pygame.display.flip()
 
-        # Wait for a few seconds to show the pop
+        # Wait for a few seconds to show the popup
         pygame.time.wait(3000)
-
