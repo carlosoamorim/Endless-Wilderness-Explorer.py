@@ -78,7 +78,8 @@ class Heal(PowerUp):
 
     def power_affect_player(self, player):
 
-        player.current_health += 25
+        if player.current_health += 25 > player.max_health:
+            player.current_health = player.max_health
         self.visual_aplication(player)
         player.heal = True
 
