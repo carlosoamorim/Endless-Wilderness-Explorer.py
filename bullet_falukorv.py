@@ -4,9 +4,9 @@ from config import *
 import pygame
 
 class BulletFalukorv(Bullet):
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction, damage):
         self.distance_travelled = 0
-        damage = 4
+        damage = damage
         speed = 10
         image_path = "images/falukorv.png"
         super().__init__(x, y, speed, direction, image_path, damage)
