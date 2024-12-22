@@ -138,7 +138,7 @@ def credits_():
         "Carlos Amorim,  ",
     ]
     rendered_credits = [optimafont.render(credit, True, ikea_yellow) for credit in credits]
-    
+
     running = True
     while running:
         mouse = pygame.mouse.get_pos()
@@ -196,7 +196,7 @@ def rules():
                     display_controls()
                     print("Controls")
                 elif is_mouse_over_button(mouse, (button_x, powerups_button_y, button_width, button_height)):
-                    print("Power-ups")
+                    display_powerups()
                     
                 elif is_mouse_over_button(mouse, (button_x, weapons_button_y, button_width, button_height)):
                     display_weapons()
@@ -349,6 +349,74 @@ def display_controls():
 
         pygame.display.update()
 
+def display_powerups():
+    optimafont = pygame.font.SysFont("Optima", 30)
+    # Weapons screen
+    screen = pygame.display.set_mode(resolution)
+    pygame.display.set_caption("Powerups")
+
+    # Load weapon images
+    blabarssoppa = pygame.image.load("images/powerups/blabarssoppa.png").convert_alpha()
+    fika = pygame.image.load("images/powerups/fika-powerup.png").convert_alpha()
+    snus = pygame.image.load("images/powerups/snus-powerup.png").convert_alpha()
+    mjolnir = pygame.image.load("images/powerups/mjolnir.png").convert_alpha()
+    surstromming = pygame.image.load("images/powerups/surstromming.png").convert_alpha()
+
+    # Scale weapon images
+    blabarssoppa = pygame.transform.scale(blabarssoppa, (100, 100))
+    fika = pygame.transform.scale(fika, (100, 100))
+    snus = pygame.transform.scale(snus, (100, 100))
+    mjolnir = pygame.transform.scale(mjolnir, (100, 100))
+    surstromming = pygame.transform.scale(surstromming, (100, 100))
+
+    # Weapon descriptions
+    descriptions = {
+        "blabarssoppa": "Blåbärssoppa: A traditional Swedish blueberry soup. Heals the player for 25 HP.",
+        "fika": "Fika: A mandatory coffee break in Sweden. Including for enemies, they will stop for a coffee break.",
+        "snus": "Snus: A Swedish tobacco product, gives the player invincibily",
+        "mjolnir": "Mjölnir: The hammer of Thor. Instantly kill a couple of enemies...",
+        "surstromming": "Surströmming: Smells and tastes disgusting, makes the enemies spawn slower..."
+    }
+
+    running = True
+    while running:
+        mouse = pygame.mouse.get_pos()
+
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif ev.type == pygame.MOUSEBUTTONDOWN:
+                if is_mouse_over_button(mouse, (450, 600, 140, 60)):  # Back button
+                    return  # Return to the previous screen
+
+        screen.fill(ikea_blue)
+
+        # Display weapon images and descriptions
+        display_powerup(screen, snus, descriptions["snus"], 20, 100)
+        display_powerup(screen, blabarssoppa, descriptions["blabarssoppa"], 250, 100)
+        display_powerup(screen, mjolnir, descriptions["mjolnir"], 480, 100)
+        display_powerup(screen, surstromming, descriptions["surstromming"], 360, 320)
+        display_powerup(screen, fika, descriptions["fika"], 140, 320)
+
+        # Create the "Back" button
+        create_button(screen, "Back", ikea_yellow, 450, 600, 140, 60, optimafont)
+
+        pygame.display.update()
+
+
+def display_powerup(screen, image, description, x, y):
+    # Draw image box
+    pygame.draw.rect(screen, ikea_yellow, (x, y, 100, 100), 2)
+    screen.blit(image, (x, y))
+
+    # Draw description box
+    description_box_y = y + 110
+    pygame.draw.rect(screen, ikea_yellow, (x, description_box_y, 200, 100), 2)
+
+    # Render description text with wrapping
+    font = pygame.font.SysFont("Optima", 18)
+    wrap_text(screen, description, font, (x + 5, description_box_y + 5), 190, (255, 255, 255))
 
 def is_mouse_over_button(mouse_pos, button_rect):
     x, y, width, height = button_rect
