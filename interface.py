@@ -15,7 +15,8 @@ def interface():
 
 
     # FONTS
-    optimafont = pygame.font.SysFont("Optima", 60)
+    optimafont = pygame.font.SysFont("Optima", 40)
+    optimafont_BOLD = pygame.font.SysFont("Optima", 60, bold=True)
     corbelfont = pygame.font.SysFont("Corbel", 50)
     comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
 
@@ -30,7 +31,7 @@ def interface():
 
     # Text renderings
     wilderness_text = corbelfont.render("", True, white)
-    title_text = optimafont.render("KALLE STRIKES BACK", True, ikea_yellow)
+    title_text = optimafont_BOLD.render("KALLE STRIKES BACK", True, ikea_yellow)
     
     
 
@@ -179,7 +180,7 @@ def start_game():
 def rules():
     # Rules screen
 
-    optimafont = pygame.font.SysFont("Optima", 60)
+    optimafont = pygame.font.SysFont("Optima", 40)
 
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Instruction")
