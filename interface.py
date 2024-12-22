@@ -19,7 +19,6 @@ def interface():
     optimafont = pygame.font.SysFont("Optima", 40)
     optimafont_BOLD = pygame.font.SysFont("Optima", 60, bold=True)
     corbelfont = pygame.font.SysFont("Corbel", 50)
-    comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
 
     
     # pygame.mixer.music.set_volume(0.1)  
@@ -176,7 +175,7 @@ def credits_():
         for i, credit in enumerate(rendered_credits):
             screen.blit(credit, (10, 50 * i + 10))
 
-        create_button(screen, "Back", dark_red, 450, 600, 140, 60, optimafont)
+        create_button(screen, "Back", ikea_yellow, 450, 600, 140, 60, optimafont)
 
         pygame.display.update()
 
@@ -209,15 +208,11 @@ def rules():
                 sys.exit()
             elif ev.type == pygame.MOUSEBUTTONDOWN:
                 if is_mouse_over_button(mouse, (button_x, controls_button_y, button_width, button_height)):
-                    # Display controls
                     display_controls()
-                    print("Controls")
                 elif is_mouse_over_button(mouse, (button_x, powerups_button_y, button_width, button_height)):
                     display_powerups()
-                    
                 elif is_mouse_over_button(mouse, (button_x, weapons_button_y, button_width, button_height)):
                     display_weapons()
-
                 elif is_mouse_over_button(mouse, (450, 600, 140, 60)):  # Back button
                     return  
 

@@ -39,8 +39,8 @@ weapons = [
     {"name": "Falukorv", "price": 80, "description": "Deliciously deadly sausage that surprisingly has a boomerang shape..."},
     {"name": "Exit", "price": 0, "description": "Click this button to get out of the store."}
 ]
-#click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
-#purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
+click_sound = pygame.mixer.Sound("music/Mouse Click Sound Effect.mp3")
+purchase_sound = pygame.mixer.Sound("music/Cash Purchase Sound Effects.mp3")
 
 # Helper functions
 def wrap_text(text, font, max_width):
@@ -100,7 +100,6 @@ def show_store_gui(player):
                     if item_rect.collidepoint(mx, my):
                         if w["name"] == "Exit":  # Check if the clicked weapon is the "Exit" button
                             show_store = False  # Exit the store
-                            print("Exiting the store...")
                         elif player.wallet >= w["price"]:
                             player.wallet -= w["price"]
                             player.change_weapon(w["name"])
@@ -177,7 +176,6 @@ def main():
                 exit_button_rect = pygame.Rect((WIDTH - eb_w) // 2, (HEIGHT - eb_h) // 2, eb_w, eb_h)
 
                 if exit_button_rect.collidepoint(mx, my):
-                    print("Returning to store.py")
                     pygame.quit()
                     sys.exit()
 

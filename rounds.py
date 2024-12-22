@@ -23,11 +23,13 @@ class Rounds:
         underline_end = (text_rect.right, underline_y)  # End point of the line
         pygame.draw.line(screen, white, underline_start, underline_end, 2)  # White line with thickness 2
 
-    def increase_difficulty(self, current_round, enemies):
+    def increase_difficulty(self, enemies):
         """Increases the difficulty of enemies based on the current round."""
         for enemy in enemies:  # Iterate through all enemies
-            enemy.speed += current_round // 2  # Increase enemy speed
-            enemy.health += int(10 + current_round * 2.5)  # Gradually increase enemy health
+            enemy.speed += 0.5  # Increase enemy speed
+            enemy.health += 0.5  # Gradually increase enemy health
+
+            print(f"Enenmy health: {enemy.health}, Enemy Speed: {enemy.speed}")
 
     def pre_round_countdown(self, screen, font, player, current_round):
         """Handles the shed exploration phase and the countdown before starting the round."""

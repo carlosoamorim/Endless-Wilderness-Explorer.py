@@ -5,7 +5,7 @@ from config import *
 from player import *
 from enemy import Enemy
 from shed import shed
-from PowerUp import *
+from power_up import *
 import math
 from game_over import game_over_screen
 from Power_up_timer import Timer
@@ -14,6 +14,11 @@ from rounds import Rounds
 from chest import Chest
 from store import *
 from save_files import *
+from invincibility_powerup import Invincibility
+from despawn_powerup import Desspawn_machine
+from slow_respawn import Slow_respawn
+from heal_powerup import Heal
+from freeze_powerup import Freeze
 
 
 def circle_collision(sprite1, sprite2):
@@ -179,7 +184,8 @@ def execute_game(player):
                 rounds.display_round_message("Congratulations! You Won!", screen, font)
                 pygame.display.flip()
 
-                pygame.time.wait(5000)  # Wait for 5 seconds before quitting
+                pygame.time.wait(5000) # Wait for 5 seconds before quitting
+                reset_save()
                 pygame.quit()
                 return
 
@@ -188,7 +194,7 @@ def execute_game(player):
             # Return to the shed
             current_round += 1
             enemies_per_round += 2
-            rounds.increase_difficulty(current_round, enemies)
+            rounds.increase_difficulty(enemies)
             save_game(player, current_round, enemies_per_round)
             pygame.time.wait(2000)
             rounds.pre_round_countdown(screen, font, player, current_round)
@@ -340,19 +346,13 @@ def execute_game(player):
                     player.take_damage(enemy.damage)
                     last_damage_time = current_time
 
-                    # Debugging logs
-                    print(f"Player health: {player.current_health}")
-                    print(f"Enemy damage: {enemy.damage}")
-
-
                     if player.current_health <= 0:
-                        print("Game Over")
+                        
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
                         pygame.time.wait(5000)  # Wait for music to play
-                        reset_save()
                         game_over_screen()
                         save_game(player, current_round, enemies_per_round)
                         return
@@ -374,7 +374,6 @@ def execute_game(player):
         if player.power_active:
             active_power_text = font.render(f"Active Power-Up: {player.power_active}", True, white)
             screen.blit(active_power_text, (10, 100))
-        ##print(f"Round: {current_round}, Enemies Left: {len(enemies)}, Spawned: {enemies_spawned}/{enemies_per_round}, Round Active: {round_active}")
 
         pygame.display.flip()
 

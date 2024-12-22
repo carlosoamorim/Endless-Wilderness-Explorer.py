@@ -2,7 +2,8 @@ import pygame
 import math
 from config import *
 from utils import *
-from PowerUp import *
+from power_up import *
+
 from lingonberry import Lingonberry
 from meatball import Meatball
 from falukorv import Falukorv
@@ -42,7 +43,7 @@ class Player(pygame.sprite.Sprite):
 
             }
 
-        self.heald = {
+        self.healing = {
             "left": pygame.image.load("images/characters/player/Kalle_Right_heal_left.png"),
             "right": pygame.image.load("images/characters/player/Kalle_Right_heal_right.png")
         }
@@ -60,6 +61,9 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         self.move(keys)
 
+        if self.is_invincible:
+            self.image = self.invincible["right"]
+            self.active_image = self.invincible
         if self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
             self.image = self.default["right"]
             self.active_image = self.default
@@ -129,37 +133,3 @@ class Player(pygame.sprite.Sprite):
             self.weapon = Meatball()
         else:
             self.weapon = Lingonberry()
-
-class Invincibility(PowerUp):
-    def __init__(self, power_box_weight, power_box_height, chance, image):
-        super().__init__("Invincibility", power_box_weight, power_box_height, chance, image)
-
-    def power_affect_player(self, player):
-        """Activate invincibility for the player."""
-        player.is_invincible = True
-        player.power_active = True
-        self.apply_invincibility_visuals(player)
-
-    def detransform(self, player):
-        """Deactivate invincibility and reset visuals."""
-        self.revert_invincibility_visuals(player)
-        player.is_invincible = False
-        player.power_active = False
-
-    def apply_invincibility_visuals(self, player):
-        """Update the player's visuals to reflect invincibility."""
-        player.active_image = player.invincible
-
-    def revert_invincibility_visuals(self, player):
-        """Revert the player's visuals to the default state."""
-        if player.active_image == player.invincible:
-            player.active_image = player.default
-            # Set the player's current image to match the default direction (right or left)
-            if player.image == player.invincible["right"]:
-                player.image = player.default["right"]
-            elif player.image == player.invincible["left"]:
-                player.image = player.default["left"]
-
-    def power_affect_game(self, target, target2):
-
-        pass

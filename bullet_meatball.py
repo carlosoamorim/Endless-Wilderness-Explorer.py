@@ -7,7 +7,7 @@ class BulletMeatball(Bullet):
         image_path = "images/meatball.png"
         damage = damage
 
-        super().__init__(x, y, speed, direction, image_path)
+        super().__init__(x, y, speed, direction, image_path, damage)
         self.rect = self.image.get_rect(center = (x, y))
 
         self.image = pygame.image.load(image_path)
