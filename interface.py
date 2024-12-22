@@ -128,9 +128,7 @@ def credits_():
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Credits")
 
-    # Fonts
-    corbelfont = pygame.font.SysFont("Corbel", 50)
-    comicsansfont = pygame.font.SysFont("Comic Sans MS", 25)
+
 
     # Credit Text
     credits = [
@@ -139,8 +137,8 @@ def credits_():
         "Philip, lrosenfeld@novaims.unl.pt",
         "Carlos Amorim,  ",
     ]
-    rendered_credits = [comicsansfont.render(credit, True, white) for credit in credits]
-
+    rendered_credits = [optimafont.render(credit, True, ikea_yellow) for credit in credits]
+    
     running = True
     while running:
         mouse = pygame.mouse.get_pos()
@@ -153,13 +151,13 @@ def credits_():
                 if is_mouse_over_button(mouse, (450, 600, 140, 60)):  # Back button
                     return  # Return to the interface
 
-        screen.fill(deep_black)
+        screen.fill(ikea_blue)
 
         # Display credits
         for i, credit in enumerate(rendered_credits):
             screen.blit(credit, (10, 50 * i + 10))
 
-        create_button(screen, "Back", dark_red, 450, 600, 140, 60, corbelfont)
+        create_button(screen, "Back", dark_red, 450, 600, 140, 60, optimafont)
 
         pygame.display.update()
 
