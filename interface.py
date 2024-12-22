@@ -135,7 +135,7 @@ def credits_():
     # Credit Text
     credits = [
         "Rodrigo Silva, 20221926@novaims.unl.pt",
-        "Lukas, drasteiro@novaims.unl.pt",
+        "Lukas, 20241448@novaims.unl.pt",
         "Philip, lrosenfeld@novaims.unl.pt",
         "Carlos Amorim,  ",
     ]
@@ -217,7 +217,6 @@ def rules():
         pygame.display.update()
 
 def display_weapons():
-
     optimafont = pygame.font.SysFont("Optima", 30)
     # Weapons screen
     screen = pygame.display.set_mode(resolution)
@@ -235,9 +234,9 @@ def display_weapons():
 
     # Weapon descriptions
     descriptions = {
-        "lingonberry": "Lingonberry: A small, red berry with a tart flavor.",
-        "meatball": "Meatball: A classic Swedish dish, perfect for any meal.",
-        "falukorv": "Falukorv: A traditional Swedish sausage, great for grilling."
+        "lingonberry": "Lingonberry: The swedes use it to everything and apparently use them in war… Does not do a lot of damage - upgrade your weapon ASAP!",
+        "meatball": "Meatball: Ah, the swedish meatball. Warm, delicious and… deadly? Does more damage than the lingonberries since it contains of more protein!",
+        "falukorv": "Falukorv: A Swedish sausage from the small town of “Falun”. Works as a boomerang doing double damage.. Do not try at home (it’s just in the game)"
     }
 
     running = True
@@ -255,14 +254,15 @@ def display_weapons():
         screen.fill(ikea_blue)
 
         # Display weapon images and descriptions
-        display_weapon(screen, lingonberry, descriptions["lingonberry"], 50, 200)
-        display_weapon(screen, meatball, descriptions["meatball"], 300, 200)
-        display_weapon(screen, falukorv, descriptions["falukorv"], 550, 200)
+        display_weapon(screen, lingonberry, descriptions["lingonberry"], 20, 200)
+        display_weapon(screen, meatball, descriptions["meatball"], 250, 200)
+        display_weapon(screen, falukorv, descriptions["falukorv"], 480, 200)
 
         # Create the "Back" button
         create_button(screen, "Back", ikea_yellow, 450, 600, 140, 60, optimafont)
 
         pygame.display.update()
+
 
 def display_weapon(screen, image, description, x, y):
     # Draw image box
@@ -271,17 +271,42 @@ def display_weapon(screen, image, description, x, y):
 
     # Draw description box
     description_box_y = y + 110
-    pygame.draw.rect(screen, ikea_yellow, (x, description_box_y, 200, 60), 2)
+    pygame.draw.rect(screen, ikea_yellow, (x, description_box_y, 200, 100), 2)
+
+    # Render description text with wrapping
     font = pygame.font.SysFont("Optima", 18)
-    description_text = font.render(description, True, (255, 255, 255))
-    screen.blit(description_text, (x + 5, description_box_y + 5))
+    wrap_text(screen, description, font, (x + 5, description_box_y + 5), 190, (255, 255, 255))
+
+
+def wrap_text(surface, text, font, position, max_width, color):
+    """
+    Renders text within a box of width `max_width`.
+    Breaks text into multiple lines if necessary.
+    """
+    words = text.split()
+    lines = []
+    current_line = words.pop(0)
+
+    for word in words:
+        test_line = f"{current_line} {word}"
+        if font.size(test_line)[0] <= max_width:
+            current_line = test_line
+        else:
+            lines.append(current_line)
+            current_line = word
+
+    lines.append(current_line)
+
+    y_offset = 0
+    for line in lines:
+        text_surface = font.render(line, True, color)
+        surface.blit(text_surface, (position[0], position[1] + y_offset))
+        y_offset += font.size(line)[1] + 2
 
 def display_controls():
     # Controls screen
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Controls")
-
-
 
     running = True
     while running:
