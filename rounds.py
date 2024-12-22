@@ -52,13 +52,13 @@ class Rounds:
 
         else:  # Show the loading screen on subsequent rounds
             background = backgrounds[1]
-            # Render and position the second line of text (round number)
-            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, black)
-            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, height - 150))
+                   # Render and position the second line of text (round number)
+            shed_text2 = font.render(f"Press Enter to Start Round {current_round}", True, white)
+            shed_text_rect2 = shed_text2.get_rect(center=(width // 2, 115))
 
             # Render and position the third line of text
             shed_text3 = font.render("or P to visit IKEA", True, black)
-            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, height - 115))
+            shed_text_rect3 = shed_text3.get_rect(center=(width // 2, 150))
 
 
 
