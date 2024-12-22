@@ -17,9 +17,11 @@ greenish = (182, 215, 168)
 black = (0, 0 ,0)
 gold = (255, 215, 0)
 
+
 # IKEA-Specific colors
 ikea_blue = (0, 87, 173)
-ikea_yellow = (251, 218, 12)
+ikea_yellow = (248, 209, 21)
+ikea_grey = (150,170,193)
 
 # SCREEN RESOLUTION
 resolution = (720, 720) # height/width

@@ -13,30 +13,37 @@ def interface():
     screen = pygame.display.set_mode(resolution)  # Create the screen
     pygame.display.set_caption("Main Interface")  # Set window title
 
+
     # FONTS
-    optimafont = pygame.font.SysFont("Optima", 60)
+    optimafont = pygame.font.SysFont("Optima", 40)
+    optimafont_BOLD = pygame.font.SysFont("Optima", 60, bold=True)
     corbelfont = pygame.font.SysFont("Corbel", 50)
     comicsansfont = pygame.font.SysFont("Comic Sans MS", 50)
+
     
-    mixer.init()
+    # pygame.mixer.music.set_volume(0.1)  
+    # mixer.init()
+
     # Load a sound for demonstration
-    mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
-    mixer.music.play(-1)  # Loop the music
-    # Fonts
+    # mixer.music.load("music/Space Harrier Music - MAIN THEME.mp3")
+    #mixer.music.play(-1)  # Loop the music
 
 
     # Text renderings
-    wilderness_text = corbelfont.render("Slaget om Sverige", True, white)
-    title_text = optimafont.render("Slaget om Sverige", True, glowing_light_red)
+    wilderness_text = corbelfont.render("", True, white)
+    title_text = optimafont_BOLD.render("KALLE STRIKES BACK", True, ikea_yellow)
+    
     
 
     # Button coordinates and sizes
     buttons = [
-        {"label": "Start Game", "action": wilderness_explorer, "rect": (90, 240, 540, 60), "color": dark_red},
-        {"label": "Instruction", "action":  rules, "rect": (90, 480, 140, 60), "color": grey},
-        {"label": "Options", "action": options, "rect": (90, 600, 140, 60), "color": grey},
-        {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": grey},
-        {"label": "Quit", "action": pygame.quit, "rect": (450, 600, 140, 60), "color": grey},
+
+        {"label": "Start Game", "action": start_game, "rect": (90, 240, 540, 60), "color": ikea_yellow},
+        {"label": "Rules", "action":  rules, "rect": (90, 480, 140, 60), "color": ikea_yellow},
+        {"label": "Options", "action": options, "rect": (90, 600, 140, 60), "color": ikea_yellow},
+        {"label": "Credits", "action": credits_, "rect": (450, 480, 140, 60), "color": ikea_yellow},
+        {"label": "Quit", "action": pygame.quit, "rect": (450, 600, 140, 60), "color": ikea_yellow},
+
     ]
 
     running = True
@@ -53,15 +60,14 @@ def interface():
                     if is_mouse_over_button(mouse, button["rect"]):
                         button["action"]()  # Execute the associated action
 
-        screen.fill(deep_black)  # Background
+        screen.fill(ikea_blue)  # Background
 
         # Draw buttons
         for button in buttons:
-            create_button(screen, button["label"], button["color"], *button["rect"], corbelfont)
+            create_button(screen, button["label"], button["color"], *button["rect"], optimafont)
 
         # Draw title
-        screen.blit(title_text, (55, 0))
-
+        screen.blit(title_text, (100, 150))
         pygame.display.update()
 
 
@@ -141,10 +147,7 @@ def credits_():
 
     # Credit Text
     credits = [
-        "Rodrigo Silva, 20221926@novaims.unl.pt",
-        "Lukas, drasteiro@novaims.unl.pt",
-        "Philip, lrosenfeld@novaims.unl.pt",
-        "Carlos Amorim,  ",
+        
     ]
     rendered_credits = [comicsansfont.render(credit, True, white) for credit in credits]
 
@@ -171,14 +174,13 @@ def credits_():
         pygame.display.update()
 
 
-def wilderness_explorer():
-    """Start the game."""
+def start_game():
     game_loop()  # Call the game loop
 
 def rules():
     # Rules screen
 
-    optimafont = pygame.font.SysFont("Optima", 60)
+    optimafont = pygame.font.SysFont("Optima", 40)
 
     screen = pygame.display.set_mode(resolution)
     pygame.display.set_caption("Instruction")
