@@ -14,6 +14,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 5
         self.hurt_time = None
         self.frozen = False
+        self.slow_respawning = False
 
         self.default = {
             "right": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_right.png").convert_alpha(), enemy_size),
@@ -26,7 +27,8 @@ class Enemy(pygame.sprite.Sprite):
         }
 
         self.affected = {
-            "freeze": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_freeze.png").convert_alpha(), (110, 120))
+            "freeze": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_freeze.png").convert_alpha(), (110, 120)),
+            "slow respawn": pygame.transform.scale(pygame.image.load("images/Characters/Enemy/enemy_slow_respawn.png").convert_alpha(), enemy_size)
         }
 
         self.image = self.default["right"]
@@ -65,6 +67,9 @@ class Enemy(pygame.sprite.Sprite):
         if self.frozen:
             self.image = self.affected["freeze"]
             self.active_image = self.affected
+        elif self.slow_respawning:
+            self.image = self.affected["slow respawn"]
+            self.active_image = self.affected
         elif self.hurt_time and pygame.time.get_ticks() - self.hurt_time > self.HURT_IMAGE_DURATION:
             self.image = self.default["right"]
             self.active_image = self.default
@@ -89,3 +94,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.default["right"]
         self.active_image = self.default
         self.speed = random.randint(2, 3)
+
+    def slow_respawn(self):
+        self.slow_respawning = True
+        self.active_image = self.affected
