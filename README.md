@@ -32,6 +32,7 @@ The base game was extended and improved with the following features:
    cd group7
 
 ---
+This project was created for academic purposes at NOVA IMS and is not intended for commercial use.
 
 ## NOVA IMS @ 2025
 **Carlos Amorim**,
