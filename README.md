@@ -34,7 +34,7 @@ The base game was extended and improved with the following features:
 ---
 
 ## NOVA IMS @ 2025
-**Carlos Amorim**
-**Lukas Andersson**
-**Philip Munther**
+**Carlos Amorim**,
+**Lukas Andersson**,
+**Philip Munther**,
 **Rodrigo Silva**
