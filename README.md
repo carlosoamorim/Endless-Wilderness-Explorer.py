@@ -2,7 +2,7 @@
 
 This project was developed as the **Final Project for Computation III** (NOVA IMS, Fall 2024).  
 It is a Pygame-based endless exploration game enhanced with power-ups, treasure chests, new weapons, and other gameplay improvements.  
-The work was completed in a team of 3 students.
+The work was completed in a team of 4 students.
 
 ---
 
