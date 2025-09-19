@@ -29,7 +29,6 @@ The base game was extended and improved with the following features:
 1. Clone the repository:
    ```bash
    git clone https://github.com/carlosamorim/Endless-Wilderness-Explorer.py.git
-   cd group7
 
 ---
 This project was created for academic purposes at NOVA IMS and is NOT intended for commercial use.
