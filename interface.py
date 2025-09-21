@@ -150,10 +150,10 @@ def credits_():
     # Credit Text
     credits = [
 
-        "Rodrigo Silva, 20221926@novaims.unl.pt",
-        "Lukas, 20241448@novaims.unl.pt",
-        "Philip, 20241463@novaims.unl.pt",
-        "Carlos Amorim,  ",
+        "Carlos Amorim, 20211548@novaims.unl.pt",
+        "Lukas Andersson, 20241448@novaims.unl.pt",
+        "Philip Munther, 20241463@novaims.unl.pt",
+        "Rodrigo Silva, 20221926@novaims.unl.pt"
 
     ]
     rendered_credits = [optimafont.render(credit, True, ikea_yellow) for credit in credits]
